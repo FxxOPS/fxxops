@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>请选择执行:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+		<a href="javascript:history.go(-1);">返回</a><br /><br />
+		<p>
+		</p>
+        {% if title == "Operate Server List" %}
+		<SCRIPT type="text/javascript">
+		$(document).ready(function(){
+                      $("#clk").click(function(){ 
+					  
+						inpval = $('input:radio[name="src"]:checked').val();
+						
+					  	if ( inpval == "command" && $("#cmdtxt").val()=="" ) {
+						  	$('#facebox').css("display","none");	
+						  	alert("请填写执行命令！");  						
+						}
+						 
+						//alert($("#sptfile").val());  				
+					  	//alert ($("#sptfile").val());
+						if ( inpval == "script" && $("#sptfile").val()=="" ) {
+						  	$('#facebox').css("display","none");	
+						  	alert("请选择脚本文件！");  						
+						}
+
+                      });
+                    });
+		</SCRIPT>
+            <form method="POST" name="execute" action="/project/{{name}}/operate" > 
+                <input  name="src" type="radio" value="command" checked="checked" /> 
+                命令 <h3 style="color:#FF0000"> ×注：禁止使用rm -rf 等危险命令。不能含有中文字符!! </h3>
+				
+                <textarea rows="3" cols="20" name = "command" id="cmdtxt"></textarea>
+                
+				<br/><br /><br />
+				<p><br />
+					<input name="src" type="radio" value="script" /> 选择脚本   
+					<select id="sptfile" name="script" >
+							<option value="" > 请选择</option>
+						{% if file_list %}
+							{% for f in file_list %}
+								<option>{{f}}</option>
+							{% endfor %}
+						{% endif %}
+					</select> <h3 style="color:#FF0000" > ×注： <br />已经自动创建脚本存放目录" {{pdir}} "。  请将脚本上传至该目录中后，再刷新页面进行选择。<br /> 脚本中不能含有中文字符!!</h3> 
+					<br />
+				</p>				
+                    <a href="#messagesops"  rel="modal" id="clk" >----- 执行操作 ----- </a>   
+					  <div  id="messagesops" style="display: none; ">
+								<div align="center">
+									<br />  <br /> 
+									<h2> 确实要执行该操作吗?</h2> <br />  <br /> 
+									<h2> <a href="javascript:document.forms['execute'].submit();" >是</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="#" onclick="javascript:document.getElementById('facebox').style.display='none';"> 否</a> 
+									</h2> <br /><br />								
+								</div>
+					  </div><br />
+<br />
+
+                </p>
+                
+                <table border=1>
+                    <thead>
+
+                  <th>机房</th>
+                        <th>状态</th>
+                        <th>分组</th>
+                        <th>内网IP</th>
+                        <th>外网IP</th>
+                        <th>域名</th>
+                        <th>用途</th>
+                        <th>池(网段)</th>
+                        <th>备注</th>    
+                        <th>其他信息</th>
+                    </thead>
+                    <tbody>
+                        {% for server in server_list %}
+                            <tr> 
+                                <td>{{server.idc}}</td>
+                                <td>{{server.status}}</td>
+                                <td>{{server.project}}</td>
+                                <td>{{server.ip_in}}</td>
+                                <td>{{server.ip_ex}}</td>
+                                <td>{{server.domain}}</td>
+                                <td>{{server.usages}}</td>
+                                <td>{{server.pool}}</td>
+								{% if server.comment %}
+                                <td><pre> <a href="/server/{{server.id}}" title='{{server.comment}}'>{{server.comment[0:20]}}</a></pre></td>
+                                {% else %}
+								<td><pre> <a href="/server/{{server.id}}" title='添加'>添加</a></pre></td>
+								{% endif %}
+                                <td><a href="#messages{{server.id}}" rel="modal" >查看</a></td>
+                                  <div  id="messages{{server.id}}" style="display: none">
+                                    <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                                    <h3>信息</h3>     
+                                    <p>
+                                        CPU    :    {{server.cpu}} <br />
+                                        内存(G) :      {{server.memory}}    <br />
+                                        硬盘(G) :     {{server.disk}} <br />
+                                        操作系统 :      {{server.os}}      <br />    
+                                        宿主机IP :     {{server.host_ip}} 
+                                    </p>
+                                  </div>
+                                  <!-- End #messages -->
+                            </tr>
+                        {% endfor %}
+                    </tbody> 
+                </table>
+            </form>
+        {% else %}
+            <table border=1>
+                <thead>
+                    <th>主机</th>
+                    <th>命令</th>
+                    <th>返回结果</th>
+                </thead>
+                {% if result_list %}
+                    {% for result in result_list %}
+                        <tr>
+                            <td>{{result[0]}}</td>
+                            <td>{{result[1]}}</td>
+                            <td>{{result[2]}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </table>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

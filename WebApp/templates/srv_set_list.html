@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>分组{{project_name}}的操作集列表:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+		<p>
+		<a href="javascript:history.go(-1);">返回上一页</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+		<a href="/operation/history">操作执行历史 </a> <br /><br />
+		</p>
+        {% if server_set_list %}
+				<table style=" width: 30%">
+				<thead>
+					<th>名称</th>
+					<th>创建时间</th>
+					<th>操作</th>							
+				</thead>
+				<tbody>
+                {% for srv_set in server_set_list %}
+						<tr>
+							<td>{{srv_set["name"]}}</td>
+							<td>{{srv_set["create_time"]}} </td>
+							<td><a href="/set/{{srv_set["name"]}}/execute">执行</a>  |  
+						{% if session["user_id"] == 1 or session["user_id"] == srv_set["create_userid"] %}
+							 <a href="/project/{{project_name}}/srv_set/{{srv_set["name"]}}">修改</a>   |  
+							 <a href="#messagesops{{srv_set["id"]}}" rel="modal">删除</a></td>
+				                
+							<div  id="messagesops{{srv_set["id"]}}" style="display: none; ">							
+								<div align="center"><br />  <br /> 
+									<h3> 确实要删除以下操作集吗?</h3> <br />  <br /> 
+									<h2 style="color:#FF0000"> {{srv_set["name"]}} </h2> <br />  <br /> 
+									<h2 > <a href="/set/{{srv_set["name"]}}/delete" >是</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="#" onclick="javascript:document.getElementById('facebox').style.display='none';"> 否</a> </h2> 
+		
+								</div>
+							</div>
+							
+						{% endif %}
+						</tr>                						
+                {% endfor %}
+				</tbody>
+				</table>				
+        {% else %}
+			<p>
+            	"未找到结果"<br />
+			</p>
+        {% endif %}<br>
+        </div>
+    </div>
+</div>
+{% endblock %}

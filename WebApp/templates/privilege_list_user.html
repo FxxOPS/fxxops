@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>用户信息:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content ">
+            <a class="button" href="/privilege/add_user">添加用户</a>
+
+            <form method="POST" name="del_user" action="/privilege/del_user">
+                <table style="width:60%">
+                    <thead>
+                        <th>选择</th>
+                        <th>用户名(点击用户名可修改权限)</th>
+                        <th>类型</th>
+                    </thead>
+                    {% for user in user_list %}
+                        <tr>
+                            <td><input type="checkbox" name="{{user["id"]}}"/></td>
+                            <td><a href="/privilege/{{user["id"]}}" title="点击修改权限">{{user["name"]}}</a></td>
+                            <td>{{user["type"]}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <input class="button" type="submit" value="勾选后,删除用户"/>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

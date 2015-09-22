@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>返回结果</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+		<p>
+		{% if err_msg %}
+				<a href="{{refurl}}">返回</a>
+		{% else %}				
+				<a href="javascript:history.go(-1);">返回</a>
+        {% endif %}
+		{% if err_msg %}
+			<p>
+            	<h2>{{err_msg}}</h2><br />
+			</p>
+        {% endif %}
+		<br>
+		</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

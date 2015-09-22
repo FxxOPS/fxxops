@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+	  
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3><a href="/" >首页</a> > 服务器信息: </h3>
+            <div class="clear"></div>
+        </div>		
+        <!-- End .content-box-header -->
+		
+	{% if server_list %}	
+		<script src="/resources/scripts/TableOrder.js"></script>
+		<script src="/resources/scripts/ZhCN_Pinyin.min.js"></script>			
+		<script type="text/javascript">
+		$(document).ready(function(){
+			 $("tbody tr").slice(0).each(function(){
+				  var p = this;
+				  $(this).children().slice(0).click(function(){
+					   $($(p).children()[0]).children().each(function(){
+							if(this.type=="checkbox"){
+								 if(!this.checked){
+									  this.checked = true;
+									  //$(p).children()[0].style.backgroundColor="#FFCC80";
+									  $(this).parent().parent().addClass("seldColor");
+								 }else{
+									  this.checked = false;
+									  //$(p).children()[0].style.backgroundColor="#FFFFFF";
+									  $(this).parent().parent().removeClass("seldColor");
+								 }
+							}
+					   });
+				  });
+			 });
+		});
+		
+		</script>
+        <div class="content-box-content">
+            <form id="select" method="POST" name="select" action="/project/{{name}}">
+                {% if 'Project Server List' == title %}
+                    <script type="text/javascript">
+                    $(document).ready(function(){
+                      $("#op").click(function(){ 
+                            $('#op_sel').css("display","none");
+                            $('#op_sel').val('0');  //执行操作
+                            $('#select').submit();
+                      });
+                      $("#set").click(function(){ 
+                            $('#op_sel').css("display","none");
+                            $('#op_sel').val('1');  //生成操作集
+                            $('#select').submit();
+                      });
+                    });
+                    </script> 
+                        
+                        <a href="#" id="op">执行操作</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+						<a href="/operation/history/" > 操作执行历史 </a>  
+						<br /><br />
+
+
+                    <p>
+                        <a href="#" id="set" > 生成操作集 </a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                        <a href="/project/{{name}}/srv_set" > 操作集列表 </a>
+                    </p>
+                    <input id="op_sel" type="text" name="op_sel" style="display:none;" value="0"/>					
+                {% endif  %}
+				
+					<p style="color:#FF0000;">(点击标题可排序)</p> 
+				<div style="overflow:auto" >
+                <table  id="idTable">
+                    <thead>
+                        <th>&nbsp;</th> 
+                        <th><a href="javascript:void(0)" id="ididc">机房</a></th>
+                        <th><a href="javascript:void(0)" id="idstatus">状态</a></th>
+                        <th><a href="javascript:void(0)" id="idproject">分组</a></th>
+                        <th><a href="javascript:void(0)" id="idip_in">内网IP</a></th>
+                        <th><a href="javascript:void(0)" id="idip_ex">外网IP</a></th>
+                        <th><a href="javascript:void(0)" id="iddomain">域名</a></th>
+                        <th><a href="javascript:void(0)" id="idusages">用途</a></th>
+                        <th><a href="javascript:void(0)" id="idpool">池(网段)</a></th>
+                        <th><a href="javascript:void(0)" id="idcomment">备注</a></th>    
+                        <th>其他信息</th> 
+                    </thead>
+                    <tbody>
+                        {% for server in server_list %}
+                            <tr> 
+                            {% if 'Project Server List' == title %}
+                                <td> <input type="checkbox" name="{{server.id}}"/> </td>
+							{% else %}
+                                <td>&nbsp;  </td>
+                            {% endif  %}
+
+                                <td _order="{{server.idc}}">{{server.idc}}</td> 
+							 
+							{% if server.visible == 0 %}
+								<td _order="已下线"><strong  style="color:#FF0000;">已下线</strong></td> 
+							{% else %}
+								<td _order="{{server.status}}">{{server.status}}</td> 
+							{% endif %} 
+                                
+								<td _order="{{server.project}}">{{server.project}}</td>
+                                <td _order="{{server.ip_in}}">{{server.ip_in}}</td>
+                                <td _order="{{server.ip_ex}}">{{server.ip_ex}}</td>
+                                <td _order="{{server.domain}}">{{server.domain}}</td>
+                                <td _order="{{server.usages}}">{{server.usages}}</td>
+                                <td _order="{{server.pool}}">{{server.pool}}</td>
+							{% if server.comment %}
+                                <td _order="{{server.comment[0:20]}}"><pre> <a href="/server/{{server.id}}" title='{{server.comment}}'>{{server.comment[0:20]}}</a></pre></td>
+                            {% else %}
+								<td _order="1"><pre> <a href="/server/{{server.id}}" title='添加'>添加</a></pre></td>
+							{% endif %}
+								<td><a href="#messages{{server.id}}" rel="modal" >查看</a></td>
+                                  <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                                  <div  id="messages{{server.id}}" style="display: none; ">
+                                    <h3>信息</h3>
+                                    <p>
+                                        CPU    :    {{server.cpu}} <br />
+                                        内存(G) :      {{server.memory}}    <br />
+                                        硬盘(G) :     {{server.disk}} <br />
+                                        操作系统 :      {{server.os}}      <br />    
+                                        宿主机IP :     {{server.host_ip}} 
+                                    </p>
+                                  </div>
+                                  <!-- End #messages -->
+                            </tr>
+                        {% endfor %}
+                    </tbody> 
+                </table>
+				</div>
+            </form>
+        </div>
+		{% else %}
+			<p><h2> 未找到结果!</h2> </p>
+		{% endif %}
+    </div>
+</div>
+<script>
+
+		TableOrderOper.Init("idTable", 0, {
+			OnShow: function (i, trJqObj, _tbodyObj) {
+				trJqObj.attr("class", ((i + 1) % 2 == 0 ? "hoverTr" : ""));
+			}
+		});
+		TableOrderOper.SetOrder("ididc", 1, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idstatus", 2, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idproject", 3, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idip_in", 4, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idip_ex", 5, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("iddomain", 6, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idusages", 7, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idpool", 8, { ValAttr: "_order", DataType: "string" }); 
+		TableOrderOper.SetOrder("idcomment", 9, { ValAttr: "_order", DataType: "string" }); 
+</script>
+{% endblock %}

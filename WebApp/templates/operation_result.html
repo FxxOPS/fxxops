@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+	
+<script type="text/javascript" language="JavaScript">    
+	var time =10 ;//设置时长
+	var myseInterval;//保存定时器ID
+	function excTime(){
+		time--; 
+		if(time==0){
+			window.location.reload();//刷新页面
+		}else{
+			document.getElementById("showTime").innerHTML=time;//修改显示的剩余时间
+		}
+	}
+	//如果定时器ID为空则重新启动定时器 ， 不为空则停止定时器
+	function stop(){
+		if(myseInterval==null){
+			start();
+			document.getElementById("refctl").innerHTML="停止刷新"
+
+		}else{
+			clearInterval(myseInterval);
+			myseInterval=null;
+			document.getElementById("refctl").innerHTML="继续";
+		}
+	}
+	function start(){
+		 myseInterval=setInterval(excTime,1000);
+	}
+ 	window.onload=start;
+</script>
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>操作执行结果:  </h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+		<a href="javascript:history.go(-1);">返回上一页</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+		<a href="/operation/history">操作执行历史 </a> <br /><br /> 
+		<p>
+			<h3><strong id="showTime" style="color:#FF0000; font-size:24px">10</strong>秒后刷新页面..</h3>
+			<a id="refctl" onclick="stop()" style="cursor: pointer; font-size:20px">停止刷新</a>
+			<br />
+			<br />
+		</p>
+		<br />
+		操作ID: {{operation_id}} <br />
+		操作人: {{op_user}} <br />
+		操作的分组:  <a href="/project/{{p_name}}" style="color:#FF0000;" >{{p_name}}</a> 
+		
+        <table border=1>
+            <thead> 
+				<th>开始时间</th>
+				<th>执行结束时间</th>
+                <th>内网IP</th>
+                <th>执行内容</th>
+                <th>返回</th>
+                <th>任务ID</th>
+            </thead>
+            {% for result in result_list %}
+                <tr> 
+					<td>{{result["start_time"]}}</td>
+					<td>{{result["alter_time"]}}</td>
+                    <td>{{result["ip_in"]}}</td>
+                    <td>{{result["fun"]}}</td>
+					{% if   '=OK='  in result["return"][-10:] %}
+                    	<td><a href="#messages{{result["jid"]}}" rel="modal" >执行成功</a></td>
+					{% else %}
+						<td ><a href="#messages{{result["jid"]}}" rel="modal" style="color:#FF0000">{{result["success"]}}.点击查看</a></td>
+					{% endif %}
+                    <td>{{result["jid"]}}</td>
+                </tr>
+				 
+				  <div  id="messages{{result["jid"]}}" style="display: none">
+					<!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+					<h3>返回内容</h3> 	
+						<pre><p>{{result["return"]}}</p></pre>
+					</div>
+				  <!-- End #messages -->
+            {% endfor %}
+        </table>
+		
+ 		</div>
+    </div>
+</div>
+{% endblock %}

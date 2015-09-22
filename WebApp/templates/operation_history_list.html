@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>操作执行历史记录:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+		<a href="javascript:history.go(-1);">返回上一页</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <a href="/">返回首页</a>
+		<br />
+		<br />
+
+		<p>
+        </p>
+        {% if operation_list %}		
+		<table style="width:60%" >
+			<thead> 
+				<th>操作ID</th>
+				<th>操作人</th>				
+				<th>操作时间</th>
+				<th>分组</th>
+				<th>操作集</th> 
+				<th>执行的操作</th> 
+			</thead>
+			<tbody> 
+                {% for operation in operation_list %}
+					<tr>
+						<td><a href="/operation/result/{{operation["operation_id"]}}/{{operation["user_id"]}}/{{operation["project_id"]}}" > {{operation["operation_id"]}} </a> </td>
+						<td>{{operation["user_id"]}}</td>
+						<td>{{operation["start_time"]}}</td>
+						<td>{{operation["project_id"]}} </td>
+						<td>{{operation["set_id"]}}</td>
+						<td>{{operation["action"] if operation["action"] else "" }}</td>
+					</tr>
+                {% endfor %} 
+			</tbody>
+			</table>
+        {% else %}
+            "未找到结果"
+        {% endif %}<br>
+ 		</div>
+    </div>
+</div>
+{% endblock %}

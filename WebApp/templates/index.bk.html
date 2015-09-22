@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Page Head -->
+        <h2>Welcome Southeast Aisa Server Information System </h2>
+
+        <!-- 查找 -->
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 查找服务器 ====</h3>
+                <div class="clear"></div>
+            </div> 
+            <script src="/resources/scripts/jquery-ui-1.10.4.min.js"></script>
+            <link rel="stylesheet" href="/resources/css/jquery-ui-1.10.4.min.css">
+            <script>
+                $(function(){$("#qResult").autocomplete({
+											//source: availableTags
+											source: '/q',
+											minLength: 2,
+											delay: 300,
+											autoFocus: true
+											});
+								$("a").click(function(){
+									 var con= $("input").val();
+									 $("input").val($.trim(con));
+								});
+							});
+            </script>
+            <div class="content-box-content">
+                <div class="clear"><br /></div>
+                    <form action="/search" method="POST" name="search">
+                        可输入分组 / 域名 / 内网IP / 外网IP / 宿主机IP<br /><br />
+                        <input id="qResult" type="text" name="value" />
+						<a href="javascript:document.forms['search'].submit();" onclick="" >查询</a>
+                    </form>
+            </div>
+
+            <div class="clear"><br/></div>
+        </div>
+
+        <!-- 分组 -->
+        {% if project_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择分组 ====</h3>
+                <div class="clear"></div>
+            </div> 
+            <div class="content-box-content"> 
+					<ul class="shortcut-buttons-set"> 
+						{% for project in project_list %} 
+							<li >
+								<a class="shortcut-button" href="/project/{{project}}">
+									<span>{{project}}</span>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+            </div>  
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div> 
+        </div>
+        {% endif %}
+
+        <!-- 操作集 -->
+        {% if set_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择操作集 ====</h3>
+                <div class="clear"></div>
+            </div> 
+            <div class="content-box-content"> 
+                <ul class="shortcut-buttons-set"> 
+                    {% for srv_set in set_list %} 
+                        <li >
+                            <a class="shortcut-button" href="/set/{{srv_set["name"]}}/execute">
+                                <span>{{srv_set["name"]}}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>  
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div> 
+        </div>
+        {% endif %}
+
+        {% if idc_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择IDC ====</h3>
+                <div class="clear"></div>
+            </div>
+
+            <div class="content-box-content">
+                <ul class="shortcut-buttons-set">
+                    {% for idc in idc_list %}
+                        <li>
+                            <a class="shortcut-button" href="/idc/{{idc}}">
+                                <span>
+                                    <img src="resources/images/idc.jpg" alt="idc" /><br />
+                                    {{idc}}
+                                </span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

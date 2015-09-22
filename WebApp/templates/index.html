@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Page Head -->
+        <h2>Welcome Southeast Aisa Server Information System </h2>
+
+ 
+        <!-- 分组 -->
+        {% if project_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择分组 ====</h3>
+                <div class="clear"></div>
+            </div> 
+            <div class="content-box-content" style="text-align:center"> 
+
+				<style>
+				.widget {
+					margin-bottom: 30px;
+					width: 160px;
+					float: left;
+					margin: 15px; 
+				}	
+
+				.subtitle {
+					color: #656565;
+					display: block;
+					margin-bottom: 5px; 
+					cursor: pointer;					
+				}				
+				
+				.well-white {
+					background: none repeat scroll 0 0 #ffffff;
+					border: 1px solid #d5d5d5;
+					padding: 10px;
+					position:absolute;
+					width: 180px;
+					display:none;					
+				}
+				
+				</style>
+				
+				<script>
+				function show(obj){
+				  var isBlock = $("#"+obj).css('display');
+				  $(".well-white").slideUp();				   
+				  if ( isBlock == 'none') {
+ 				  	$("#"+obj).slideToggle();
+				  }				
+				}
+				
+				$(document).ready(function(){
+				  $(".subtitle").mouseover(function(){
+					$(this).css("color","#57a000");
+				  });
+				  $(".subtitle").mouseout(function(){
+					$(this).css("color","#656565");
+				  });
+				});
+
+				$("div.content-box").click(function(){   					
+				  if (! $(this).children(".well-white") ) {
+					  $(".well-white").slideUp();
+					  //alert('aa');
+					}
+				}); 
+
+				</script>
+	
+				<!-- Glyph icons -->	
+				
+				{% for code in code_list %}  
+				<div class="widget">
+					<strong id="t_{{ code.replace(' ','') }}" class="subtitle" onclick="show('{{ code.replace(' ','') }}')">{{code}}</strong>
+					<div class="well-white" id="{{code.replace(' ','')}}">
+						<ul class="">
+						{% for project in project_list %} 
+							{% if project.split("-")[0] == code.split("-")[1] %} 
+								<li>
+									<i class="icon-move">
+										<a href="/project/{{project}}">{{project}}</a> 										
+									</i>
+								</li>						
+							{% endif %}							
+						{% endfor %} 
+						</ul>
+					</div>
+				</div>	
+				{% endfor %}			
+				<!-- /glyph icons --> 
+				
+           	 </div>  
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div> 
+        </div>
+        {% endif %}
+
+
+        <!-- 操作集 -->
+        {% if set_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择操作集 ====</h3>
+                <div class="clear"></div>
+            </div> 
+            <div class="content-box-content"> 
+                <ul class="shortcut-buttons-set"> 
+                    {% for srv_set in set_list %} 
+                        <li >
+                            <a class="shortcut-button" href="/set/{{srv_set["name"]}}/execute">
+                                <span>{{srv_set["name"]}}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>  
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div> 
+        </div>
+        {% endif %}
+
+        {% if idc_list %}
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== 选择IDC ====</h3>
+                <div class="clear"></div>
+            </div>
+
+            <div class="content-box-content">
+                <ul class="shortcut-buttons-set">
+                    {% for idc in idc_list %}
+                        <li>
+                            <a class="shortcut-button" href="/idc/{{idc}}">
+                                <span>
+                                    <img src="resources/images/idc.jpg" alt="idc" /><br />
+                                    {{idc}}
+                                </span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% endif %}
+		
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>==== Smokeping监控 ====</h3>
+                <div class="clear"></div>
+            </div>
+
+            <div class="content-box-content">
+                <ul class="shortcut-buttons-set"> 
+                        <li>
+                            <a class="shortcut-button" target="_blank" href="http://10.52.36.219/smokeping">
+                                <span> 
+                                     HKNTT
+                                </span>
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="shortcut-button" target="_blank" href="http://119.81.170.138/smokeping">
+                                <span>
+                                    SoftLayer test Sever
+                                </span>
+                            </a>
+                        </li> 
+                </ul>
+                <!-- End .shortcut-buttons-set -->
+                <div class="clear"></div>
+            </div>
+        </div>
+		
+    </div>
+{% endblock %}

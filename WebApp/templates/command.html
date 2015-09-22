@@ -1,0 +1,31 @@
+﻿<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<html>
+    <head>
+        {% if title %}
+            <title>{{title}}</title>
+        {% else %}
+            <title>Password</title>
+        {% endif %}
+    </head>
+    <body>
+        <form action="/cmd" method="post" name="cmd">
+            <input class="textarea" name="command" rows="80" cols="40"/>
+            <input class="button" type="submit" value="execute"/>
+        </form>
+
+        {% if title == "result" %}
+            <table border = 1>
+                <tr>
+                    <th>minion</th>
+                    <th>return</th>
+                </tr>
+                {% for (k,v) in ret.items() %}
+                    <tr>
+                        <td>{{k}}</td>
+                        <td>{{v}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </body>
+</html>

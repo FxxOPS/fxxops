@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Start Content Box -->
+        <div class="content-box-header">
+            <h3>执行操作集</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+		<p>
+		<a href="javascript:history.go(-1);"> 返回</a> | <a href="/operation/history"> 返回操作执行历史</a>
+        </p>
+        <p>操作集名称:</p>
+		 <span style="color:#FF0000;font-size:24px"><a href="/project/{{pname}}/srv_set/{{name}}"> {{name}} </a> </span>
+        <form name="execute"  action="" method="POST" enctype=multipart/form-data>
+            <p>
+                请选择操作:
+                <select name="type">
+                    {% if actions["init"] %}
+                        <option value="init">开服 - {{actions["initPath"]}}</option>
+                    {% endif %}
+                    {% if actions["merge"] %}
+                        <option value="merge">合服 - {{actions["mergePath"]}}</option>
+                    {% endif %}
+                    {% if actions["upgrade"] %}
+                        <option value="upgrade">更新 - {{actions["upgradePath"]}}</option>
+                    {% endif %}
+                    {% if actions["reboot"] %}
+                        <option value="reboot">维护 - {{actions["rebootPath"]}}</option>
+                    {% endif %}
+                </select>
+				<h4 style="color:#FF0000"> 脚本存放目录为 {{pdir}} 。</h4>
+            </p>
+				<br />
+            <a href="#messagesops"  rel="modal" id="clk" >----- 执行操作 ----- </a>  
+				<br /><br /><br />
+              <div  id="messagesops" style="display: none; ">
+                        <div align="center">
+							<br />  <br /> 
+                            <h3> 确实要执行该操作吗?</h3> <br />  <br /> 
+								 <h2 style="color:#FF0000">点击"执行"后无法终止,请谨慎!! </h2><br /> 
+                            <h2> <a href="javascript:document.forms['execute'].submit();" >执行</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            	<a href="#" onclick="javascript:document.getElementById('facebox').style.display='none';">取消</a> 
+							</h2> <br /><br />								
+		                </div>
+              </div>
+              </p>
+        </form>
+        {% if server_list %}
+            <table border=1>
+                <thead>
+                    <th>机房</th>
+                    <th>状态</th>
+                    <th>分组</th>
+                    <th>内网IP</th>
+                    <th>外网IP</th>
+                    <th>域名</th>
+                    <th>用途</th>
+                    <th>池(网段)</th>
+                    <th>备注</th>    
+                    <th>其他信息</th>
+                </thead>
+                <tbody>
+                    {% for server in server_list %}
+                        <tr> 
+                            <td>{{server.idc}}</td>
+                            <td>{{server.status}}</td>
+                            <td>{{server.project}}</td>
+                            <td>{{server.ip_in}}</td>
+                            <td>{{server.ip_ex}}</td>
+                            <td>{{server.domain}}</td>
+                            <td>{{server.usages}}</td>
+                            <td>{{server.pool}}</td>
+							{% if server.comment %}
+							<td><pre> <a href="/server/{{server.id}}" title='{{server.comment}}'>{{server.comment[0:20]}}</a></pre></td>
+							{% else %}
+							<td><pre> <a href="/server/{{server.id}}" title='添加'>添加</a></pre></td>
+							{% endif %}
+                            <td><a href="#messages{{server.id}}" rel="modal">查看</a></td>
+                              <div  id="messages{{server.id}}" style="display: none; ">
+                                <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                                <h3>信息</h3>
+                                <p>
+                                    CPU    :    {{server.cpu}} <br />
+                                    内存(G) :      {{server.memory}}    <br />
+                                    硬盘(G) :     {{server.disk}} <br />
+                                    操作系统 :      {{server.os}}      <br />    
+                                    宿主机IP :     {{server.host_ip}} 
+                                </p>
+                              </div>
+                              <!-- End #messages -->
+                        </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        {% endif %}
+    </div>
+
+{% endblock %}
+

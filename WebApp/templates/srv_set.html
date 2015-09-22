@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Start Content Box -->
+        <div class="content-box-header">
+            <h3>操作集信息:</h3>
+            <div class="clear"></div>			
+        </div>
+		
+		<p>
+		<a href="javascript:history.go(-1);">返回</a>
+        </p>
+		<p>
+			<h3 style="color:#FF0000">×注：已经自动创建脚本存放目录" {{pdir}} "。  请将脚本上传至该目录中后，再刷新页面进行选择。 </h3>
+		</p>
+		<!-- End .content-box-header -->
+		<SCRIPT type="text/javascript">
+		function checkForm(form){
+		//for (var i=0; i<form1.elements.length; i++) {
+			if (form1.name.value == "{{pname}}-"){
+				alert("请填写操作集名称！");
+				return false;
+			}
+		  //}
+			return true;
+		}
+		</SCRIPT>
+        <form name="form1" action="" method="POST" enctype=multipart/form-data onsubmit="return checkForm(this)">
+            <p>
+                {% if title == "Create" %}
+                    操作集名称: <input type="text" name="name" value="{{pname}}-" /> * <span style="color:#FF0000"> *必填，格式为: {{pname}}-功能 </span> <br/>
+                {% else %}
+                    操作集名称: <h2 style="color:#FF0000;">{{name}}</h2><br/>
+                {% endif %}
+                开服脚本:
+                <select name="init">
+                    <option value="">请选择</option>
+                    {% if file_list %}
+                        {% for f in file_list %}
+                            {% if actions and actions["init"] and actions["init"] == f%}
+                                <option value={{f}} selected="selected">{{f}}</option>
+                            {% else %}
+                                <option value={{f}}>{{f}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select><br/>
+                合服脚本:
+                <select name="merge">
+                    <option value="">请选择</option>
+                    {% if file_list %}
+                        {% for f in file_list %}
+                            {% if actions and actions["merge"] and actions["merge"] == f%}
+                                <option value={{f}} selected="selected">{{f}}</option>
+                            {% else %}
+                                <option value={{f}}>{{f}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select><br/>
+                更新脚本:
+                <select name="upgrade">
+                    <option value="">请选择</option>
+                    {% if file_list %}
+                        {% for f in file_list %}
+                            {% if actions and actions["upgrade"] and actions["upgrade"] == f%}
+                                <option value={{f}} selected="selected">{{f}}</option>
+                            {% else %}
+                                <option value={{f}}>{{f}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select><br/>
+                维护脚本:
+                <select name="reboot">
+                    <option value="">请选择</option>
+                    {% if file_list %}
+                        {% for f in file_list %}
+                            {% if actions and actions["reboot"] and actions["reboot"] == f%}
+                                <option value={{f}} selected="selected">{{f}}</option>
+                            {% else %}
+                                <option value={{f}}>{{f}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </p>
+			<input name="set_id" value="{{setid}}" style="display:none;" />
+            <input type="submit" value="提交" />
+        </form>
+        <table border=1>
+            <thead>
+                <th>机房</th>
+                <th>状态</th>
+                <th>分组</th>
+                <th>内网IP</th>
+                <th>外网IP</th>
+                <th>域名</th>
+                <th>用途</th>
+                <th>池(网段)</th>
+                <th>备注</th>    
+                <th>其他信息</th>
+            </thead>
+            <tbody>
+                {% for server in server_list %}
+                    <tr> 
+                        <td>{{server.idc}}</td>
+                        <td>{{server.status}}</td>
+                        <td>{{server.project}}</td>
+                        <td>{{server.ip_in}}</td>
+                        <td>{{server.ip_ex}}</td>
+                        <td>{{server.domain}}</td>
+                        <td>{{server.usages}}</td>
+                        <td>{{server.pool}}</td>
+						{% if server.comment %}
+						<td><pre> <a href="/server/{{server.id}}" title='{{server.comment}}'>{{server.comment[0:20]}}</a></pre></td>
+						{% else %}
+						<td><pre> <a href="/server/{{server.id}}" title='添加'>添加</a></pre></td>
+						{% endif %}
+                        <td><a href="#messages{{server.id}}" rel="modal">查看</a></td>
+                          <div  id="messages{{server.id}}" style="display: none; ">
+                            <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                            <h3>信息</h3>
+                            <p>
+                                CPU    :    {{server.cpu}} <br />
+                                内存(G) :      {{server.memory}}    <br />
+                                硬盘(G) :     {{server.disk}} <br />
+                                操作系统 :      {{server.os}}      <br />    
+                                宿主机IP :     {{server.host_ip}} 
+                            </p>
+                          </div>
+                          <!-- End #messages -->
+                    </tr>
+                {% endfor %}
+            </tbody> 
+        </table>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+<!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    {% if project_list %}
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3>项目权限:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+		<p>
+			&nbsp;&nbsp;&nbsp;<a href="/privilege">返回用户列表</a>
+        </p>
+        <div class="content-box-content">
+            <h2>用户名: <span style="color:#FF0000">{{user_name}}</span></h2>
+            <form method="POST" name="input" action="/privilege/{{user_id}}">
+            <div align="left">
+			
+             <input class="check-all" type="checkbox" />全选 <input type ="submit" value ="Save">
+<table >
+<thead>
+	<th>项目权限</th>
+	<th>操作集权限</th>
+</thead>
+<tbody style="background-color:#FFFFFF"  >
+  <tr>
+	<td style="vertical-align:top;width:100px;" >		
+			<table>
+			<thead>
+			  <th>项目名称</th>
+				<th>读权限</th>
+				<th>操作权限 </th>
+			</thead>
+			<tbody>
+			{% for project in project_list %}
+				<tr>
+					<td>{{project["project_name"]}}</td>
+					<td>
+						{% if project["read"] == 1 %}
+							<input type="checkbox" name="project_{{project["project_id"]}}_read" checked="checked"/>
+						{% else %}
+							<input type="checkbox" name="project_{{project["project_id"]}}_read"/>
+						{% endif %}
+					</td>
+					<td>
+						{% if project["write"] == 1 %}
+							<input type="checkbox" name="project_{{project["project_id"]}}_write" checked="checked"/>
+						{% else %}
+							<input type="checkbox" name="project_{{project["project_id"]}}_write"/>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+			</table> 
+	</td>
+  
+	<td style="vertical-align:top; width:100px;text-align:right;" >		
+			<table>
+			<thead>
+			  <th>操作集名称</th>
+				<th>开服</th>
+				<th>合服</th>
+				<th>更新</th>
+				<th>维护</th>
+			</thead>
+			<tbody>
+				{% if set_list %}
+                    {% for set in set_list %}
+                        <tr>
+                            <td>{{set["set_name"]}}</td>
+                            <td>
+                                {% if set["init"] == 1 %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_init" checked="checked"/>
+                                {% else %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_init"/>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if set["merge"] == 1 %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_merge" checked="checked"/>
+                                {% else %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_merge"/>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if set["upgrade"] == 1 %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_upgrade" checked="checked"/>
+                                {% else %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_upgrade"/>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if set["reboot"] == 1 %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_reboot" checked="checked"/>
+                                {% else %}
+                                    <input type="checkbox" name="set_{{set["set_id"]}}_reboot"/>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+				{% endif %}
+			</tbody>
+            </table> 
+	</td>
+  </tr>
+</tbody>	
+</table>
+			</div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-content">
+    <div class="content-box-content">
+        <table border=1>
+                    <thead>
+                        <th>域名</th>
+                        <th>子域名</th>
+                        <th>项目</th>
+                        <th>原IP</th>
+                        <th>域名状态</th>
+                        <th>cdn_hightanti</th>
+{#                        <th>注册商</th>#}
+{#                        <th>注册时间</th>#}
+                        <th>过期时间</th>
+                        <th>用途</th>
+                        <th>备注</th>
+                        <th>是否开放给运营</th>
+                    </thead>
+                    <tbody>
+                        {% for domain in domain_return_list %}
+                            <tr>
+                                <td>{% if domain.domain_name %}{{domain.domain_name}} {% endif %}</td>
+                                <td>{% if domain.subdomain %}{{domain.subdomain}}{% endif %}</td>
+                                <td>{% if domain.project_name %}{{domain.project_name}}{% endif %}</td>
+                                <td>{% if domain.ip_source %}{{domain.ip_source}}{% endif %}</td>
+                                <td>{% if domain.status %}{{domain.status}}{% endif %}</td>
+                                <td>{% if domain.cdn_hightanti %}{{domain.cdn_hightanti}}{% endif %}</td>
+{#                                <td>{{domain.register}}</td>#}
+{#                                <td>{{domain.register_date}}</td>#}
+                                <td>{% if domain.expiration %}{{domain.expiration}}{% endif %}</td>
+                                <td>{% if domain.function %}{{domain.function}}{% endif %}</td>
+                                <td>{% if domain.comments %}{{domain.comments}}{% endif %}</td>
+                                <td>{{domain.is_public}}</td>
+                                {% if domain.comments %}
+                                <td><pre> <a href="/domain/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
+                                {% else %}
+                                <td><pre> <a href="/domain/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
+                                {% endif %}
+                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>
+                                  <div  id="messages{{domain.domain_id}}" style="display: none; ">
+                                    <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                                    <h3>信息</h3>
+                                    <p>
+                                        注册商    :    {{domain.register}} <br />
+                                        注册时间 :      {{domain.register_date}}
+
+                                    </p>
+                                  </div>
+                                  <!-- End #messages -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+    </div>
+</div>
+{% endblock %}

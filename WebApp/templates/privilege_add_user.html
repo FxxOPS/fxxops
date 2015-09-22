@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script type="text/javascript">
+		$(document).ready(function(){ 
+			$('#name').val('');  
+			$('#password').val('');  
+		});
+		$("#addval").click(function(){
+			 var con= $("#name").val();
+			 $("#name").val($.trim(con));
+			 var con= $("#password").val();
+			 $("#password").val($.trim(con));
+		});
+</script>
+<div id="main-content">
+    <!-- Main Content Section with everything -->
+    <!-- Start Content Box -->
+    <div class="content-box column-left" style="width:600px;height:400px;">
+        <div class="content-box-header">
+            <h3>用户信息:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+           <div id="login-content">
+            <form  method="post" action="" name="add_user">
+			<div class="notification information png_bg">
+				<div> 请输入用户名和密码 </div>
+			</div> 					
+			<p>
+				<label>用户名</label>
+				<input id="name" class="text-input" type="text" name="name" />  <span style="color:#FF0000"> *必填，不支持中文 </span>
+			    <div class="clear"></div>
+				<label>密码</label>
+				<input id="password" class="text-input" type="password" name="password" />  <span style="color:#FF0000"> *必填，至少6位 </span>
+				<label>类型</label>
+				<select name="type" />
+					<option value="opadmin">运营 - 只能对操作组进行操作</option>
+					<option value="opsadmin">运维 - 可以创建操作组</option>
+					<option value="sysadmin">系统管理员 - 可创建用户,修改用户权限</option>
+				</select>
+			</p>
+              <input id="addval" class="button" type="submit" value="添加"/>
+            </form>
+             {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li><span style="color:#FF0000"> {{ message }} </span> </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+		   </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

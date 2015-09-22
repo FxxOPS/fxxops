@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Start Content Box -->
+        <div class="content-box-header">
+            <h3>服务器信息:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+		<a href="/project/{{server.project}}"> <<回到分组</a> <br /><br />
+            <table border=1>
+                <thead>
+                     <th>机房</th>
+                        <th>状态</th>
+                        <th>分组</th>
+                        <th>内网IP</th>
+                        <th>外网IP</th>
+                        <th>域名</th>
+                        <th>用途</th>
+                        <th>池(网段)</th>
+                        <th>宿主机IP</th>
+                        <th>CPU</th>
+                        <th>内存(G)</th>
+                        <th>硬盘(G)</th>
+                        <th>操作系统</th>
+                </thead>
+                <tr>
+                    <tr> 
+                        <td>{{server.idc}}</td>
+                        <td>{{server.status}}</td>
+                        <td>{{server.project}}</td>
+                        <td>{{server.ip_in}}</td>
+                        <td>{{server.ip_ex}}</td>
+                        <td>{{server.domain}}</td>
+                        <td>{{server.usages}}</td>
+                        <td>{{server.pool}}</td> 
+                        <td>{{server.host_ip}}</td>
+                        <td>{{server.cpu}}</td>
+                        <td>{{server.memory}}</td>
+                        <td>{{server.disk}}</td>
+                        <td>{{server.os}}</td>
+                </tr>
+            </table>
+        </div>
+        <br/>
+        <form action="/server/{{server.id}}" method="POST">
+            comment:<textarea cols="60" rows="10" name="comment">{{server.comment}}</textarea>
+            <input type="submit" value="Submit" />
+        </form>
+        <ul>
+            {% for comment in comment_list %}
+                <li>------ {{comment.update_time}} ------ ------ 
+					<pre> {{comment.history}} </pre> 
+				</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
