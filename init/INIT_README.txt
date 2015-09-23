@@ -13,6 +13,14 @@ cd  /<ur_home_dir>/dev
 git clone -b dev https://github.com/FxxOPS/fxxops.git
 
 
+## ignore useless file
+cd fxxops
+vi .gitignore
+.idea
+.gitignore
+*.pyc
+
+
 ## change config.ini
 cd fxxops
 [LOGGER]
@@ -55,7 +63,7 @@ admin/1234
 
 
 
-# before ur coding (how can use git, u can see git_cmd.txt)
+# before code (how can use git, u can see git_cmd.txt)
 
 ## create ur local branch (local branch is used develop, fix bug, test)
 git branch (check ur branch)
