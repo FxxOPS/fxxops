@@ -19,7 +19,7 @@ highanti_rule_dic = {'5.254.87.': 'Voxility'}
 
 check_sql = 'select domain_name from domain_info where pre_domain_id = %d;'
 update_sub_sql = "update domain_info set cdn_hightanti = '%s', dml_time = '%s', dml_flag = 2 where domain_name = '%s' and pre_domain_id = %d;"
-insert_sub_sql = "insert into domain_info(domain_name, project_id, cdn_hightanti, pre_domain_id, init_time, dml_time) value ('%s', 1, '%s', %d, '%s', '%s')"
+insert_sub_sql = "insert into domain_info(domain_name, project_name, cdn_hightanti, pre_domain_id, init_time, dml_time) value ('%s', 'V项目', '%s', %d, '%s', '%s')"
 delete_sub_sql = "delete from domain_info where domain_name = '%s' and pre_domain_id = %d;"
 
 
@@ -51,7 +51,7 @@ def auto_dig(domains_list):
             if dig_result[1] == '':
                 mysql_conf.sql_exec("update domain_info set status = '已解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain['domain_name'])))
             else:
-                mysql_conf.sql_exec("update asset_domain set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain['domain_name'])))
+                mysql_conf.sql_exec("update domain_info set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain['domain_name'])))
 
         for head in subdomain_head_list:
             subdomain = '%s.%s' % (head, domain['domain_name'])

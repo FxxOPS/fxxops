@@ -6,7 +6,7 @@ class mysql_connect:
         def sql_exec(self, amont_sql):
                 result_dic = {}
                 try:
-                        conn = MySQLdb.connect(host='', user='', passwd='', port=3306, db='')
+                        conn = MySQLdb.connect(host='10.1.110.24', user='root', passwd='123456', port=3306, db='ops')
                         cur = conn.cursor()
                         cur.execute(amont_sql)
                         conn.commit()

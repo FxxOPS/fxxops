@@ -21,7 +21,7 @@
                         {% for domain in domain_return_list %}
                             <tr>
                                 <td>{% if domain.domain_name %}{{domain.domain_name}} {% endif %}</td>
-                                <td>{% if domain.subdomain %}{{domain.subdomain}}{% endif %}</td>
+                                <td>{% if domain.subdomain %}{{domain.subdomain | safe}}{% endif %}</td>
                                 <td>{% if domain.project_name %}{{domain.project_name}}{% endif %}</td>
                                 <td>{% if domain.ip_source %}{{domain.ip_source}}{% endif %}</td>
                                 <td>{% if domain.status %}{{domain.status}}{% endif %}</td>

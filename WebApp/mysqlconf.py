@@ -3,10 +3,10 @@ import MySQLdb
 
 class mysql_connect:
 
-        def sql_exec(self, amont_sql, host, port, db):
+        def sql_exec(self, amont_sql):
                 result_dic = {}
                 try:
-                        conn = MySQLdb.connect(host='', user='', passwd='', db='ops', port=3306, charset='utf8')
+                        conn = MySQLdb.connect(host='10.1.110.24', user='root', passwd='123456', db='ops', port=3306, charset='utf8')
                         cur = conn.cursor()
                         cur.execute(amont_sql)
                         conn.commit()
