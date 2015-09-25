@@ -84,20 +84,16 @@
         	<form class="mws-form" action="" method="post">
                 <div class="mws-form-row">
                 	<div class="mws-form-item large">
-                    	<input type="text" class="mws-login-username mws-textinput" placeholder="username" id="strUser" name="strUser" />
-                        用户名:{{form.strUser(size=20)}}
+                        {{form.strUser(size=20,class_="mws-login-username mws-textinput",placeholder="username" )}}
                     </div>
                 </div>
                 <div class="mws-form-row">
                 	<div class="mws-form-item large">
-
-                    	<input type="password" class="mws-login-password mws-textinput" placeholder="password" id="strPassword" str="strPassword" />
-
-                        密码:{{form.strPassword(size=20)}}
+                        {{form.strPassword(size=20,class_="mws-login-username mws-textinput",placeholder="password")}}
                     </div>
                 </div>
                 <div class="mws-form-row">
-                	<input type="submit" value="Login" class="mws-button green mws-login-button" /-->
+                	<input type="submit" value="Login" class="mws-button green mws-login-button" />
                 </div>
             </form>
 
@@ -105,7 +101,7 @@
                     {% if messages %}
                         <ul>
                             {% for message in messages %}
-                                <li>{{ message }} </li>
+                                <li style="color:ffffff">{{ message}} </li>
                             {% endfor %}
                         </ul>
                     {% endif %}
