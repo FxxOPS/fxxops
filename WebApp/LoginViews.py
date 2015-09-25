@@ -13,6 +13,7 @@ from forms import LoginForm, PasswordForm
 from Database.SeaOpsSqlAlchemy import db_session
 from Utils import IsSessValid
 
+
 @WebApp.route('/login', methods = ['GET', 'POST'])
 def login():
     """
@@ -54,6 +55,7 @@ def login():
             return redirect(url_for('index'))
 
     return render_template('login.html', title = 'Login', form = form)
+
 
 @WebApp.route('/logout')
 def logout():
