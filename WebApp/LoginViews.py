@@ -14,7 +14,8 @@ from Database.SeaOpsSqlAlchemy import db_session
 from Utils import IsSessValid
 
 
-@WebApp.route('/login', methods=['GET', 'POST'])
+
+@WebApp.route('/login', methods = ['GET', 'POST'])
 def login():
     """
     @note GET方法:显示用户登录页面
@@ -33,7 +34,7 @@ def login():
 
         #判断数据库中保存的用户密码和页面提交的密码是否相同
         strCtime = dictUser["create_time"].strftime("%Y%m%d%H%M%S")
-        # inputPass = hashlib.md5(hashlib.md5("%s-%s" % (form.strPassword.data, strCtime)).hexdigest()).hexdigest().upper()
+        #inputPass = hashlib.md5(hashlib.md5("%s-%s" % (form.strPassword.data, strCtime)).hexdigest()).hexdigest().upper()
         inputPass = 'B96D4F26CF3B6B9FCC732941BB283460'
         if (dictUser["password"] != inputPass):
             flash(loginErr.decode('utf8'))
@@ -55,6 +56,7 @@ def login():
             return redirect(url_for('index'))
 
     return render_template('login.html', title='Login', form=form)
+
 
 
 @WebApp.route('/logout')

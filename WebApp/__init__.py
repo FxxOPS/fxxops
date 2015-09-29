@@ -38,7 +38,7 @@ WebApp.secret_key = "A0Zr98j/3yX R~XHH!jmN]LWX/,?RT"
 logger.info("service start")
 
 # 启动Event to Salt Returner 的线程
-EventThreadRun()
+#EventThreadRun()
 
 """
 导入页面模块
