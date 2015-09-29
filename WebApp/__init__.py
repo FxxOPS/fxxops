@@ -17,11 +17,12 @@ from NetWork.EventLog2db import EventThreadRun
 
 config = ConfigParser()
 lstFile = config.read("config.ini")
-if("config.ini" in lstFile):
+if ("config.ini" in lstFile):
     config.SCRIPT_PATH = config.get("FILE", "ShellScriptPath")
     config.LOG_PATH = config.get("LOGGER", "Path")
 
 import logging
+
 logger = logging.getLogger("ServerListLogger")
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler(config.LOG_PATH)
@@ -30,7 +31,8 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 from flask import Flask
-WebApp = Flask(__name__, static_folder = "../resources")
+
+WebApp = Flask(__name__, static_folder="../resources")
 WebApp.secret_key = "A0Zr98j/3yX R~XHH!jmN]LWX/,?RT"
 
 logger.info("service start")

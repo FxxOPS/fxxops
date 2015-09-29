@@ -5,6 +5,7 @@ Created on 2014.05.28
 @author: yuan.gao
 '''
 import logging
+
 logger = logging.getLogger("ServerListLogger")
 
 from . import HttpClient

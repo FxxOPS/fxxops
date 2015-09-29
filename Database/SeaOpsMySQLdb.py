@@ -39,10 +39,13 @@ SQL_UPDATE_SALT_RETURNS_BY_JID = """UPDATE `salt_returns` SET `success`='%s', `r
 '''
 Return a mysql cursor
 '''
+
+
 @contextmanager
 def GetCursor():
     try:
-        conn = MySQLdb.connect(host = DB_ADDRESS, user = DB_USER, passwd = DB_PWD, db = DB_DEF, port = DB_PORT, charset = DB_CHAR_SET)
+        conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, db=DB_DEF, port=DB_PORT,
+                               charset=DB_CHAR_SET)
         cursor = conn.cursor()
         yield cursor
     except MySQLdb.DatabaseError as err:

@@ -9,42 +9,44 @@ Created on 2014.05.12
 import os
 from . import logger
 
+
 def IsAllowedExt(strFileName):
     strExt = os.path.splitext(strFileName)[1]
-    if(strExt != ".sh"):
+    if (strExt != ".sh"):
         return False
     return True
+
 
 def MakeDir(strPathName):
     strExt = os.path.splitext(strFileName)[1]
-    if(strExt != ".sh"):
+    if (strExt != ".sh"):
         return False
     return True
 
-def ListFile(path = None):
+
+def ListFile(path=None):
     """
     @note 列出指定的路径中的所有文件
     @param path: 指定的路径
     """
     try:
-        if(None == path):
+        if (None == path):
             logger.error("invalid path input")
             return None
-        path=path.encode('utf-8')
-        if(False == os.path.isdir(path)):
+        path = path.encode('utf-8')
+        if (False == os.path.isdir(path)):
             os.makedirs(path)
             logger.info("create dir : %s" % path)
             return None
-
 
         lstRtn = []
         lstFile = os.listdir(path)
         for f in lstFile:
             tmp = os.path.join(path, f)
-            if(False == os.path.isfile(tmp)):
+            if (False == os.path.isfile(tmp)):
                 continue
             fExt = os.path.splitext(f)[1]
-            if(fExt != ".sh"):
+            if (fExt != ".sh"):
                 continue
             lstRtn.append(f)
 

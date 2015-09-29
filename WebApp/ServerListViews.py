@@ -11,8 +11,9 @@ import MySQLdb
 from flask import request, redirect, render_template, session, url_for
 from Database.SeaOpsSqlAlchemy import db_session
 from Database.const import *
-from . import WebApp,logger
-from Utils import IsSessValid,getFirstPY
+from . import WebApp, logger
+from Utils import IsSessValid, getFirstPY
+
 
 @WebApp.route('/')
 @WebApp.route('/index')
@@ -20,15 +21,14 @@ def index():
     """
     @note GET方法:显示分组列表/机房列表
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
-
 
     lstProject = db_session.SelectProjectName(session["user_id"], True)
     lstCode = []
     for r in lstProject:
         strCode = r.split("-")[0]
-        strCode = "%s-%s" %(getFirstPY(strCode),strCode)
+        strCode = "%s-%s" % (getFirstPY(strCode), strCode)
         if (strCode not in lstCode):
             lstCode.append(strCode)
 
@@ -36,19 +36,20 @@ def index():
     lstIdc = db_session.SelectIdcName(session["user_id"], True)
     lstServer = db_session.SelectServer(session["user_id"], True)
     return render_template("index.html",
-                           title = 'Index',
-                           code_list = lstCode,
-                           project_list = lstProject,
-                           server_list = lstServer,
-                           set_list = lstSet,
-                           idc_list = lstIdc)
+                           title='Index',
+                           code_list=lstCode,
+                           project_list=lstProject,
+                           server_list=lstServer,
+                           set_list=lstSet,
+                           idc_list=lstIdc)
 
-@WebApp.route('/q', methods = ['GET'])
+
+@WebApp.route('/q', methods=['GET'])
 def show_q_result():
     """
     @note GET方法:为指定索引查询的输入框提供自动完成功能
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
     req = request.args
@@ -70,7 +71,7 @@ def show_q_result():
                         ) t """
 
         try:
-            conn = MySQLdb.connect(host = DB_ADDRESS, user = DB_USER, passwd = DB_PWD, port = DB_PORT, charset = DB_CHAR_SET)
+            conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, charset=DB_CHAR_SET)
             conn.select_db(DB_DEF)
             cur = conn.cursor()
 
@@ -80,7 +81,7 @@ def show_q_result():
 
             lstResult = []
             for r in result:
-                lstResult.append ('%s' % r)
+                lstResult.append('%s' % r)
 
         except Exception, e:
             print e
@@ -90,12 +91,13 @@ def show_q_result():
 
     return "%s" % json.dumps(lstResult)
 
-@WebApp.route('/search', methods = ['POST'])
+
+@WebApp.route('/search', methods=['POST'])
 def show_server_list_search():
     """
     @note POST方法:根据输入的索引查找主机
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
     SQL_SELECT_SERVER_BY_USER = """ select distinct t.* from (
@@ -257,7 +259,7 @@ def show_server_list_search():
                                         )t """
 
     try:
-        conn = MySQLdb.connect(host = DB_ADDRESS, user = DB_USER, passwd = DB_PWD, port = DB_PORT, charset = DB_CHAR_SET)
+        conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, charset=DB_CHAR_SET)
         conn.select_db(DB_DEF)
         cur = conn.cursor()
 
@@ -271,90 +273,100 @@ def show_server_list_search():
         cur.execute(strSql)
         results = cur.fetchall()
         for r in results:
-            if(r[5] not in lstProject):
+            if (r[5] not in lstProject):
                 lstProject.append(r[5])
-            lstServer.append({'id':r[0], 'domain':r[1], 'status':r[2], 'ip_ex':r[3], 'ip_in':r[4], 'project':r[5], 'idc':r[6], 'usages':r[7], 'os':r[8], 'cpu':r[9], 'memory':r[10],'disk':r[11], 'pool':r[12], 'comment':r[13], 'host_ip':r[14],'visible':r[15]})
+            lstServer.append(
+                {'id': r[0], 'domain': r[1], 'status': r[2], 'ip_ex': r[3], 'ip_in': r[4], 'project': r[5], 'idc': r[6],
+                 'usages': r[7], 'os': r[8], 'cpu': r[9], 'memory': r[10], 'disk': r[11], 'pool': r[12],
+                 'comment': r[13], 'host_ip': r[14], 'visible': r[15]})
     except Exception, e:
         print e
     finally:
         cur.close()
         conn.close()
-    return render_template("result.html", title = "search Result", project_list = lstProject, server_list = lstServer, req_text = req)
+    return render_template("result.html", title="search Result", project_list=lstProject, server_list=lstServer,
+                           req_text=req)
 
-@WebApp.route('/closed', methods = ['GET'])
+
+@WebApp.route('/closed', methods=['GET'])
 def show_server_list_closed():
     """
     @note GET方法:显示所有已停机的主机信息
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
     lstServer = db_session.SelectServer(session["user_id"], False)
-    return render_template("result.html", title = "Closed", server_list = lstServer)
+    return render_template("result.html", title="Closed", server_list=lstServer)
 
-@WebApp.route('/project/<strProjectName>', methods = ['POST', 'GET'])
+
+@WebApp.route('/project/<strProjectName>', methods=['POST', 'GET'])
 def show_server_list_project(strProjectName):
     """
     @note GET方法:显示指定组名的所有主机
     @note POST方法:提交一个选定的主机列表,用于执行命令/脚本
     @param strProjectName: 分组名称
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
-    if(request.method == "GET"):
+    if (request.method == "GET"):
         lstServer = db_session.SelectServerByProject(strProjectName, session["user_id"])
-        return render_template("result.html", title = "Project Server List", type = "project", name = strProjectName, server_list = lstServer)
+        return render_template("result.html", title="Project Server List", type="project", name=strProjectName,
+                               server_list=lstServer)
     else:
         lstServerId = []
         for k, v in request.form.iteritems():
-            if(k != "op_sel"):
+            if (k != "op_sel"):
                 lstServerId.append(k)
 
         session.pop("server_list", None)
         session["server_list"] = lstServerId
-        if("0" == request.form["op_sel"]):
+        if ("0" == request.form["op_sel"]):
             return redirect("/project/%s/operate" % strProjectName)
         else:
             return redirect("/project/%s/set/create" % strProjectName)
+
 
 @WebApp.route('/idc/<strIdcName>')
 def show_server_list_idc(strIdcName):
     """
     @note GET方法:显示指定机房的所有主机
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
     lstProject = db_session.SelectProjectByIdc(strIdcName, session["user_id"])
     lstServer = db_session.SelectServerByIdc(strIdcName, session["user_id"])
-    return render_template("result.html", title = "IDC Server List", type = "idc", name = strIdcName, project_list = lstProject, server_list = lstServer)
+    return render_template("result.html", title="IDC Server List", type="idc", name=strIdcName, project_list=lstProject,
+                           server_list=lstServer)
 
-@WebApp.route('/server/<iServerId>', methods = ['GET', 'POST'])
+
+@WebApp.route('/server/<iServerId>', methods=['GET', 'POST'])
 def show_server_info(iServerId):
     """
     @note GET方法:显示指定ID的主机
     @note POST方法:修改指定主机的备注信息
     @param iServerId: 主机ID
     """
-    if(False == IsSessValid()):
+    if (False == IsSessValid()):
         return redirect(url_for("login"))
 
-    #查询当前用户有权限查看的主机信息
+    # 查询当前用户有权限查看的主机信息
     dictServer = db_session.SelectServerById(iServerId, session["user_id"], True)
-    if(request.method == 'GET'):
+    if (request.method == 'GET'):
         #查询指定主机的历史备注
         lstComment = db_session.SelectCommentByServer(iServerId)
-        return render_template("server_info.html", title = 'Server Information', comment_list = lstComment, server = dictServer)
+        return render_template("server_info.html", title='Server Information', comment_list=lstComment,
+                               server=dictServer)
     else:
         #查找用户对指定的分组是否有操作权限
         dictPrivilege = db_session.SelectProjectPrivilegeByServer(iServerId, session["user_id"])
-        if(None == dictPrivilege or 0 == dictPrivilege["write"]):
+        if (None == dictPrivilege or 0 == dictPrivilege["write"]):
             return redirect("/error/%s" % " you have no privilege, update denied.")
-
 
         db_session.UpdateComment(iServerId, session["user_id"], request.form["comment"])
         return redirect("/project/%s" % dictServer["project"])
 
-# @WebApp.route('/pmodify/<iServerId>', methods = ['GET', 'POST'])
-# def
+        # @WebApp.route('/pmodify/<iServerId>', methods = ['GET', 'POST'])
+        # def

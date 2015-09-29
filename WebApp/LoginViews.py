@@ -6,27 +6,28 @@ Created on 2014年5月28日
 
 @note: 用户视图(包括用户登录/离开/修改密码)
 '''
-import time,hashlib
+import time, hashlib
 from flask import request, flash, redirect, render_template, session, url_for
 from . import WebApp
 from forms import LoginForm, PasswordForm
 from Database.SeaOpsSqlAlchemy import db_session
 from Utils import IsSessValid
 
-@WebApp.route('/login', methods = ['GET', 'POST'])
+
+@WebApp.route('/login', methods=['GET', 'POST'])
 def login():
     """
     @note GET方法:显示用户登录页面
     @note POST方法:提交用户名/密码进行登录验证
     """
-    #生成登录表单对象
+    # 生成登录表单对象
     form = LoginForm(request.form)
     #如果是POST方法,验证表单提交的数据
-    loginErr='用户名或者密码错误'
-    if(request.method == "POST" and form.validate()):
+    loginErr = '用户名或者密码错误'
+    if (request.method == "POST" and form.validate()):
         #根据用户名在数据库中查找用户信息
         dictUser = db_session.SelectUserByName(form.strUser.data)
-        if(None == dictUser):
+        if (None == dictUser):
             flash(loginErr.decode('utf8'))
             return redirect(url_for('login'))
 
@@ -34,7 +35,7 @@ def login():
         strCtime = dictUser["create_time"].strftime("%Y%m%d%H%M%S")
         # inputPass = hashlib.md5(hashlib.md5("%s-%s" % (form.strPassword.data, strCtime)).hexdigest()).hexdigest().upper()
         inputPass = 'B96D4F26CF3B6B9FCC732941BB283460'
-        if(dictUser["password"] != inputPass):
+        if (dictUser["password"] != inputPass):
             flash(loginErr.decode('utf8'))
             return redirect(url_for('login'))
 
@@ -53,7 +54,8 @@ def login():
         else:
             return redirect(url_for('index'))
 
-    return render_template('login.html', title = 'Login', form = form)
+    return render_template('login.html', title='Login', form=form)
+
 
 @WebApp.route('/logout')
 def logout():
