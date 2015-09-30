@@ -19,7 +19,7 @@ def domain_info():
     domain_return_list = []
     domain_field = []
 
-    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,"-->", z.cdn_hightanti SEPARATOR "<br>") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;'
+    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,":  ",z.ip_source,"|", z.cdn_hightanti SEPARATOR "<br>") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;;'
     domain_result = mysql_conf.sql_exec(domain_select_sql)
     for f in domain_result['field']:
         domain_field.append(f[0])
@@ -27,7 +27,16 @@ def domain_info():
     for v in domain_result['value']:
         domain_dic = {}
         for n in range(len(domain_field)):
-            domain_dic[domain_field[n]] = v[n]
+            if v[n] is None:
+                domain_dic[domain_field[n]] = ""
+            else:
+                domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
+    print domain_return_list
+    return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list)
 
-    return render_template("domain.html", title='Domain', domain_return_list=domain_return_list)
+
+@WebApp.route('/domain/add/')
+def domain_add():
+
+    return render_template("domain/add_update.html")
