@@ -198,51 +198,51 @@ class Action(Base):
 class Domain(Base):
     __tablename__ = "domain_info"
 
-    domain_id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    domain_name = Column("domain", String(64), unique=True,  nullable=False)
-    project_id = Column("project_id", Integer, default="NULL")
+    domain_id = Column("domain_id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    domain_name = Column("domain_name", String(64), unique=True,  nullable=False)
+    project_name = Column("project_name", Integer, default="NULL")
     ip_source = Column("ip_source", String(16), default="NULL")
     status = Column("status", String(64), default="NULL")
     cdn_hightanti = Column("cdn_hightanti", String(64), default="NULL")
     pre_domain_id = Column("pre_domain_id", Integer, nullable=False, default=0)
-    function = Column("function", String(255), default="NULL")
+    functions = Column("functions", String(255), default="NULL")
     comments = Column("comments", String(255), default="NULL")
     is_public = Column("is_public", Integer, default=0)
     register = Column("register", String(64), default="NULL")
     register_date = Column("register_date", TIMESTAMP, server_default="NULL")
     expiration = Column("expiration", TIMESTAMP, server_default="NULL")
-    init_time = Column("init_time", TIMESTAMP, server_default="NULL")
-    update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
-    dml_flag = Column("dml_flag", Integer, default="NULL")
+    init_time = Column("init_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
     def __repr__(self):
         return "<Domain(domain_id='%s',\
                        domain_name ='%s',\
-                       project_id='%s',\
+                       project_name='%s',\
                        ip_source='%s',\
                        status='%s',\
                        cdn_hightanti='%s',\
                        pre_domain_id='%s',\
-                       fuction='%s',\
+                       functions='%s',\
                        comments='%s',\
                        is_public='%s',\
                        register='%s',\
                        register_date='%s',\
                        expiration='%s',\
                        init_time='%s',\
-                       update_time='%s',\
+                       dml_time='%s',\
                        dml_flag='%s')>" % (self.domain_id,
                                           self.domain_name,
-                                          self.project_id,
+                                          self.project_name,
                                           self.ip_source,
                                           self.status,
                                           self.cdn_hightanti,
                                           self.pre_domain_id,
-                                          self.fuction,
+                                          self.functions,
                                           self.comments,
                                           self.is_public,
                                           self.register,
                                           self.register_date,
                                           self.expiration,
                                           self.init_time,
-                                          self.update_time,
+                                          self.dml_time,
                                           self.dml_flag)

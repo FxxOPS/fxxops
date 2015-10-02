@@ -36,7 +36,16 @@ def domain_info():
     return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list)
 
 
-@WebApp.route('/domain/add/')
+@WebApp.route('/domain/add/', methods=['GET', 'POST'])
 def domain_add():
-
+    if request.method == 'POST':
+        subdomain_dic = {"www": request.form['www_ip'], 'v': request.form['v_ip'], 's': request.form['s_ip'], 'p1': request.form['p1_ip']}
+        print subdomain_dic
+        for domain in request.form['domain_name'].split('\r\n'):
+            print domain,"+++"
+            pre_id = db_session.InsertDomain(domain, request.form['project_name'], request.form['fuction'], request.form['comments'])
+            print pre_id[0]
+            db_session.InsertSubdomain(pre_id[0], subdomain_dic)
+            #print a, "-----"
+        return redirect("/domain")
     return render_template("domain/add_update.html")

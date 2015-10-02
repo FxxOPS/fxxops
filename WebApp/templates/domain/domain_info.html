@@ -4,6 +4,7 @@
     <div class="content-box-content">
         <table border=1>
                     <thead>
+                        <th>&nbsp;</th>
                         <th>项目</th>
                         <th>域名</th>
                         <th>子域名</th>
@@ -20,6 +21,7 @@
                     <tbody>
                         {% for domain in domain_return_list %}
                             <tr>
+                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>
                                 <td>{{domain.project_name}}</td>
                                 <td>{{domain.domain_name}}</td>
                                 <td>{{domain.subdomain | safe}}</td>
