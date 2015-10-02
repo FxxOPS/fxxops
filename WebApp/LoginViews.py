@@ -35,7 +35,7 @@ def login():
         #判断数据库中保存的用户密码和页面提交的密码是否相同
         strCtime = dictUser["create_time"].strftime("%Y%m%d%H%M%S")
         inputPass = hashlib.md5(hashlib.md5("%s-%s" % (form.strPassword.data, strCtime)).hexdigest()).hexdigest().upper()
-        if (dictUser["password"] != inputPass):
+        if(dictUser["password"] != inputPass):
             flash(loginErr.decode('utf8'))
             return redirect(url_for('login'))
 
