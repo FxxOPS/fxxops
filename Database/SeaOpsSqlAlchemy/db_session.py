@@ -1089,3 +1089,21 @@ def UpdateSaltReturns(strSuccess , strReturn , strFullRet , strAlterTime, strJob
             logger.error("=== UpdateSaltReturns Error : %s - %s " % (strAlterTime,strJobId))
             logger.error(e)
     return
+
+def InsertDomain(strDomainName, strProjectName, strFunctions, strComments):
+
+    with GetSession() as db_ses:
+        domain = tables.Domain(domain_name=strDomainName, project_name=strProjectName, functions=strFunctions, comments=strComments)
+        db_ses.add(domain)
+        domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
+        # print domain_id
+    return domain_id
+
+def InsertSubdomain(pre_id, DicSubdomain):
+
+    with GetSession() as db_ses:
+        for k, v in DicSubdomain.items():
+            print k, v
+            if v:
+                subdomain = tables.Domain(domain_name=k, ip_source=v, pre_domain_id=pre_id)
+                db_ses.add(subdomain)
