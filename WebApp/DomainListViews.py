@@ -6,7 +6,10 @@ from . import WebApp
 from flask import request, redirect, render_template, session, url_for
 from Database.SeaOpsSqlAlchemy import db_session
 import mysqlconf
-from Utils import IsSessValid, getFirstPY
+
+from Utils import IsSessValid,getFirstPY
+from domain.utils import auto_dig
+
 
 mysql_conf = mysqlconf.mysql_connect()
 
@@ -46,7 +49,7 @@ def domain_add():
             pre_id = db_session.InsertDomain(domain, request.form['project_name'], request.form['fuction'], request.form['comments'])
             print pre_id[0]
             db_session.InsertSubdomain(pre_id[0], subdomain_dic)
-            #print a, "-----"
+            auto_dig(domain, pre_id[0])
         return redirect("/domain")
 
     return render_template("domain/add_update.html")
