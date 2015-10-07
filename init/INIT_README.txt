@@ -54,6 +54,9 @@ vi LoginViews.py
 # inputPass = hashlib.md5(hashlib.md5("%s-%s" % (form.strPassword.data, strCtime)).hexdigest()).hexdigest().upper()
 inputPass = 'B96D4F26CF3B6B9FCC732941BB283460'
 
+select UPPER(md5(md5(CONCAT('132qwe','-','20140610185638')))) ;
+
+
 
 
 ## view web
