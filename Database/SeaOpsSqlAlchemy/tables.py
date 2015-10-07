@@ -200,7 +200,8 @@ class Domain(Base):
 
     domain_id = Column("domain_id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     domain_name = Column("domain_name", String(64), unique=True,  nullable=False)
-    project_name = Column("project_name", Integer, default="NULL")
+    project_id = Column("project_id", Integer)
+    project_name = Column("project_name", String(64), default="NULL")
     ip_source = Column("ip_source", String(16), default="NULL")
     status = Column("status", String(64), default="NULL")
     cdn_hightanti = Column("cdn_hightanti", String(64), default="NULL")
@@ -217,6 +218,7 @@ class Domain(Base):
     def __repr__(self):
         return "<Domain(domain_id='%s',\
                        domain_name ='%s',\
+                       project_id ='%s',\
                        project_name='%s',\
                        ip_source='%s',\
                        status='%s',\
@@ -232,6 +234,7 @@ class Domain(Base):
                        dml_time='%s',\
                        dml_flag='%s')>" % (self.domain_id,
                                           self.domain_name,
+                                          self.project_id,
                                           self.project_name,
                                           self.ip_source,
                                           self.status,

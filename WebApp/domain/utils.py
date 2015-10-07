@@ -17,8 +17,10 @@ subdomain_head_list = ['www', 'v', 's', 'p1']
 cdn_rule_dic = {'.cdng[a-z].net.': 'CDNetwork'}
 highanti_rule_dic = {'5.254.87.': 'Voxility'}
 
+dns_check = ['ultradns', 'dnsmadeeasy', 'cloudflare']
 
 check_sql = 'select domain_name from domain_info where pre_domain_id = %d;'
+counts_sql = 'select count(1) from domain_info where pre_domain_id = %d;'
 update_sub_sql = "update domain_info set cdn_hightanti = '%s', dml_time = '%s', dml_flag = 2 where domain_name = '%s' and pre_domain_id = %d;"
 insert_sub_sql = "insert into domain_info(domain_name, project_name, cdn_hightanti, pre_domain_id, init_time, dml_time) value ('%s', 'V项目', '%s', %d, '%s', '%s')"
 delete_sub_sql = "delete from domain_info where domain_name = '%s' and pre_domain_id = %d;"
@@ -30,12 +32,27 @@ now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def auto_dig(domain, pre_id):
     
-    dig_result = commands.getstatusoutput('dig %s +short |head -1' % domain)
-    if int(dig_result[0]) == 0:
-        if dig_result[1] == '':
-            mysql_conf.sql_exec("update domain_info set status = '已解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
-        else:
-            mysql_conf.sql_exec("update domain_info set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
+    # dig_result = commands.getstatusoutput('dig %s +short |head -1' % domain)
+    # if int(dig_result[0]) == 0:
+    #     if dig_result[1] == '':
+    #         mysql_conf.sql_exec("update domain_info set status = '已解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
+    #     else:
+    #         mysql_conf.sql_exec("update domain_info set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
+
+    dns_result = commands.getstatusoutput(''' dig %s +trace | grep "%s" |awk '{print $NF}' ''' % (str(domain), str(domain)))
+    if int(dns_result[0]) == 0:
+        for dns in dns_check:
+            if re.search(dns, dns_result[1]):
+                mysql_conf.sql_exec("update domain_info set domain_DNS = '%s', dml_time = '%s' where domain_name = '%s' " % (dns, now_time, str(domain)))
+            else:
+                pass
+
+    time_result = commands.getstatusoutput(''' whois %s|grep Expir | awk '{print $NF}' ''' % (str(domain)))
+    if int(time_result[0]) == 0:
+        times = str(time_result[1]).split('T')[0]
+        # timeArray = time.strptime(dates, "%Y-%m-%d")
+        # times = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+        mysql_conf.sql_exec("update domain_info set expiration = '%s', dml_time = '%s' where domain_name = '%s' " % (times, now_time, str(domain)))
 
     for head in subdomain_head_list:
         subdomain = '%s.%s' % (head, domain)
@@ -100,3 +117,10 @@ def auto_dig(domain, pre_id):
                 mysql_conf.sql_exec(insert_sub_sql % (head, reslut, pre_id, now_time, now_time))
         if len(delete_list) == 2 and list(set(delete_list))[0] == "Unknow":
             mysql_conf.sql_exec(delete_sub_sql % (head, pre_id))
+
+    count_result = mysql_conf.sql_exec(counts_sql % int(pre_id))
+    print count_result,"+++"
+    if int(count_result['value'][0][0]) == 0:
+        mysql_conf.sql_exec("update domain_info set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
+    else:
+        mysql_conf.sql_exec("update domain_info set status = '已解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))

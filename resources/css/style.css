@@ -348,7 +348,7 @@ ul.content-box-tabs li a.current {
                 font-weight: bold;
                 font-size: 15px;
                 border-bottom: 1px solid #ddd;
-				text-align:center;		
+				text-align:left;
 				white-space: nowrap;
                 }
                 
@@ -364,7 +364,7 @@ ul.content-box-tabs li a.current {
 				cursor:default;
                 }
 #main-content tbody td {
-				text-align:center;
+				text-align:left;
 				vertical-align:middle; 
 				white-space:nowrap;
                 }
