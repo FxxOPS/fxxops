@@ -1145,10 +1145,10 @@ def UpdateSaltReturns(strSuccess, strReturn, strFullRet, strAlterTime, strJobId)
             logger.error(e)
     return
 
-def InsertDomain(strDomainName, strProjectName, strFunctions, strComments):
+def InsertDomain(strDomainName,strProjectId, strProjectName, strFunctions, strComments):
 
     with GetSession() as db_ses:
-        domain = tables.Domain(domain_name=strDomainName, project_name=strProjectName, functions=strFunctions, comments=strComments)
+        domain = tables.Domain(domain_name=strDomainName, project_id=strProjectId, project_name=strProjectName, functions=strFunctions, comments=strComments)
         db_ses.add(domain)
         domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
         # print domain_id
@@ -1162,3 +1162,15 @@ def InsertSubdomain(pre_id, DicSubdomain):
             if v:
                 subdomain = tables.Domain(domain_name=k, ip_source=v, pre_domain_id=pre_id)
                 db_ses.add(subdomain)
+
+def UpdateDomainComments(strDomainId, strComments):
+
+    with GetSession() as db_ses:
+        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainId).update({"comments": strComments})
+
+def SelectProjectId(strProjectId):
+    with GetSession() as db_ses:
+        project_name = db_ses.query(tables.Project.name).filter(tables.Project.id == strProjectId).first()
+
+    return project_name
+

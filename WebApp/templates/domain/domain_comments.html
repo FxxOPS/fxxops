@@ -1,19 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="main-content">
-    <div class="content-box-content">
-        <a href="/domain/add/">添加</a>
-        <table border=1>
+
+    <div id="main-content">
+        <!-- Main Content Section with everything -->
+        <!-- Start Content Box -->
+        <div class="content-box-header">
+            <h3>域名信息:</h3>
+            <div class="clear"></div>
+        </div>
+        <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+		<a href="/domain/"> <<回到分组</a> <br /><br />
+            <table border=1>
                     <thead>
-                        <th>&nbsp;</th>
+
                         <th>项目</th>
                         <th>域名</th>
                         <th>子域名</th>
                          <th>域名状态</th>
 {#                        <th>原IP</th>#}
-                        <th>是否开放给运营</th>
+
                         <th>用途</th>
-                        <th>备注</th>
                         <th>域名解析</th>
                         <th>过期时间</th>
                         <th>其他信息</th>
@@ -22,25 +30,17 @@
                     <tbody>
                         {% for domain in domain_return_list %}
                             <tr>
-                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>
+
                                 <td>{{domain.project_name}}</td>
                                 <td>{{domain.domain_name}}</td>
                                 <td>{{domain.subdomain | safe}}</td>
-                                {% if domain.status == '已解析' %}
-                                <td><font color="blue">{{domain.status}}</font></td>
-                                {% else %}
-                                <td><font color="#A4A4A4">{{domain.status}}</font></td>
-                                {% endif %}
+                                <td>{{domain.status}}</td>
 {#                                <td>{{domain.ip_source}}</td>#}
-                                <td>{{domain.is_public}}</td>
+
                                 <td>{{domain.functions}}</td>
 
 {#                                <td>{% if domain.cdn_hightanti %}{{domain.cdn_hightanti}}{% endif %}</td>#}
-                                {% if domain.comments %}
-                                <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
-                                {% else %}
-                                <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
-                                {% endif %}
+
                                 <td>{{domain.domain_DNS}}</td>
                                 <td>{{domain.expiration}}</td>
 
@@ -58,10 +58,24 @@
                                   </div>
                                   <!-- End #messages -->
                             </tr>
-                        {% endfor %}
+
                     </tbody>
                 </table>
-
+        </div>
+        <br/>
+        <form action="/domain/comments/{{domain.domain_id}}" method="POST">
+            comment:<textarea cols="60" rows="10" name="comments">{{domain.comments}}</textarea>
+            <input type="submit" value="Submit" />
+        </form>
+        <ul>
+            {% for comment in comment_list %}
+                <li>------ {{comment.update_time}} ------ ------
+					<pre> {{comment.history}} </pre>
+				</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
     </div>
-</div>
+
 {% endblock %}
+
