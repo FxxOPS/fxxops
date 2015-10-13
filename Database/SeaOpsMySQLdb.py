@@ -39,17 +39,41 @@ SQL_UPDATE_SALT_RETURNS_BY_JID = """UPDATE `salt_returns` SET `success`='%s', `r
 '''
 Return a mysql cursor
 '''
-@contextmanager
-def GetCursor():
-    try:
-        conn = MySQLdb.connect(host = DB_ADDRESS, user = DB_USER, passwd = DB_PWD, db = DB_DEF, port = DB_PORT, charset = DB_CHAR_SET)
-        cursor = conn.cursor()
-        yield cursor
-    except MySQLdb.DatabaseError as err:
-        cursor.execute("ROLLBACK")
-        logger.error(err)
-    else:
-        cursor.execute("COMMIT")
-    finally:
-        cursor.close()
-        conn.close()
+# @contextmanager
+# def GetCursor():
+#     try:
+#         conn = MySQLdb.connect(host = DB_ADDRESS, user = DB_USER, passwd = DB_PWD, db = DB_DEF, port = DB_PORT, charset = DB_CHAR_SET)
+#         cursor = conn.cursor()
+#         yield cursor
+#     except MySQLdb.DatabaseError as err:
+#         cursor.execute("ROLLBACK")
+#         logger.error(err)
+#     else:
+#         cursor.execute("COMMIT")
+#     finally:
+#         cursor.close()
+#         conn.close()
+
+
+class mysql_connect:
+
+        def sql_exec(self, amont_sql, where='local',):
+                result_dic = {}
+                try:
+                        if where == 'local':
+                            conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, db=DB_DEF, charset=DB_CHAR_SET)
+                        else:
+                            conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, db=DB_DEF, charset=DB_CHAR_SET)
+                        cur = conn.cursor()
+                        cur.execute(amont_sql)
+                        conn.commit()
+                        value = cur.fetchall()
+                        field = cur.description
+                        cur.close()
+                        conn.close()
+                        result_dic = {'result': 'True', 'value': value, 'field': field}
+                        return result_dic
+                except MySQLdb.Error, e:
+                        err_msg = "Mysql Error Msg: %s" % e
+                        result_dic = {'result': 'False', 'err_msg': err_msg}
+                        return result_dic

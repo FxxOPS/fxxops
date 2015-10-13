@@ -1,35 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="main-content">
-    <div class="content-box-content">
-        <a href="/domain/add/">添加</a>
-        <table border=1>
-                    <thead>
-                        <th>&nbsp;</th>
-                        <th>项目</th>
-                        <th>域名</th>
-                        <th>子域名</th>
-                         <th>域名状态</th>
-{#                        <th>原IP</th>#}
-                        <th>是否开放给运营</th>
-                        <th>用途</th>
-                        <th>备注</th>
-                        <th>域名解析</th>
-                        <th>过期时间</th>
-                        <th>其他信息</th>
-
-                    </thead>
-                    <tbody>
-                        {% for domain in domain_return_list %}
-                            <tr>
+<div class="mws-panel grid_8" id="mian-content">
+                	<div class="mws-panel-header">
+                    	<span class="mws-i-24 i-table-1">域名列表</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-datatable-fn mws-table">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>项目</th>
+                                    <th>域名</th>
+                                    <th>子域名:源IP | 高防or防火墙</th>
+                                    <th>域名状态</th>
+                                    <th>是否开放给运营</th>
+                                    <th>用途</th>
+                                    <th>备注</th>
+                                    <th>域名解析</th>
+                                    <th>过期时间</th>
+                                    <th>其他信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 {% for domain in domain_return_list %}
+                            <tr class="gradeA">
                                 <td><input type="checkbox" name="{{ domain.domain_id }}"></td>
                                 <td>{{domain.project_name}}</td>
                                 <td>{{domain.domain_name}}</td>
-                                <td>{{domain.subdomain | safe}}</td>
+{#                                <td>{{domain.subdomain | Subdomain}}</td>#}
+                                <td>
+                                    {% for subdomain in domain.subdomain | Subdomain  %}
+                                    <div><span style="width: 50px; display: inline-block; text-align: right;margin-right: 10px;">{{ subdomain[0] }}:</span><span style="display: inline-block;margin-right: 5px;">{{ subdomain[1] }}</span>&nbsp;|&nbsp;&nbsp;<span style="display: inline-block;">{{ subdomain[2] }}</span></div>
+                                    {% endfor %}
+                                </td>
                                 {% if domain.status == '已解析' %}
-                                <td><font color="blue">{{domain.status}}</font></td>
+                                <td><span style="color: #5092C7">{{domain.status}}</span></td>
                                 {% else %}
-                                <td><font color="#A4A4A4">{{domain.status}}</font></td>
+                                <td><span style="color: #A4A4A4">{{domain.status}}</span></td>
                                 {% endif %}
 {#                                <td>{{domain.ip_source}}</td>#}
                                 <td>{{domain.is_public}}</td>
@@ -39,15 +46,21 @@
                                 {% if domain.comments %}
                                 <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
                                 {% else %}
-                                <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
+                                <td><pre> <a type="button" class="mws-button blue" href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
                                 {% endif %}
                                 <td>{{domain.domain_DNS}}</td>
+                                {% if domain.expiration | Expiration  == 'True'%}
+                                <td><font color="red">{{domain.expiration}}</font></td>
+                                {% else %}
                                 <td>{{domain.expiration}}</td>
+                                {% endif %}
 
+{#                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>#}
+                                <td>
+                                <input type="button" class="mws-button blue mws-pop" value="查看" data-dialogid="messages{{domain.domain_id}}" />
 
-
-                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>
-                                  <div  id="messages{{domain.domain_id}}" style="display: none; ">
+{#                                  <div  id="messages{{domain.domain_id}}" style="display: none; ">#}
+                                  <div  id="messages{{domain.domain_id}}" class="mws-dialog nws-hide">
                                     <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
                                     <h3>信息</h3>
                                     <p>
@@ -56,12 +69,38 @@
 
                                     </p>
                                   </div>
+                                </td>
                                   <!-- End #messages -->
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-    </div>
-</div>
+<script>
+$(function(){
+    $(".mws-dialog").dialog({
+        autoOpen: false,
+        title: "",
+        modal: true,
+        width: 500,
+        buttons: [{
+            text: "关闭",
+            click: function() {
+                $( this ).dialog( "close" );
+            }}]
+    });
+    $(".mws-table .mws-pop").bind("click", function(event) {
+        var id = $(this).data('dialogid');
+        $("#"+id).dialog("option", {modal: true}).dialog("open");
+        event.preventDefault();
+    });
+
+    /* Data Tables */
+
+{#    $(".mws-datatable").dataTable();#}
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' href='/domain/update/'>修改</a><label>"});
+})
+</script>
 {% endblock %}

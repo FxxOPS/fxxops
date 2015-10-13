@@ -1,0 +1,312 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!-- Required Stylesheets -->
+<link rel="stylesheet" type="text/css" href="/resources/css/reset.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/text.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/fonts/ptsans/stylesheet.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/fluid.css" media="screen" />
+
+<link rel="stylesheet" type="text/css" href="/resources/css/mws.style.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/icons/icons.css" media="screen" />
+
+<!-- Demo and Plugin Stylesheets -->
+<link rel="stylesheet" type="text/css" href="/resources/css/demo.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/mws.theme.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/jui/jquery.ui.css" media="screen" />
+
+<script type="text/javascript" src="/resources/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/resources/plugins/jquery.dataTables.js"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/resources/plugins/flot/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/resources/js/mws.js"></script>
+
+
+<title>Domain</title>
+
+</head>
+<div class="container">
+    <div class="mws-dialog">
+        {% for history in history_return_list %}
+        <div class="mws-tabs">
+            <ul>
+                <li><a href="#tab-1">Fingerprint</a></li>
+                <li><a href="#tab-2">Example</a></li>
+                <li><a href="#tab-3">Review</a></li>
+            </ul>
+
+            <div id="tab-1">
+                <p>{{ history.fingerprint }}</p>
+            </div>
+
+            <div id="tab-2">
+                <p>{{ history.sample }}</p>
+            </div>
+
+            <div id="tab-3">
+            <form class="mws-form" action="/digest/comments/{{history.checksum}}" method="POST">
+                <div class="mws-form-inline">
+                            <div class="mws-form-row">
+                                <label>Comments</label>
+                                <div class="mws-form-item large">
+                                <input type="hidden" name="tablename" value="{{ table_name }}" />
+                                <textarea rows="100%" cols="100%" name="comments">{{history.comments}}</textarea>
+                                </div>
+                            </div>
+                            <div class="mws-form-row">
+                            <input type="submit" value="submit" class="mws-button green">
+                            </div>
+                            </div>
+            </form>
+{#                <form action="/digest/comments/{{history.checksum}}" method="POST">#}
+{#                        <input type="hidden" name="tablename" value="{{ table_name }}" />#}
+{#                        comment:<textarea cols="100" rows="10" name="comments">{{history.comments}}</textarea>#}
+{#                        <input type="submit" value="Submit" />#}
+{#                </form>#}
+            </div>
+        </div>
+        <div class="mws-accordion">
+            <h3><a href="#">Data Show</a></h3>
+            <div>
+                <div class="mws-panel grid_3 clearfix">
+                    <div class="mws-panel-header">
+                        <span class="mws-i-24 i-table-1">总览数据</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-table">
+                            <thead>
+                            <tr>
+                                <th>Boolean Attributes</th>
+                                <th>Count</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="gradeX">
+                                <td>Query Count</td>
+                                <td>{{ history.ts_cnt |int}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="mws-panel grid_8 clearfix">
+                    <div class="mws-panel-header">
+                        <span class="mws-i-24 i-table-1">Simple Table</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-table">
+                            <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Median</th>
+                                <th>95%</th>
+                                <th>StdDev</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                                <th>Sum</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="gradeX">
+                                <td>Query Time (ms)</td>
+                                <td>{{ history.Query_time_median }}</td>
+                                <td>{{ history.Query_time_pct_95 }}</td>
+                                <td>{{ history.Query_time_stddev }}</td>
+                                <td>{{ history.Query_time_min }}</td>
+                                <td>{{ history.Query_time_max }}</td>
+                                <td>{{ history.Query_time_sum }}</td>
+                            </tr>
+                            <tr class="gradeC">
+                                <td>Lock Time (ms)</td>
+                                <td>{{ history.Lock_time_median }}</td>
+                                <td>{{ history.Lock_time_pct_95 }}</td>
+                                <td>{{ history.Lock_time_stddev }}</td>
+                                <td>{{ history.Lock_time_min }}</td>
+                                <td>{{ history.Lock_time_max }}</td>
+                                <td>{{ history.Lock_time_sum }}</td>
+                            </tr>
+                            <tr class="gradeA">
+                                <td>Rows Sent</td>
+                                <td>{{ history.Rows_sent_median |int }}</td>
+                                <td>{{ history.Rows_sent_pct_95 |int }}</td>
+                                <td>{{ history.Rows_sent_stddev |int }}</td>
+                                <td>{{ history.Rows_sent_min |int }}</td>
+                                <td>{{ history.Rows_sent_max |int }}</td>
+                                <td>{{ history.Rows_sent_sum |int }}</td>
+                            </tr>
+                            <tr class="gradeA">
+                                <td>Rows Examined</td>
+                                <td>{{ history.Rows_examined_median |int }}</td>
+                                <td>{{ history.Rows_examined_pct_95 |int }}</td>
+                                <td>{{ history.Rows_examined_stddev |int }}</td>
+                                <td>{{ history.Rows_examined_min |int }}</td>
+                                <td>{{ history.Rows_examined_max |int }}</td>
+                                <td>{{ history.Rows_examined_sum |int }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+
+{#            <h3><a href="#">Data Show</a></h3>#}
+{#            <div>#}
+{#                <div>#}
+{#                <table class="mws-table">#}
+{#                    <thead>#}
+{#                    <tr>#}
+{#                        <th>Attribute</th>#}
+{#                        <th>Median</th>#}
+{#                        <th>95%</th>#}
+{#                        <th>StdDev</th>#}
+{#                        <th>Min</th>#}
+{#                        <th>Max</th>#}
+{#                        <th>Sum</th>#}
+{#                    </tr>#}
+{#                    </thead>#}
+{#                    <tbody>#}
+{#                    <tr class="gradeX">#}
+{#                        <td>Query Time (ms)</td>#}
+{#                        <td>{{ history.Query_time_median }}</td>#}
+{#                        <td>{{ history.Query_time_pct_95 }}</td>#}
+{#                        <td>{{ history.Query_time_stddev }}</td>#}
+{#                        <td>{{ history.Query_time_min }}</td>#}
+{#                        <td>{{ history.Query_time_max }}</td>#}
+{#                        <td>{{ history.Query_time_sum }}</td>#}
+{#                    </tr>#}
+{#                    <tr class="gradeC">#}
+{#                        <td>Lock Time (ms)</td>#}
+{#                        <td>{{ history.Lock_time_median }}</td>#}
+{#                        <td>{{ history.Lock_time_pct_95 }}</td>#}
+{#                        <td>{{ history.Lock_time_stddev }}</td>#}
+{#                        <td>{{ history.Rows_sent_min }}</td>#}
+{#                        <td>{{ history.Rows_sent_max }}</td>#}
+{#                        <td>{{ history.Rows_sent_sum }}</td>#}
+{#                    </tr>#}
+{#                    <tr class="gradeA">#}
+{#                        <td>Rows Sent</td>#}
+{#                        <td>{{ history.Rows_sent_median }}</td>#}
+{#                        <td>{{ history.Rows_sent_pct_95 }}</td>#}
+{#                        <td>{{ history.Rows_sent_stddev }}</td>#}
+{#                        <td>{{ history.Rows_sent_min }}</td>#}
+{#                        <td>{{ history.Rows_sent_max }}</td>#}
+{#                        <td>{{ history.Rows_sent_sum }}</td>#}
+{#                    </tr>#}
+{#                    <tr class="gradeA">#}
+{#                        <td>Rows Examined</td>#}
+{#                        <td>{{ history.Rows_examined_median }}</td>#}
+{#                        <td>{{ history.Rows_examined_pct_95 }}</td>#}
+{#                        <td>{{ history.Rows_examined_stddev }}</td>#}
+{#                        <td>{{ history.Rows_examined_min }}</td>#}
+{#                        <td>{{ history.Rows_examined_max }}</td>#}
+{#                        <td>{{ history.Rows_examined_sum }}</td>#}
+{#                    </tr>#}
+{#                    </tbody>#}
+{#                </table>#}
+{#            </div>#}
+{#            </div>#}
+{#            <h3><a href="#">Section 3</a></h3>#}
+{#            <div>#}
+{#                <p>#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{##}
+{##}
+{#                </p>#}
+{#                <ul>#}
+{#                    <li>List item one</li>#}
+{#                    <li>List item two</li>#}
+{#                    <li>List item three</li>#}
+{#                </ul>#}
+{#            </div>#}
+{#            <h3><a href="#">Section 4</a></h3>#}
+{#            <div>#}
+{#                <p>#}
+{#                    Cras dictum. Pellentesque habitant morbi tristique senectus et netus#}
+{#                    et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in#}
+{#                    faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia#}
+{#                    mauris vel est.#}
+{#                </p>#}
+{#                <p>#}
+{#                    Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.#}
+{#                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per#}
+{#                    inceptos himenaeos.#}
+{#                </p>#}
+{#            </div>#}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $(".mws-table .mws-button").bind("click", function(event) {
+            $(".mws-dialog").dialog("option", {modal: true}).dialog("open");
+            event.preventDefault();
+        });
+
+        $(".mws-tabs").tabs();
+        $(".mws-accordion").accordion();
+
+    })
+</script>
+
