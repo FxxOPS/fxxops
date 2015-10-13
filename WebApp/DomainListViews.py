@@ -3,15 +3,16 @@ __author__ = 'Abbott'
 
 import json
 from . import WebApp
+from . import logger
 from flask import request, redirect, render_template, session, url_for
 from Database.SeaOpsSqlAlchemy import db_session
-import mysqlconf
-
+# import mysqlconf
+from Database.SeaOpsMySQLdb import mysql_connect
 from Utils import IsSessValid,getFirstPY
 from domain.utils import auto_dig
 
+mysql_conf = mysql_connect()
 
-mysql_conf = mysqlconf.mysql_connect()
 
 
 @WebApp.route('/domain/')
@@ -22,7 +23,9 @@ def domain_info():
     domain_return_list = []
     domain_field = []
 
-    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,":  ",z.ip_source,"|", z.cdn_hightanti SEPARATOR "<br>") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;'
+    #domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,":  ",z.ip_source,"|", z.cdn_hightanti SEPARATOR "<br>") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;'
+    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,"," ,z.ip_source, "," ,z.cdn_hightanti SEPARATOR ";") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;'
+
     domain_result = mysql_conf.sql_exec(domain_select_sql)
     for f in domain_result['field']:
         domain_field.append(f[0])
@@ -32,6 +35,7 @@ def domain_info():
         for n in range(len(domain_field)):
             if v[n] is None:
                 domain_dic[domain_field[n]] = ""
+                logger.info(domain_dic)
             else:
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
@@ -60,7 +64,7 @@ def domain_add():
 def domain_comments(iDomainId):
     domain_return_list = []
     domain_field = []
-    domain_id_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,":  ",z.ip_source,"|", z.cdn_hightanti SEPARATOR "<br>") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0 and f.domain_id = %d  group by f.domain_id;' % int(iDomainId)
+    domain_id_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,"," ,z.ip_source, "," ,z.cdn_hightanti SEPARATOR ";") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0 and f.domain_id = %d  group by f.domain_id;' % int(iDomainId)
     domain_result = mysql_conf.sql_exec(domain_id_select_sql)
     for f in domain_result['field']:
         domain_field.append(f[0])

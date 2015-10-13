@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block content %}
+
+{#<div class="mws-dialog">#}
+{#    <div class="mws-tabs">#}
+{#        <ul>#}
+{#            <li><a href="#tab-1">Tab 1</a></li>#}
+{#            <li><a href="#tab-2">Tab 2</a></li>#}
+{#            <li><a href="#tab-3">Tab 3</a></li>#}
+{#        </ul>#}
+{##}
+{#        <div id="tab-1">#}
+{#            <p>1</p>#}
+{#        </div>#}
+{##}
+{#        <div id="tab-2">#}
+{#            <p>2</p>#}
+{#        </div>#}
+{##}
+{#        <div id="tab-3">#}
+{#            <p>3</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="mws-accordion">#}
+{#        <h3><a href="#">Section 1</a></h3>#}
+{#        <div>#}
+{#            <table class="mws-table">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th>Rendering engine</th>#}
+{#                    <th>Browser</th>#}
+{#                    <th>Platform(s)</th>#}
+{#                    <th>Engine version</th>#}
+{#                    <th>CSS grade</th>#}
+{#                </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                <tr class="gradeX">#}
+{#                    <td>Trident</td>#}
+{#                    <td>Internet#}
+{#                        Explorer 4.0</td>#}
+{#                    <td>Win 95+</td>#}
+{#                    <td class="center">4</td>#}
+{#                    <td class="center">X</td>#}
+{#                </tr>#}
+{#                <tr class="gradeC">#}
+{#                    <td>Trident</td>#}
+{#                    <td>Internet#}
+{#                        Explorer 5.0</td>#}
+{#                    <td>Win 95+</td>#}
+{#                    <td class="center">5</td>#}
+{#                    <td class="center">C</td>#}
+{#                </tr>#}
+{#                <tr class="gradeA">#}
+{#                    <td>Trident</td>#}
+{#                    <td>Internet#}
+{#                        Explorer 5.5</td>#}
+{#                    <td>Win 95+</td>#}
+{#                    <td class="center">5.5</td>#}
+{#                    <td class="center">A</td>#}
+{#                </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+{#        <h3><a href="#">Section 2</a></h3>#}
+{#        <div>#}
+{#            <p>#}
+{#                Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet#}
+{#                purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor#}
+{#                velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In#}
+{#                suscipit faucibus urna.#}
+{#            </p>#}
+{#        </div>#}
+{#        <h3><a href="#">Section 3</a></h3>#}
+{#        <div>#}
+{#            <p>#}
+{#                Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.#}
+{#                Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero#}
+{#                ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis#}
+{#                lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.#}
+{#            </p>#}
+{#            <ul>#}
+{#                <li>List item one</li>#}
+{#                <li>List item two</li>#}
+{#                <li>List item three</li>#}
+{#            </ul>#}
+{#        </div>#}
+{#        <h3><a href="#">Section 4</a></h3>#}
+{#        <div>#}
+{#            <p>#}
+{#                Cras dictum. Pellentesque habitant morbi tristique senectus et netus#}
+{#                et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in#}
+{#                faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia#}
+{#                mauris vel est.#}
+{#            </p>#}
+{#            <p>#}
+{#                Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.#}
+{#                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per#}
+{#                inceptos himenaeos.#}
+{#            </p>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+<div class="container">
+
+    <div class="mws-panel grid_8" id="mian-content">
+        <div class="mws-panel-header">
+            <span class="mws-i-24 i-table-1">digest列表</span>
+        </div>
+        <div class="mws-panel-body">
+            <table class="mws-datatable-fn mws-table" id="{{ table_name }}">
+                <thead>
+                <tr>
+                    <th>checksum</th>
+                    <th>sample</th>
+                    <th>row_counts</th>
+                    <th>row_time_sum</th>
+                    <th>row_time_max</th>
+                    <th>row_time_95</th>
+                    <th>first_seen</th>
+                    <th>last_seen</th>
+                    <th>reviewed_on</th>
+                    <th>comments</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for digest in result_list %}
+                <tr class="gradeX">
+                    <td>{{ digest.checksum }}</td>
+                    <td>{{ digest.sample }}</td>
+                    <td>{{ digest.ts_cnt |int }}</td>
+                    <td>{{ digest.Query_time_sum }}</td>
+                    <td>{{ digest.Query_time_max }}</td>
+                    <td>{{ digest.Query_time_pct_95 }}</td>
+                    <td>{{ digest.first_seen }}</td>
+                    <td>{{ digest.last_seen }}</td>
+                    <td>{{ digest.reviewed_on }}</td>
+                    <td>{{ digest.comments }}</td>
+                    <td>
+                        <input type="button" class="mws-button blue" onclick="openDialogByIframe('http://10.1.110.25:8011/digest/{{ table_name }}/{{ digest.checksum }}')" value="查看" />
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $(".mws-tabs").tabs();
+        $(".mws-accordion").accordion();
+
+        /* Data Tables */
+
+{#        $(".mws-datatable").dataTable();#}
+{#        $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers"});#}
+        var selectFilter = '<select class="fnTabFilter" ><option value="000">----过滤条件----</option><option value="9">All</option><option value="0">UnCheck</option><option value="1">Check</option></select>';
+        $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabFilter:selectFilter});
+
+        $(".fnTabFilter").on('change',function(){
+            var value = $(this).val();
+            var table_name = $(".mws-datatable-fn").attr('id');
+            location = "/digest/"+ table_name +"/?filter_id="+value;
+        });
+
+        $(".mws-dialog").dialog({
+            autoOpen: false,
+            title: "",
+            modal: true,
+            width: "95%",
+            buttons: [{
+                text: "关闭",
+                click: function() {
+                    $( this ).dialog( "close" );
+                }}]
+        });
+
+
+    })
+
+   function openDialogByIframe(url) {
+        var winWinth = $(window).width(), winHeight = $(document).height();
+        var width = winWinth - 50,
+                height = winHeight - 50;
+
+        $("body").append("<div class='yz_popIframeDiv'></div>");
+        $("body")
+                .append(
+                "<div class='yz_popTanChu'><div class='pop-banner'><input type='button' class='mws-button green mws-pop iframe-close' value='关闭' /></div><iframe class='winIframe' frameborder='0' hspace='0' src="
+                + url + "></iframe></div>");
+
+        $(".yz_popIframeDiv").css({
+            width : winWinth,
+            height : winHeight,
+            background : "#000",
+            position : "absolute",
+            zIndex : 100000,
+            left : "0",
+            top : "0"
+        });
+
+        $(".yz_popIframeDiv").fadeTo(0, 0.5);
+        var yz_popTanChuLeft = $(window).width() / 2 - width / 2;
+        //var yz_popTanChuTop = $(window).height() / 2 - height / 2 + $(window).scrollTop();
+
+        $(".yz_popTanChu").css({
+            width : width,
+            height : height,
+            left : yz_popTanChuLeft,
+            top : 0,
+            background : "#fff",
+            zIndex : 100000,
+            position : "absolute"
+        });
+
+        var winIframeHeight = height - 26;
+
+        $(".winIframe").css({
+            width : width,
+            height : winIframeHeight
+        });
+
+        $(".iframe-close").click(function() {
+            $(".yz_popIframeDiv").remove();
+            $(".yz_popTanChu").remove();
+        });
+    }
+
+</script>
+
+{% endblock %}

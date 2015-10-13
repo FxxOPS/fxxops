@@ -1,199 +1,207 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<html>
-    <head>
-        <!--                       CSS                       -->
-        <!-- Reset Stylesheet -->
-        <link rel="stylesheet" href="/resources/css/reset.css" type="text/css" media="screen" />
-        <!-- Main Stylesheet -->
-        <link rel="stylesheet" href="/resources/css/style.css" type="text/css" media="screen" />
-        <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
-        <link rel="stylesheet" href="/resources/css/invalid.css" type="text/css" media="screen" />
-        <!--                       Javascripts                       -->
-        <!-- jQuery -->
-        <script type="text/javascript" src="http://libs.useso.com/js/jquery/1.11.1/jquery.min.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <!-- jQuery Configuration -->
-        <script type="text/javascript" src="/resources/scripts/simpla.jquery.configuration.js"></script>
-        <!-- Facebox jQuery Plugin -->
-        <script type="text/javascript" src="/resources/scripts/facebox.js"></script>
-        <!-- jQuery WYSIWYG Plugin -->
-        <script type="text/javascript" src="/resources/scripts/jquery.wysiwyg.js"></script>
-        <!-- jQuery Datepicker Plugin -->
-        <script type="text/javascript" src="/resources/scripts/jquery.datePicker.js"></script>
-        <script type="text/javascript" src="/resources/scripts/jquery.date.js"></script>
+<!-- Required Stylesheets -->
+<link rel="stylesheet" type="text/css" href="/resources/css/reset.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/text.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/fonts/ptsans/stylesheet.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/fluid.css" media="screen" />
 
-        <script language="javascript">
-        $(window).scroll(function(){
-            $('#move').css('top', $(document).scrollTop() + $(window).height() - $('#move').height()-5);
-        });
-        </script>
+<link rel="stylesheet" type="text/css" href="/resources/css/mws.style.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/icons/icons.css" media="screen" />
 
-        {% if title %}
-            <title>{{title}}</title>
-        {% else %}
-            <title>Server List</title>
-        {% endif %}
-    </head>
-    <body>
-    <div id="body-wrapper">
-        <div id=move><a href="#top"><img src="/resources/images/top.gif"></a></div>
-        <div id="sidebar">
-            <div id="sidebar-wrapper">
-                <!-- Sidebar with logo and menu -->
-                <h1 id="sidebar-title"><a href="#">ServerInfo</a></h1>
-                <!-- Logo (221px wide) -->
-                <a href="/"><img id="logo" src="/resources/images/logo.png" alt="Group List" /></a>
-				
-					<!-- 查询 -->
-					<script src="http://libs.useso.com/js/jqueryui/1.10.4/jquery-ui.min.js"></script>
-					<link rel="stylesheet" href="http://libs.useso.com/js/jqueryui/1.10.4/css/jquery-ui.min.css">
-					<script>
-						$(function(){$("#qResult").autocomplete({
-													//source: availableTags
-													source: '/q',
-													minLength: 2,
-													delay: 300,
-													autoFocus: false
-													});
-										$("#qSubmit").click(function(){
-											 var con= $("input").val();
-											 $("input").val($.trim(con));
-										});
-									}); 				
-					</script>
-					<style>
-					
+<!-- Demo and Plugin Stylesheets -->
+<link rel="stylesheet" type="text/css" href="/resources/css/demo.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/mws.theme.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/resources/css/jui/jquery.ui.css" media="screen" />
 
-					/* Search Box */
-					
-					div#mws-searchbox
-					{
-						margin:0 16px 10px 25px;
-						padding:3px;
-					}
-					
-					div#mws-searchbox .mws-search-input
-					{
-						background:none;
-						padding:3px;
-						width:135px;
-						float:left;
-						border:none;
-						outline:none;
-						color:#ffffff;
-					}
-					
-					div#mws-searchbox .mws-search-submit
-					{
-						text-indent:-9999px;
-						text-transform:capitalize;
-						width:24px; height:24px;
-						display:block;
-						margin-left:144px;
-						border:none;
-						cursor:pointer;
-						background:url("/resources/images/mws-search-icon.png") no-repeat center center;
-						
-						/* CSS 3 */
-						
-						-webkit-border-radius:4px;
-						-moz-border-radius:4px;
-						-o-border-radius:4px;
-						-khtml-border-radius:4px;
-						border-radius:4px;
-						background-color: #57a000;
-					}					 
-					
-					.mws-inset
-					{
-						background-image:url("/resources/images/mws-inset.png");
-						
-						/* CSS 3 */
-						
-						-webkit-border-radius:4px;
-						-moz-border-radius:4px;
-						-o-border-radius:4px;
-						-khtml-border-radius:4px;
-						border-radius:4px;
-						
-						-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.5);
-						-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.5);
-						-o-box-shadow:0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.5);
-						-khtml-box-shadow:0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.5);
-						box-shadow:0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.5);
-						width: 168px;
-					}
+<script type="text/javascript" src="/resources/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/resources/plugins/jquery.dataTables.js"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/resources/plugins/flot/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/resources/js/mws.js"></script>
 
-					</style>
-					<div id="mws-searchbox" class="mws-inset" >
-							<form action="/search" method="POST" name="search"> 
-								<input id="qResult" class="mws-search-input" type="text" name="value" value="{{req_text}}"/> 
-								<input id="qSubmit" class="mws-search-submit" type="submit">
-							</form>
-					</div>
-					<div class="clear"><br /></div>
-					<!-- 查询 end -->			
-				
-				
-				
-                <!-- Sidebar Profile links -->
-                <div id="profile-links" style="padding-right:25px;">
-                    Welcome, {{session["user_name"]}} !! <br />
-                    <a href="/" >回到首页</a> |   <a href="/logout" >退出</a> <br />
-					<a href="/operation/history" >操作历史 </a> <br />
-					<a href="/domain" >域名管理 </a> <br />
-                    {% if session["user_type"]==0 %}
-                         <a href="/privilege" >权限管理</a>  |
-						 <a href="/pmodify" >分组管理</a>  
-						 <br />
-                    {% endif %}
-                    <a href="/domain" >域名管理</a>
-                    <br />
-					
-					
-			        {% if project_list %}
-                        <a href="#" > {{project_list|length()}} </a> 个分组,
-                    {% endif %}
-                    {% if server_list %}
-                        <a href="#" >{{server_list|length()}}</a>   台服务器  <br />
-                    {% endif %}
-                    <br />
-          		</div>
-	
 
-                <!-- left nav Menu -->
-                <ul id="main-nav">
-                    {% if title != 'User Management' and title != 'User Privilege' and title != 'Index' %}
-                        {% for project in project_list %}
-                            <li> <a href="/project/{{project}}" class="nav-top-item no-submenu">
-                              <!-- Add the class "no-submenu" to menu items with no sub menu -->
-                              {{project}} </a>
-                               </li>
-                        {% endfor %}
-                    {% endif  %}
+<title>Domain</title>
 
-                    {% if type == 'project' %}
-                        <li>
-                            <!-- Add the class "no-submenu" to menu items with no sub menu -->
-                            <a href="#" class="nav-top-item current">{{name}} </a>
-                        </li>
-                    {% endif %}
+</head>
+
+<body>
+
+	<div id="mws-header" class="clearfix">
+    	<div id="mws-logo-container">
+        	<div id="mws-logo-wrap">
+            	<img src="/resources/images/logo.png" alt="mws admin" />
+			</div>
+        </div>
+
+        <div id="mws-user-tools" class="clearfix">
+        	<div id="mws-user-notif" class="mws-dropdown-menu">
+            	<a href="#" class="mws-i-24 i-alert-2 mws-dropdown-trigger">Notifications</a>
+                <span class="mws-dropdown-notif">35</span>
+                <div class="mws-dropdown-box">
+                	<div class="mws-dropdown-content">
+                        <ul class="mws-notifications">
+                        	<li class="read">
+                            	<a href="#">
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="read">
+                            	<a href="#">
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="unread">
+                            	<a href="#">
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="unread">
+                            	<a href="#">
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="mws-dropdown-viewall">
+	                        <a href="#">View All Notifications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mws-user-message" class="mws-dropdown-menu">
+            	<a href="#" class="mws-i-24 i-message mws-dropdown-trigger">Messages</a>
+                <span class="mws-dropdown-notif">35</span>
+                <div class="mws-dropdown-box">
+                	<div class="mws-dropdown-content">
+                        <ul class="mws-messages">
+                        	<li class="read">
+                            	<a href="#">
+                                    <span class="sender">John Doe</span>
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="read">
+                            	<a href="#">
+                                    <span class="sender">John Doe</span>
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="unread">
+                            	<a href="#">
+                                    <span class="sender">John Doe</span>
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        	<li class="unread">
+                            	<a href="#">
+                                    <span class="sender">John Doe</span>
+                                    <span class="message">
+                                        Lorem ipsum dolor sit amet
+                                    </span>
+                                    <span class="time">
+                                        January 21, 2012
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="mws-dropdown-viewall">
+	                        <a href="#">View All Messages</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mws-user-info" class="mws-inset">
+            	<div id="mws-user-photo">
+                	<img src="/resources/images/profile.jpg" alt="User Photo" />
+                </div>
+                <div id="mws-user-functions">
+                    <div id="mws-username">
+                        Welcome, {{session["user_name"]}}
+                    </div>
+                    <ul>
+                    	<li><a href="#">Profile</a></li>
+                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mws-wrapper">
+		<div id="mws-sidebar-stitch"></div>
+		<div id="mws-sidebar-bg"></div>
+        <div id="mws-sidebar">
+        	<div id="mws-searchbox" class="mws-inset">
+            	<form action="./">
+                	<input type="text" class="mws-search-input" />
+                    <input type="submit" class="mws-search-submit" />
+                </form>
+            </div>
+            <div id="mws-navigation">
+            	<ul>
+                	<li><a href="" class="mws-i-24 i-home">回到首页</a></li>
+{#                	<li><a href="" class="mws-i-24 i-clock-1">操作历史</a></li>#}
+{#                	<li><a href="" class="mws-i-24 i-multiple-users">权限管理</a></li>#}
+{#                	<li><a href="" class="mws-i-24 i-file-cabinet">分组管理</a></li>#}
+                	<li class="active"><a href="/domain/" class="mws-i-24 i-table-1">域名管理</a></li>
+                	<li class="active"><a href="/digest/" class="mws-i-24 i-table-1">Query-Digest-UI</a></li>
+                    <li><a href="" class="mws-i-24 i-running-man">退出</a></li>
                 </ul>
             </div>
         </div>
-        <!-- End #sidebar -->
-        <div>ServerList: <a href="/">Home</a></div>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }} </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
+
+        <div id="mws-container" class="clearfix">
+            <div class="container">
+
+            	{% block content %}{% endblock %}
+
+
+            </div>
+
+        </div>
+
+
     </div>
-    <!-- End #body-wraper -->
-	
+</body>
 </html>
