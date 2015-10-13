@@ -54,7 +54,7 @@ def domain_add():
             pre_id = db_session.InsertDomain(domain, request.form['project_id'], project_name[0], request.form['fuction'], request.form['comments'])
             # print pre_id[0]
             db_session.InsertSubdomain(pre_id[0], subdomain_dic)
-            auto_dig(domain, pre_id[0])
+            # auto_dig(domain, pre_id[0])
         return redirect("/domain")
 
     return render_template("domain/add_update.html")
@@ -83,4 +83,9 @@ def domain_comments(iDomainId):
         db_session.UpdateDomainComments(iDomainId, request.form['comments'])
         return redirect("/domain")
     return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list)
+
+
+@WebApp.route('/domain/update/')
+def domain_update():
+    return render_template("domain/update.html")
 
