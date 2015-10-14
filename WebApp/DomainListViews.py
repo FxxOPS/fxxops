@@ -39,7 +39,6 @@ def domain_info():
             else:
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
-    # print domain_return_list
     return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list)
 
 
@@ -48,13 +47,9 @@ def domain_add():
     if request.method == 'POST':
         subdomain_dic = {"www": request.form['www_ip'], 'v': request.form['v_ip'], 's': request.form['s_ip'], 'p1': request.form['p1_ip']}
         project_name = db_session.SelectProjectId(request.form['project_id'])
-        # print subdomain_dic
         for domain in request.form['domain_name'].split('\r\n'):
-            # print domain,"+++"
             pre_id = db_session.InsertDomain(domain, request.form['project_id'], project_name[0], request.form['fuction'], request.form['comments'])
-            # print pre_id[0]
             db_session.InsertSubdomain(pre_id[0], subdomain_dic)
-            # auto_dig(domain, pre_id[0])
         return redirect("/domain")
 
     return render_template("domain/add_update.html")
@@ -79,7 +74,6 @@ def domain_comments(iDomainId):
         domain_return_list.append(domain_dic)
 
     if request.method == 'POST':
-        print request.form['comments'], "+++"
         db_session.UpdateDomainComments(iDomainId, request.form['comments'])
         return redirect("/domain")
     return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list)
@@ -87,12 +81,23 @@ def domain_comments(iDomainId):
 
 @WebApp.route('/domain/update/', methods=['GET', 'POST'])
 def domain_update():
-    domains = request.form['checks']
-    domain_list = domains.split('|')
     if request.form['page'] == 'DomainMain':
+        domains = request.form['checks']
+        domain_list = domains.split('|')
         return render_template("domain/update.html", domain_list=domain_list)
     else:
-
-        return render_template("domain/update.html", domain_list=domain_list)
+        DomainDic = {
+            'comments': request.form['comments'],
+            'function': request.form['function'],
+            'www': request.form['www_ip'],
+            'v': request.form['v_ip'],
+            'p1': request.form['p1_ip'],
+            's': request.form['s_ip']
+        }
+        domain_list = request.values.getlist('domains')
+        for domain in domain_list:
+            domain_id = db_session.SelectDomainId(domain)
+            db_session.UpdateDomain(domain_id[0],DomainDic)
+        return redirect("/domain/")
 
 

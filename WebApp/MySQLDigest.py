@@ -32,14 +32,13 @@ def digest_info(DigestName):
     ReviewName = "analyze_sql_review_%s" % DigestName
     if request.args.get('filter_id') is None or int(request.args.get('filter_id')) == 9:
         # digest_select_sql = 'select sum(binary z.ts_cnt) as ts_cnt, sum(binary z.Query_time_sum) as Query_time_sum, sum(binary z.Query_time_max) as Query_time_max,sum(binary z.Query_time_pct_95) as Query_time_pct_95, z.sample, z.checksum,f.*  from `%s` as  z left join `%s` f on z.checksum = f.checksum  group by z.checksum order by z.checksum;' % (HistoryName, ReviewName)
-        digest_select_sql = 'select z.ts_cnt, z.Query_time_sum, z.Query_time_max, z.Query_time_pct_95, z.sample, z.checksum,f.*  from `%s` as  z left join `%s` f on z.checksum = f.checksum  group by z.checksum order by z.checksum;' % (HistoryName, ReviewName)
+        digest_select_sql = 'select z.ts_cnt, z.Query_time_sum, z.Query_time_max, z.Query_time_pct_95, z.sample, z.checksum,f.*  from (select * from `%s` order by ts_max desc ) as  z left join `%s` f on z.checksum = f.checksum  group by z.checksum;' % (HistoryName, ReviewName)
         result_list = MysqlReturnValue(digest_select_sql)
     else:
         review_id = request.args.get('filter_id')
         # filter_sql = 'select sum(binary z.ts_cnt) as ts_cnt, sum(binary z.Query_time_sum) as Query_time_sum, sum(binary z.Query_time_max) as Query_time_max,sum(binary z.Query_time_pct_95) as Query_time_pct_95, z.sample, z.checksum,f.*  from `%s` as  z left join `%s` f on z.checksum = f.checksum where review_switch = %d group by z.checksum order by z.checksum;' % (HistoryName, ReviewName, int(review_id))
-        filter_sql = 'select z.ts_cnt, z.Query_time_sum, z.Query_time_max, z.Query_time_pct_95, z.sample, z.checksum,f.*  from (select * from `%s` order by ts_max desc ) as  z left join `%s` f on z.checksum = f.checksum where f.review_switch = %d group by z.checksum order by z.checksum;' % (HistoryName, ReviewName, int(review_id))
+        filter_sql = 'select z.ts_cnt, z.Query_time_sum, z.Query_time_max, z.Query_time_pct_95, z.sample, z.checksum,f.*  from (select * from `%s` order by ts_max desc ) as  z left join `%s` f on z.checksum = f.checksum where f.review_switch = %d group by z.checksum;' % (HistoryName, ReviewName, int(review_id))
         result_list = MysqlReturnValue(filter_sql)
-
 
 
     return render_template("digest/digest_info.html", title='DigestInfo', table_name=DigestName, result_list=result_list)
