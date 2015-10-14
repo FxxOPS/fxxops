@@ -134,9 +134,9 @@
                     <td>{{ digest.Query_time_sum }}</td>
                     <td>{{ digest.Query_time_max }}</td>
                     <td>{{ digest.Query_time_pct_95 }}</td>
-                    <td>{{ digest.first_seen }}</td>
-                    <td>{{ digest.last_seen }}</td>
-                    <td>{{ digest.reviewed_on }}</td>
+                    <td class="date">{{ digest.first_seen }}</td>
+                    <td class="date">{{ digest.last_seen }}</td>
+                    <td class="date">{{ digest.reviewed_on }}</td>
                     <td>{{ digest.comments }}</td>
                     <td>
                         <input type="button" class="mws-button blue" onclick="openDialogByIframe('http://10.1.110.25:8011/digest/{{ table_name }}/{{ digest.checksum }}')" value="查看" />
