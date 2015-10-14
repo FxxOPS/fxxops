@@ -6,16 +6,18 @@
             <span class="mws-i-24 i-list">批量修改域名</span>
         </div>
         <div class="mws-panel-body">
-            <form class="mws-form" action="">
+            <form class="mws-form" role="form" id="DomainUpdateForm" action="/domain/update/" method="post">
                 <div class="mws-form-inline grid_3">
                     <div class="mws-form-row">
-                        <label>所属项目</label>
+                        <label>主域名</label>
                         <div class="mws-form-item normal">
                             <ul class="mws-form-domain">
-                                <li>www.baidu.com</li>
-                                <li>www.ceshi.com</li>
+                                {% for domain in domain_list %}
+                                <li>{{ domain }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
+                        <input type="hidden" name="page" value="DomainUpdate" />
                     </div>
                     <div class="mws-form-row">
                             <label>源IP</label>
@@ -41,21 +43,22 @@
                     <div class="mws-form-row">
                         <label>用途</label>
                         <div class="mws-form-item large">
-                            <input type="text" class="mws-textinput" />
+                            <input type="text" name="fuction" class="mws-textinput" />
                         </div>
                     </div>
                     <div class="mws-form-row">
                         <label>备注</label>
                         <div class="mws-form-item large">
-                            <textarea rows="100%" cols="100%"></textarea>
+                            <textarea rows="100%" name="comments" cols="100%"></textarea>
                         </div>
                     </div>
 
                 </div>
                 <div class="clearfix"></div>
                 <div class="mws-button-row">
-                    <input type="submit" value="保存" class="mws-button green" />
-                    <input type="button" value="取消" class="mws-button gray" />
+                    <button type="submit" class="mws-button green">保存</button>
+                    <button type="reset"  class="mws-button red">重 置</button>
+                    <a type="button" href="/domain/" style="text-decoration: none;" class="mws-button gray" >取消</a>
                 </div>
             </form>
         </div>

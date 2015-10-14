@@ -1118,3 +1118,13 @@ def SelectProjectId(strProjectId):
         project_name = db_ses.query(tables.Project.name).filter(tables.Project.id == strProjectId).first()
 
     return project_name
+
+def SelectDomainId(strDomainName):
+    with GetSession() as db_ses:
+        domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
+    return domain_id
+
+def UpdateDomain():
+    with GetSession() as db_ses:
+        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == "").update({"comments": ""})
+    return
