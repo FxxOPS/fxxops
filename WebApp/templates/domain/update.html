@@ -11,9 +11,10 @@
                     <div class="mws-form-row">
                         <label>主域名</label>
                         <div class="mws-form-item normal">
-                            <ul class="mws-form-domain">
+                            <ul class="mws-form-domain" name="xxx">
                                 {% for domain in domain_list %}
                                 <li>{{ domain }}</li>
+                                <input type="hidden" multiple name="domains" value="{{ domain }}">
                                 {% endfor %}
                             </ul>
                         </div>
@@ -43,7 +44,7 @@
                     <div class="mws-form-row">
                         <label>用途</label>
                         <div class="mws-form-item large">
-                            <input type="text" name="fuction" class="mws-textinput" />
+                            <input type="text" name="function" class="mws-textinput" />
                         </div>
                     </div>
                     <div class="mws-form-row">

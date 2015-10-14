@@ -1124,7 +1124,11 @@ def SelectDomainId(strDomainName):
         domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
     return domain_id
 
-def UpdateDomain():
+def UpdateDomain(strDomainID,strDomainDic):
     with GetSession() as db_ses:
-        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == "").update({"comments": ""})
+        subdomains = db_ses.query(tables.Domain.domain_name).filter(tables.Domain.pre_domain_id == strDomainID).all()
+        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainID).update({"comments": strDomainDic['comments'], "functions": strDomainDic['function']})
+
+        for sub in subdomains:
+            db_ses.query(tables.Domain).filter(tables.Domain.pre_domain_id == strDomainID, tables.Domain.domain_name == sub[0]).update({"ip_source": strDomainDic[sub[0]]})
     return
