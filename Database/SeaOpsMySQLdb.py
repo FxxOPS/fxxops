@@ -63,7 +63,7 @@ class mysql_connect:
                         if where == 'local':
                             conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, db=DB_DEF, charset=DB_CHAR_SET)
                         else:
-                            conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, db=DB_DEF, charset=DB_CHAR_SET)
+                            conn = MySQLdb.connect(host=DIGEST_HOST, user=DIGEST_USER, passwd=DIGEST_PWD, port=DIGEST_PORT, db=DIGEST_DB, charset=DIGEST_CHAR_SET)
                         cur = conn.cursor()
                         cur.execute(amont_sql)
                         conn.commit()

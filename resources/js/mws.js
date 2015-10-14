@@ -72,4 +72,38 @@ $(document).ready(function() {
 	if($.fn.placeholder) {
 		$('[placeholder]').placeholder();
 	}
+
+    $('table.mws-datatable-fn tbody tr').on('click',function(e){
+        if($(e.target).find('input[type="button"]').length == 0) {
+            var check = $(this).find('input[type="checkbox"]');
+            if(check.prop('checked')) {
+                check.prop('checked',false);
+                $(this).removeClass('table-tr-bg');
+            }
+            else {
+                check.prop('checked',true);
+                $(this).addClass('table-tr-bg');
+            }
+        }
+    });
 });
+
+$.extend({
+        StandardPost:function(url,args){
+            var body = $(document.body),
+                    form = $("<form method='post'></form>"),
+                    input;
+            form.attr({"action":url});
+            $.each(args,function(key,value){
+                input = $("<input type='hidden'>");
+                input.attr({"name":key});
+                input.val(value);
+                form.append(input);
+            });
+
+            form.appendTo(document.body);
+            form.submit();
+            document.body.removeChild(form[0]);
+        }
+    });
+

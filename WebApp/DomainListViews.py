@@ -85,7 +85,14 @@ def domain_comments(iDomainId):
     return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list)
 
 
-@WebApp.route('/domain/update/')
+@WebApp.route('/domain/update/', methods=['GET', 'POST'])
 def domain_update():
-    return render_template("domain/update.html")
+    domains = request.form['checks']
+    domain_list = domains.split('|')
+    if request.form['page'] == 'DomainMain':
+        return render_template("domain/update.html", domain_list=domain_list)
+    else:
+
+        return render_template("domain/update.html", domain_list=domain_list)
+
 

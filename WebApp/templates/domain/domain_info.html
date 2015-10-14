@@ -24,7 +24,8 @@
                             <tbody>
                                  {% for domain in domain_return_list %}
                             <tr class="gradeA">
-                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>
+{#                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>#}
+                                <td><input type="checkbox" name="url" value="{{ domain.domain_name }}" /></td>
                                 <td>{{domain.project_name}}</td>
                                 <td>{{domain.domain_name}}</td>
 {#                                <td>{{domain.subdomain | Subdomain}}</td>#}
@@ -100,7 +101,22 @@ $(function(){
     /* Data Tables */
 
 {#    $(".mws-datatable").dataTable();#}
-    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' href='/domain/update/'>修改</a><label>"});
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>"});
+    $('#edit').on('click',function(){
+            var checks = "";
+            $("input[name='url']").each(function(){
+                if($(this).prop("checked") == true){
+                    checks += $(this).val() + "|";            //动态拼取选中的checkbox的值，用“|”符号分隔
+                }
+            })
+            if(checks.length) {
+                checks = checks.substr(0,checks.length-1);
+                $.StandardPost('/domain/update/',{checks:checks, page:'DomainMain'});
+            }
+            else {
+                alert("请勾选")
+            }
+        });
 })
 </script>
 {% endblock %}
