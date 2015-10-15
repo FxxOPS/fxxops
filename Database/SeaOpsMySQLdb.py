@@ -8,7 +8,7 @@ Created on 2014年5月28日
 from contextlib import contextmanager
 import MySQLdb
 from const import *
-from . import logger
+# from . import logger
 
 SQL_INSERT_SERVER = """INSERT INTO server(id,domain,stat,ip_ex,ip_in,host_ip,project_id,idc,usages,os,cpu,memory,disk,pool,visible)
                                       VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)
