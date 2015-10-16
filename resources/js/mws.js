@@ -74,7 +74,7 @@ $(document).ready(function() {
 	}
 
     $('table.mws-datatable-fn tbody tr').on('click',function(e){
-        if($(e.target).find('input[type="button"]').length == 0) {
+        if(e.target.nodeName != 'INPUT' && e.target.nodeName != 'A') {
             var check = $(this).find('input[type="checkbox"]');
             if(check.prop('checked')) {
                 check.prop('checked',false);

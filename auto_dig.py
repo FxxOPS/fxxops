@@ -16,6 +16,7 @@ domain_list = []
 
 subdomain_head_list = ['www', 'v', 's', 'p1']
 
+
 cdn_rule_dic = {'.cdng[a-z].net.': 'CDNetwork'}
 highanti_rule_dic = {'5.254.87.': 'Voxility', 'incapdns': 'incapslua'}
 
@@ -30,9 +31,7 @@ delete_sub_sql = "delete from domain_info where domain_name = '%s' and pre_domai
 
 
 mysql_conf = SeaOpsMySQLdb.mysql_connect()
-
 now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
 
 def get_domain():
     domain_list = []
@@ -67,7 +66,6 @@ def auto_dig(domains_list):
             times = str(time_result[1]).split('T')[0]
             print domain['domain_name'], times, "+++"
             mysql_conf.sql_exec("update domain_info set expiration = '%s', dml_time = '%s' where domain_name = '%s' " % (times, now_time, str(domain['domain_name'])))
-
 
         for head in subdomain_head_list:
             subdomain = '%s.%s' % (head, domain['domain_name'])
@@ -113,7 +111,6 @@ def auto_dig(domains_list):
                 if head in check_value:
                     # print head,"update, fff"
                     mysql_conf.sql_exec(update_sub_sql % (highanti_result_list[0][head], now_time, head, domain['domain_id']))
-
                 else:
                     mysql_conf.sql_exec(insert_sub_sql % (head, highanti_result_list[0][head], domain['domain_id'], now_time, now_time))
             else:
@@ -127,10 +124,9 @@ def auto_dig(domains_list):
             mysql_conf.sql_exec("update domain_info set status = '2', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain['domain_name'])))
         else:
             mysql_conf.sql_exec("update domain_info set status = '1', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain['domain_name'])))
-
-
 if __name__ == '__main__':
-    domains_list = get_domain()
+
+    domains_list=get_domain()
     auto_dig(domains_list)
     endtime = time.clock()
-    print (endtime - starttime)
+    print (endtime-starttime)
