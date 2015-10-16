@@ -112,6 +112,7 @@
             <table class="mws-datatable-fn mws-table" id="{{ table_name }}">
                 <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>checksum</th>
                     <th>sample</th>
                     <th>row_counts</th>
@@ -128,6 +129,7 @@
                 <tbody>
                 {% for digest in result_list %}
                 <tr class="gradeX">
+                    <td><input type="checkbox" name="url" value="{{ digest.checksum }}" /></td>
                     <td>{{ digest.checksum }}</td>
                     <td>{{ digest.sample }}</td>
                     <td>{{ digest.ts_cnt |int }}</td>
