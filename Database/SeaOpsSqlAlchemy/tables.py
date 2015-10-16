@@ -211,6 +211,7 @@ class Domain(Base):
     is_public = Column("is_public", Integer, default=0)
     register = Column("register", String(64), default="NULL")
     register_date = Column("register_date", TIMESTAMP, server_default="NULL")
+    domain_DNS = Column("domain_DNS", String(64), default="NULL")
     expiration = Column("expiration", TIMESTAMP, server_default="NULL")
     init_time = Column("init_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
@@ -229,6 +230,7 @@ class Domain(Base):
                        is_public='%s',\
                        register='%s',\
                        register_date='%s',\
+                       domain_DNS='%s',\
                        expiration='%s',\
                        init_time='%s',\
                        dml_time='%s',\
@@ -245,6 +247,7 @@ class Domain(Base):
                                           self.is_public,
                                           self.register,
                                           self.register_date,
+                                          self.domain_DNS,
                                           self.expiration,
                                           self.init_time,
                                           self.dml_time,
