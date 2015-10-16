@@ -6,7 +6,7 @@ import re
 import datetime
 import time
 
-from Script import mysqlconf
+from Database import SeaOpsMySQLdb
 
 
 domain_list = []
@@ -26,7 +26,7 @@ insert_sub_sql = "insert into domain_info(domain_name, project_name, cdn_hightan
 delete_sub_sql = "delete from domain_info where domain_name = '%s' and pre_domain_id = %d;"
 
 
-mysql_conf = mysqlconf.mysql_connect()
+mysql_conf = SeaOpsMySQLdb.mysql_connect()
 now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
