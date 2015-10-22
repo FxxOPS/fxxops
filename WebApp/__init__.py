@@ -50,3 +50,4 @@ from . import ServerListViews
 from . import DomainListViews
 from .util import DomainFilters
 from . import MySQLDigest
+from . import IndexViews
