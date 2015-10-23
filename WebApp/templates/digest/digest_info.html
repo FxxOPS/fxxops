@@ -112,7 +112,7 @@
             <table class="mws-datatable-fn mws-table" id="{{ table_name }}">
                 <thead>
                 <tr>
-                    <th>&nbsp;</th>
+                    <th><input type="checkbox" /></th>
                     <th>checksum</th>
                     <th>sample</th>
                     <th>row_counts</th>
@@ -152,6 +152,10 @@
     </div>
 </div>
 
+<div id="btn-checkbox-dialog">
+    <p></p>
+</div>
+
 <script>
     $(function(){
         $(".mws-tabs").tabs();
@@ -161,7 +165,7 @@
 
 {#        $(".mws-datatable").dataTable();#}
 {#        $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers"});#}
-        var selectFilter = '<select class="fnTabFilter" ><option value="000">----过滤条件----</option><option value="9">All</option><option value="0">UnCheck</option><option value="1">Check</option></select>';
+        var selectFilter = '<select class="fnTabFilter" ><option value="000">----过滤条件----</option><option value="9">All</option><option value="0">UnCheck</option><option value="1">Check</option></select><a class="mws-button green mln" id="btn-checked">批量review</a>';
         $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabFilter:selectFilter});
 
         $(".fnTabFilter").on('change',function(){
@@ -180,6 +184,58 @@
                 click: function() {
                     $( this ).dialog( "close" );
                 }}]
+        });
+
+        // 列表全选checkbox
+        $('.mws-datatable-fn thead tr th:first').on('click',function(event){
+
+            var $checkbox = $(this).find("input[type='checkbox']");
+           if($checkbox.prop('checked')) {
+               $("input[name='url']").prop('checked',true);
+               //$checkbox.prop('checked',false);
+           }
+            else {
+               $("input[name='url']").prop('checked',false);
+               //$checkbox.prop('checked',true);
+           }
+        });
+
+        // checkbox选中弹出框
+        $('#btn-checked').on('click',function(){
+            var checks = "";
+            $("input[name='url']").each(function(){
+                if($(this).prop("checked") == true){
+                    checks += $(this).val() + "<br />";            //动态拼取选中的checkbox的值，用“|”符号分隔
+                }
+            });
+            if(checks.length) {
+                $("#btn-checkbox-dialog").find('p').html(checks).end().dialog("option", {modal: true}).dialog("open");
+            }
+            else {
+                alert("没有勾选项目")
+            }
+            event.preventDefault();
+        });
+
+        // checkbox选中弹出框对象
+        $("#btn-checkbox-dialog").dialog({
+            autoOpen: false,
+            title: "选中的域名",
+            modal: true,
+            width: "640",
+            buttons: [
+                {
+                    text: "关闭",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+                },
+                {
+                    text: "取消",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }]
         });
 
 

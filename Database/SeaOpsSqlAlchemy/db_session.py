@@ -9,6 +9,7 @@ from contextlib import contextmanager
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 from . import tables, logger
+from WebApp.config import *
 
 
 @contextmanager
@@ -248,7 +249,9 @@ def SelectServer(iUserId=0, bVisible=True):
         if (lstRcd != None):
             for rcdServer in lstRcd:
                 # if (rcdServer.Server.comment == '' ):
-                # rcdServer.Server.comment = "添加"
+
+                #    rcdServer.Server.comment = "添加"
+
                 dictTmp = {"id": rcdServer.Server.id,
                            "domain": rcdServer.Server.domain,
                            "status": rcdServer.Server.stat,
@@ -354,7 +357,8 @@ def SelectServerByProject(strProjectName, iUserId=0):
         if (lstRcd != None):
             for rcdServer in lstRcd:
                 # logger.info ("comment:%s" %(rcdServer.Server.comment))
-                # if rcdServer.Server.comment is None:
+
+                #if rcdServer.Server.comment is None:
                 #    rcdServer.Server.comment = "添加"
                 dictTmp = {"id": rcdServer.Server.id,
                            "domain": rcdServer.Server.domain,
@@ -499,7 +503,7 @@ def UpdateComment(iServerId, iUserId, strComment):
         comment_history = tables.CommentHistory(server_id=iServerId, comment=rcdComment.comment)
         db_ses.add(comment_history)
 
-        # 将当前备注信息改为用户输入的值
+        #将当前备注信息改为用户输入的值
         db_ses.query(tables.Server).filter(tables.Server.id == iServerId).update({"comment": strComment})
     return
 
@@ -552,7 +556,9 @@ def DeleteUser(iUserId):
     with GetSession() as db_ses:
         # 从数据库中删除指定ID用户的所有权限
         db_ses.query(tables.PrivilegeProject).filter(tables.PrivilegeProject.user_id == iUserId).delete()
-        # 从数据库中删除指定ID用户的所有权限
+
+        #从数据库中删除指定ID用户的所有权限
+
         db_ses.query(tables.PrivilegeSet).filter(tables.PrivilegeSet.user_id == iUserId).delete()
         #从数据库中删除指定ID的用户
         db_ses.query(tables.User).filter(tables.User.id == iUserId).delete()
@@ -847,7 +853,8 @@ def SelectReturnByOpId(strOperationId):
         lstReturn = db_ses.query(tables.SaltReturns).filter(tables.SaltReturns.operation_id == strOperationId).all()
         logger.info("%s job found" % len(lstReturn))
         for rcdReturn in lstReturn:
-            # 如果还没有结果,显示为等待状态
+            #如果还没有结果,显示为等待状态
+
             if ("" == rcdReturn.full_ret or "" == rcdReturn.success or "" == rcdReturn.ret):
                 dictResult = {"ip_in": rcdReturn.minion_id,
                               "fun": rcdReturn.fun,
@@ -1145,17 +1152,19 @@ def UpdateSaltReturns(strSuccess, strReturn, strFullRet, strAlterTime, strJobId)
             logger.error(e)
     return
 
-def InsertDomain(strDomainName,strProjectId, strProjectName, strFunctions, strComments):
 
+### Domain
+def InsertDomain(strDomainName, strProjectId, strProjectName, strFunctions, strComments):
     with GetSession() as db_ses:
-        domain = tables.Domain(domain_name=strDomainName, project_id=strProjectId, project_name=strProjectName, functions=strFunctions, comments=strComments)
+        domain = tables.Domain(domain_name=strDomainName, project_id=strProjectId, project_name=strProjectName,
+                               functions=strFunctions, comments=strComments)
         db_ses.add(domain)
         domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
         # print domain_id
     return domain_id
 
-def InsertSubdomain(pre_id, DicSubdomain):
 
+def InsertSubdomain(pre_id, DicSubdomain):
     with GetSession() as db_ses:
         for k, v in DicSubdomain.items():
             print k, v
@@ -1163,10 +1172,11 @@ def InsertSubdomain(pre_id, DicSubdomain):
                 subdomain = tables.Domain(domain_name=k, ip_source=v, pre_domain_id=pre_id)
                 db_ses.add(subdomain)
 
-def UpdateDomainComments(strDomainId, strComments):
 
+def UpdateDomainComments(strDomainId, strComments):
     with GetSession() as db_ses:
         db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainId).update({"comments": strComments})
+
 
 def SelectProjectId(strProjectId):
     with GetSession() as db_ses:
@@ -1180,12 +1190,51 @@ def SelectDomainId(strDomainName):
         domain_id = db_ses.query(tables.Domain.domain_id).filter(tables.Domain.domain_name == strDomainName).first()
     return domain_id
 
-def UpdateDomain(strDomainID,strDomainDic):
+
+def UpdateDomain(strDomainID, strDomainDic):
     with GetSession() as db_ses:
         subdomains = db_ses.query(tables.Domain.domain_name).filter(tables.Domain.pre_domain_id == strDomainID).all()
-        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainID).update({"comments": strDomainDic['comments'], "functions": strDomainDic['function']})
+        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainID).update(
+            {"comments": strDomainDic['comments'], "functions": strDomainDic['function']})
 
         for sub in subdomains:
-            db_ses.query(tables.Domain).filter(tables.Domain.pre_domain_id == strDomainID, tables.Domain.domain_name == sub[0]).update({"ip_source": strDomainDic[sub[0]]})
+            db_ses.query(tables.Domain).filter(tables.Domain.pre_domain_id == strDomainID,
+                                               tables.Domain.domain_name == sub[0]).update(
+                {"ip_source": strDomainDic[sub[0]]})
     return
+
+
+### Redis
+def SelectRedisInfo():
+    redis_list = []
+    with GetSession() as db_ses:
+        redis_result_info = db_ses.query(tables.Redis, tables.User, tables.Datadict).join(tables.User,
+                                                                                          tables.Redis.apply_user_id == tables.User.id).join(
+            tables.Datadict, tables.Redis.status == tables.Datadict.value).filter(
+            tables.Datadict.pre_id == REDIS_STATUS_PRE_ID)
+
+        for redisTmp, userTmp, datadictTmp in redis_result_info:
+            redis_dic = {'redis_id': redisTmp.redis_id, 'command': redisTmp.command, 'status': datadictTmp.name,
+                         'apply_user_id': userTmp.name, 'init_time': redisTmp.init_time,
+                         'project_name': redisTmp.project_name, 'redis_filename': redisTmp.redis_filename}
+            redis_list.append(redis_dic)
+
+    return redis_list
+
+
+def InsertRedisInfo(strProjectName, strCommand, strApplyUserId, strRedisFilePath='', strRedisFilename=''):
+    with GetSession() as db_ses:
+        if strProjectName == 'video':
+            redis_insert = tables.Redis(project_id=1, project_name='V项目', status=1, command=strCommand,
+                                        apply_user_id=strApplyUserId, redis_file_path=strRedisFilePath,
+                                        redis_filename=strRedisFilename)
+        elif strProjectName == 'discuze':
+            redis_insert = tables.Redis(project_id=2, project_name='论坛', status=1, command=strCommand,
+                                        apply_user_id=strApplyUserId, redis_file_path=strRedisFilePath,
+                                        redis_filename=strRedisFilename)
+
+        db_ses.add(redis_insert)
+    return
+
+### system datadict
 
