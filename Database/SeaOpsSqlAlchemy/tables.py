@@ -216,6 +216,7 @@ class Domain(Base):
     init_time = Column("init_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     dml_flag = Column("dml_flag", Integer, default=1)
+
     def __repr__(self):
         return "<Domain(domain_id='%s',\
                        domain_name ='%s',\
@@ -235,20 +236,85 @@ class Domain(Base):
                        init_time='%s',\
                        dml_time='%s',\
                        dml_flag='%s')>" % (self.domain_id,
-                                          self.domain_name,
-                                          self.project_id,
-                                          self.project_name,
-                                          self.ip_source,
-                                          self.status,
-                                          self.cdn_hightanti,
-                                          self.pre_domain_id,
-                                          self.functions,
-                                          self.comments,
-                                          self.is_public,
-                                          self.register,
-                                          self.register_date,
-                                          self.domain_DNS,
-                                          self.expiration,
-                                          self.init_time,
-                                          self.dml_time,
-                                          self.dml_flag)
+                                           self.domain_name,
+                                           self.project_id,
+                                           self.project_name,
+                                           self.ip_source,
+                                           self.status,
+                                           self.cdn_hightanti,
+                                           self.pre_domain_id,
+                                           self.functions,
+                                           self.comments,
+                                           self.is_public,
+                                           self.register,
+                                           self.register_date,
+                                           self.domain_DNS,
+                                           self.expiration,
+                                           self.init_time,
+                                           self.dml_time,
+                                           self.dml_flag)
+
+class Redis(Base):
+    __tablename__ = "redis_info"
+
+    redis_id = Column("redis_id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    project_id = Column("project_id", Integer)
+    project_name = Column("project_name", String(64), default="NULL")
+    command = Column("command", String(256), default="NULL")
+    status = Column("status", Integer, default="NULL")
+    redis_file_path = Column("redis_file_path", String(256), default="NULL")
+    redis_filename = Column("redis_filename", String(256), default="NULL")
+    apply_user_id = Column("apply_user_id", Integer, default="NULL")
+    init_time = Column("init_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+
+    def __repr__(self):
+        return "<Redis(redis_id='%s',\
+                       command ='%s',\
+                       project_id = '%s',\
+                       project_name = '%s',\
+                       status='%s',\
+                       redis_file_path='%s',\
+                       redis_filename='%s',\
+                       apply_user_id='%s',\
+                       init_time='%s',\
+                       dml_time='%s',\
+                       dml_flag='%s')>" % (self.redis_id,
+                                           self.command,
+                                           self.project_id,
+                                           self.project_name,
+                                           self.status,
+                                           self.redis_file_path,
+                                           self.redis_filename,
+                                           self.apply_user_id,
+                                           self.init_time,
+                                           self.dml_time,
+                                           self.dml_flag)
+
+class Datadict(Base):
+    __tablename__ = "system_datadict"
+
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    pre_id = Column("pre_id", Integer, nullable=False)
+    name = Column("name", String(64), nullable=False)
+    init_time = Column("init_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+    value = Column("value", String(64), default="NULL")
+
+
+    def __repr__(self):
+        return "<Datadict(id='%s',\
+                       pre_id = '%s',\
+                       name = '%s',\
+                       init_time='%s',\
+                       dml_time='%s',\
+                       dml_flag='%s',\
+                       value='%s')>" % (self.id,
+                                        self.pre_id,
+                                        self.name,
+                                        self.init_time,
+                                        self.dml_time,
+                                        self.dml_flag,
+                                        self.value)
