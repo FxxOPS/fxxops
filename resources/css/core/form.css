@@ -556,3 +556,7 @@ ul.mws-form-domain li {
 .fr { float: right !important;}
 .fl { float: left !important;}
 .tar { text-align: right !important;}
+
+.index-main-urls { width: 500px; }
+.index-main-urls a{ display: inline-block; width: 350px; text-decoration: none; color: #333; height: 35px; font-size: 14px; }
+
