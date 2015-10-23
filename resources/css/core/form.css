@@ -554,3 +554,4 @@ ul.mws-form-domain li {
 .mws-form-row .mws-form-item .mws-form-row input { width: 70%; float:right;}
 .index-main-urls { width: 500px; }
 .index-main-urls a{ display: inline-block; width: 350px; text-decoration: none; color: #333; height: 35px; font-size: 14px; }
+.index-main-urls a:hover{ color:green }

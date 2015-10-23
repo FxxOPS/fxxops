@@ -71,4 +71,5 @@ def logout():
     session.pop("server_list", None)
     session.pop('project_list', None)
     session.pop("set_list", None)
+    session.pop("referUrl", None)
     return redirect(url_for('login'))
