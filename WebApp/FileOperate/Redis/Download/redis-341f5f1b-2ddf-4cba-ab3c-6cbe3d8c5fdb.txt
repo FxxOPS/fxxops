@@ -1,0 +1,36 @@
+hgetall huser_info:102849
+
+username:ihe2789@qq.com
+isedit:0
+vip_end:
+uid:102849
+pop:0
+sex:
+county:0
+vip:0
+rid:
+city:0
+province:0
+headimg:
+rich:0
+safemail:
+status:1
+pic_used_size:0
+description:
+lv_rich:1
+birthday:
+password:96e79218965eb72c92a549dd5a330112
+nickname:ihe2789
+pic_total_size:524288000
+lv_type:1
+video_status:0
+created:2015-10-12 13:41:20
+icon_id:0
+logined:2015-10-19 16:16:34
+lv_exp:1
+roled:0
+points:60002
+exp:0
+
+
+

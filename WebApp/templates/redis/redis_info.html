@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mws-panel grid_8" id="mian-content">
+                	<div class="mws-panel-header">
+                    	<span class="mws-i-24 i-table-1">域名列表</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-datatable-fn mws-table">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Redis命令</th>
+                                    <th>项目</th>
+                                    <th>执行状态</th>
+                                    <th>Redis申请人</th>
+                                    <th>创建时间</th>
+                                    <th>其他信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 {% for redis in redis_list %}
+                            <tr class="gradeA">
+{#                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>#}
+                                <td><input type="checkbox" /></td>
+{#                                <td>{{redis.redis_id}}</td>#}
+                                <td>{{redis.command}}</td>
+                                <td>{{redis.project_name}}</td>
+                                <td>{{redis.status}}</td>
+                                <td>{{redis.apply_user_id}}</td>
+                                <td>{{redis.init_time}}</td>
+                                <td>
+                                    <input type="button" class="mws-button blue" onclick="openDialogByIframe('http://10.1.110.25:8011/')" value="查看" />
+                                    <a type="button" class="mws-button blue" href="/redis/download/{{ redis.redis_filename }}">下载</a>
+{#                                    <input type="button" class="mws-button blue" onclick="openDialogByIframe('http://10.1.110.25:8011/redis/download/{{ redis.redis_filename }}')" value="下载" />#}
+                                </td>
+                                  <!-- End #messages -->
+                            </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+<script>
+$(function(){
+    $(".mws-dialog").dialog({
+        autoOpen: false,
+        title: "",
+        modal: true,
+        width: 500,
+        buttons: [{
+            text: "关闭",
+            click: function() {
+                $( this ).dialog( "close" );
+            }}]
+    });
+    $(".mws-table .mws-pop").bind("click", function(event) {
+        var id = $(this).data('dialogid');
+        $("#"+id).dialog("option", {modal: true}).dialog("open");
+        event.preventDefault();
+    });
+
+    /* Data Tables */
+
+{#    $(".mws-datatable").dataTable();#}
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/redis/add/video/'>V项目申请</a><a class='mws-button green' href='/redis/add/discuze/'>论坛申请</a>label>"});
+    $('#edit').on('click',function(){
+            var checks = "";
+            $("input[name='url']").each(function(){
+                if($(this).prop("checked") == true){
+                    checks += $(this).val() + "|";            //动态拼取选中的checkbox的值，用“|”符号分隔
+                }
+            })
+            if(checks.length) {
+                checks = checks.substr(0,checks.length-1);
+                $.StandardPost('/domain/update/',{checks:checks, page:'DomainMain'});
+            }
+            else {
+                alert("请勾选")
+            }
+        });
+})
+</script>
+{% endblock %}

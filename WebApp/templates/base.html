@@ -26,7 +26,11 @@
 <script type="text/javascript" src="/resources/js/mws.js"></script>
 
 
-<title>Domain</title>
+        {% if title %}
+            <title>FxxOPS - {{title}}</title>
+        {% else %}
+            <title>FxxOPS</title>
+        {% endif %}
 
 </head>
 
@@ -159,9 +163,9 @@
                         Welcome, {{session["user_name"]}}
                     </div>
                     <ul>
-                    	<li><a href="#">Profile</a></li>
-                        <li><a href="#">Change Password</a></li>
-                        <li><a href="#">Logout</a></li>
+                    	{# <li><a href="#">Profile</a></li> #}
+                        {# <li><a href="#">Change Password</a></li> #}
+                        <li><a href="/logout">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -180,12 +184,13 @@
             </div>
             <div id="mws-navigation">
             	<ul>
-                	<li><a href="" class="mws-i-24 i-home">回到首页</a></li>
+                	<li><a href="/" class="mws-i-24 i-home">回到首页</a></li>
 {#                	<li><a href="" class="mws-i-24 i-clock-1">操作历史</a></li>#}
 {#                	<li><a href="" class="mws-i-24 i-multiple-users">权限管理</a></li>#}
 {#                	<li><a href="" class="mws-i-24 i-file-cabinet">分组管理</a></li>#}
                 	<li class="active"><a href="/domain/" class="mws-i-24 i-table-1">域名管理</a></li>
                 	<li class="active"><a href="/digest/" class="mws-i-24 i-table-1">Query-Digest-UI</a></li>
+                	<li class="active"><a href="/redis/" class="mws-i-24 i-table-1">Redis</a></li>
                     <li><a href="/logout" class="mws-i-24 i-running-man">退出</a></li>
                 </ul>
             </div>

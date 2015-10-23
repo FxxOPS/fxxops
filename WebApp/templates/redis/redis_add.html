@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mws-panel grid_8" id="mian-content">
+                <div class="mws-panel grid_8">
+                    <div class="mws-panel-header">
+                        <span class="mws-i-24 i-list">Redis 申请</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <div class="mws-form">
+                            <div class="mws-form-inline grid_3">
+                                <div class="mws-form-row">
+                                    <label>xxxxx</label>
+                                    <div class="mws-form-item normal">
+                                        <select id="J-otherSelect">
+                                            <option>-- 请选择Redis命令 --</option>
+                                            <option>hgetall</option>
+{#                                            <option>Option3</option>#}
+{#                                            <option>Option4</option>#}
+{#                                            <option>Option5</option>#}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mws-form-row">
+                                    <label>Redis 命令</label>
+                                    <div class="mws-form-item large">
+                                        <textarea rows="100%" cols="100%" id="J-otherText"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <form class="mws-form-inline grid_3" role="form" action="/redis/add/{{ redis_project }}/" method="post" id="RedisForm">
+                                <div class="mws-form-row">
+                                    <table border="1" class="other-table">
+                                        <tr>
+                                            <th colspan="2" class="tar">
+                                                <input type="button" value="增加" class="mws-button blue addRow" />
+                                                <input type="button" value="提交" class="mws-button green submit" />
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" readonly class="mws-textinput other-item-new" name="command"></td>
+                                            <td class="tar"><input type="button" class="mws-button gray delRow" value="删除"/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<script type="text/javascript" src="/resources/plugins/jquery.table.addrow.js"></script>
+<script>
+    $(document).ready(function(){
+        //item的第一个元素
+        var $firstItem = $('.other-table tr').eq(1);
+
+        $(".addRow").btnAddRow({maxRow:10},function(row){
+            if(row){
+                var selectText = $('#J-otherSelect').find("option:selected").text(),
+                    textareaValue = $('#J-otherText').val(),
+                    newText = selectText+" "+textareaValue;
+                row.find('input[type="text"]').val(newText);
+            }
+            //找到第一个空的item删除
+            if($firstItem.find('.other-item-new').val() == "") {
+                $firstItem.remove();
+            }
+        });
+
+        $(".delRow").btnDelRow();
+
+        //提交按钮
+        $('.submit').on('click',function(){
+            var ary = [];
+            $('.other-item-new').each(function(){
+                ary.push($(this).val())
+            });
+
+
+
+            var nary=ary.sort();
+            for(var i=0; i < ary.length; i++){
+                if (nary[i]==nary[i+1]){
+                    alert("提交有重复数据："+nary[i]);
+                    return false;
+                }
+            }
+            $('form').submit();
+        })
+    });
+</script>
+{% endblock %}
