@@ -552,3 +552,7 @@ ul.mws-form-domain li {
 .mws-form-row .mws-form-item .mws-form-row { padding: 0}
 .mws-form-row .mws-form-item .mws-form-row label { width: 20%; float: left}
 .mws-form-row .mws-form-item .mws-form-row input { width: 70%; float:right;}
+
+.fr { float: right !important;}
+.fl { float: left !important;}
+.tar { text-align: right !important;}

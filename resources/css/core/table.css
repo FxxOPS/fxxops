@@ -332,3 +332,10 @@ div.dataTables_wrapper .dataTables_paginate span.paginate_active
 table.mws-table tbody tr:hover { background: #f4f9c4}
 
 table tbody tr td.date { min-width: 120px;}
+
+.mln { margin-left: 15px !important;}
+
+.other-table { width: 100%}
+.other-table tr { height: 40px;}
+.other-table tr th { height: 50px;}
+.other-item-new { width: 100%;}
