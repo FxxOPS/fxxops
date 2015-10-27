@@ -19,12 +19,15 @@ from Utils import IsSessValid, getFirstPY
 @WebApp.route('/')
 @WebApp.route('/index')
 def index():
+    if (False == IsSessValid()):
+        return redirect(url_for("login"))
+
     titletxt=('常用操作').decode('utf-8')
+
     # """
     # @note GET方法:显示分组列表/机房列表
     # """
-    # if (False == IsSessValid()):
-    #     return redirect(url_for("login"))
+
     #
     # lstProject = db_session.SelectProjectName(session["user_id"], True)
     # lstCode = []
