@@ -8,7 +8,7 @@ DB_PORT = 3306
 DB_USER = 'root'
 DB_PWD = '123456'
 DB_CHAR_SET = 'utf8'
-DB_DEF = 'ops'
+DB_DEF = 'fxxops_sid'
 
 
 ## Mysql digest conf
