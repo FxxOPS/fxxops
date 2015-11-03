@@ -24,7 +24,7 @@ class User(Base):
 
     def __repr__(self):
         return "<User(id='%s', name='%s, password=%s, type=%s, create_time=%s')>" % (
-        self.id, self.name, self.password, self.type, self.create_time)
+            self.id, self.name, self.password, self.type, self.create_time)
 
 
 class Project(Base):
@@ -48,7 +48,7 @@ class PrivilegeProject(Base):
 
     def __repr__(self):
         return "<PrivilegeProject(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (
-        self.id, self.project_id, self.user_id, self.read, self.write)
+            self.id, self.project_id, self.user_id, self.read, self.write)
 
 
 class PrivilegeSet(Base):
@@ -63,7 +63,7 @@ class PrivilegeSet(Base):
 
     def __repr__(self):
         return "<PrivilegeSet(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (
-        self.id, self.project_id, self.user_id, self.init, self.merge, self.upgrade, self.reboot)
+            self.id, self.project_id, self.user_id, self.init, self.merge, self.upgrade, self.reboot)
 
 
 class CommentHistory(Base):
@@ -76,7 +76,7 @@ class CommentHistory(Base):
 
     def __repr__(self):
         return "<CommentHistory(id='%s', server_id = %s, comment='%s, update_time='%s')>" % (
-        self.id, self.server_id, self.comment, self.update_time)
+            self.id, self.server_id, self.comment, self.update_time)
 
 
 class SaltReturns(Base):
@@ -218,7 +218,7 @@ class Domain(Base):
     __tablename__ = "domain_info"
 
     domain_id = Column("domain_id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    domain_name = Column("domain_name", String(64), unique=True,  nullable=False)
+    domain_name = Column("domain_name", String(64), unique=True, nullable=False)
     project_id = Column("project_id", Integer)
     project_name = Column("project_name", String(64), default="NULL")
     ip_source = Column("ip_source", String(16), default="NULL")
@@ -273,6 +273,7 @@ class Domain(Base):
                                            self.dml_time,
                                            self.dml_flag)
 
+
 class Redis(Base):
     __tablename__ = "redis_info"
 
@@ -311,6 +312,7 @@ class Redis(Base):
                                            self.dml_time,
                                            self.dml_flag)
 
+
 class Datadict(Base):
     __tablename__ = "system_datadict"
 
@@ -337,4 +339,66 @@ class Datadict(Base):
                                         self.dml_time,
                                         self.dml_flag,
                                         self.value)
+
+
+class Menu(Base):
+    __tablename__ = "ops_menu"
+
+    mid = Column("mid", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    preid = Column("preid", Integer, nullable=False, default=0)
+    name = Column("name", String(32), nullable=False)
+    url = Column("url", String(128), nullable=False)
+    is_func = Column("is_func", Integer, nullable=False, default=1)
+    level = Column("level", Integer, nullable=False, default=1)
+    status = Column("status", Integer, nullable=False, default=1)
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+
+
+    def __repr__(self):
+        return "<Datadict(mid='%s',\
+                       preid = '%s',\
+                       name = '%s',\
+                       url = '%s',\
+                       is_func = '%s',\
+                       level = '%s',\
+                       status = '%s',\
+                       dml_time='%s',\
+                       dml_flag='%s')>" % (self.mid,
+                                           self.preid,
+                                           self.name,
+                                           self.url,
+                                           self.is_func,
+                                           self.level,
+                                           self.status,
+                                           self.dml_time,
+                                           self.dml_flag)
+
+
+class MenuPrivilege(Base):
+    __tablename__ = "ops_priv_data"
+
+    uid = Column("uid", Integer, nullable=False, primary_key=True, unique=True)
+    mid = Column("mid", Integer, nullable=False, primary_key=True, unique=True)
+    pid = Column("pid", Integer, nullable=False, primary_key=True, unique=True)
+    r_priv = Column("r_priv", Integer, nullable=False, default=0)
+    w_priv = Column("w_priv", Integer, nullable=False, default=0)
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+
+
+    def __repr__(self):
+        return "<Datadict(uid='%s',\
+                       mid = '%s',\
+                       pid = '%s',\
+                       r_priv = '%s',\
+                       w_priv = '%s',\
+                       dml_time='%s',\
+                       dml_flag='%s')>" % (self.uid,
+                                           self.mid,
+                                           self.pid,
+                                           self.r_priv,
+                                           self.w_priv,
+                                           self.dml_time,
+                                           self.dml_flag)
 

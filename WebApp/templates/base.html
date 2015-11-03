@@ -188,11 +188,41 @@
 {#                	<li><a href="" class="mws-i-24 i-clock-1">操作历史</a></li>#}
 {#                	<li><a href="" class="mws-i-24 i-multiple-users">权限管理</a></li>#}
 {#                	<li><a href="" class="mws-i-24 i-file-cabinet">分组管理</a></li>#}
+                    {% if 1 in session["menu_priv"] %}
+                        <li >
+                            <a href="#" class="mws-i-24 i-table-1">域名管理</a>
+                            {% if 3 in session["menu_priv"] %}
+                            <ul>
+                                <li><a href="/domain/" >域名列表</a></li>
+                            </ul>
+                            {% endif %}
+                        </li>
+                    {% endif %}
 
-{#                	<li class="active"><a href="/server/" class="mws-i-24 i-table-1">服务器信息</a></li> #}
-                	<li class="active"><a href="/domain/" class="mws-i-24 i-table-1">域名管理</a></li>
-                	<li class="active"><a href="/digest/" class="mws-i-24 i-table-1">Query-Digest-UI</a></li>
-                	<li class="active"><a href="/redis/" class="mws-i-24 i-table-1">Redis</a></li>
+                    {% if 2 in session["menu_priv"] %}
+                	<li class="active">
+                	    <a href="#" class="mws-i-24 i-table-1">MySQL</a>
+                        <ul>
+                            {% if 4 in session["menu_priv"] %}
+                            <li class="active"><a href="/digest/" >Query-Digest-UI</a></li>
+                            {% endif %}
+                            {% if 5 in session["menu_priv"] %}
+                            <li class="active"><a href="/redis/" >Redis</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
+
+                    {% if 7 in session["menu_priv"] or 0 == session["user_type"] %}
+                    <li class="active">
+                	    <a href="#" class="mws-i-24 i-table-1">Admin设置</a>
+                	    <ul>
+                	        {% if 7 in session["menu_priv"] or 0 == session["user_type"] %}
+                            <li class="active"><a href="/privilege/" >用户权限</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
                     <li><a href="/logout" class="mws-i-24 i-running-man">退出</a></li>
                 </ul>
             </div>
