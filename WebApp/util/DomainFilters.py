@@ -6,18 +6,25 @@ import datetime
 
 @WebApp.template_filter('Subdomain')
 def Subdomain(Subdomain):
+    """
+    @note 格式化显示子域名
+    :param Subdomain:
+    :return:
+    """
     sub_list = []
     if Subdomain:
         subdomain = Subdomain.split(';')
         for s in subdomain:
-            # print s.split(','), "---"
             sub_list.append(s.split(','))
-        # print subdomain,"--"
-        # print Subdomain
     return sub_list
 
 @WebApp.template_filter('Expiration')
 def Expiration(Expiration):
+    """
+    @note 过滤超时时间信息（90天）
+    :param Expiration:
+    :return:
+    """
     if Expiration:
         ex_dates = datetime.datetime.strptime(str(Expiration), "%Y-%m-%d")
         now_time = datetime.datetime.now().strftime("%Y-%m-%d")

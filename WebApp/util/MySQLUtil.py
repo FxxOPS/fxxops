@@ -7,6 +7,11 @@ from Database.SeaOpsMySQLdb import mysql_connect
 mysql_conf = mysql_connect()
 
 def MysqlReturnValue(sql):
+    """
+    @note select类型 SQL执行完后过滤一些信息再返回
+    :param sql:
+    :return:
+    """
     return_list = []
     field = []
     select_sql = '%s' % (sql)

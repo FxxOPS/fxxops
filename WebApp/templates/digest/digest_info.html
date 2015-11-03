@@ -154,6 +154,11 @@
 
 <div id="btn-checkbox-dialog">
     <p></p>
+    <div class="mws-form-row">
+        <div class="mws-form-item">
+            <textarea rows="10" cols="75%"></textarea>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -225,9 +230,33 @@
             width: "640",
             buttons: [
                 {
-                    text: "关闭",
+                    text: "提交",
                     click: function() {
-                        $( this ).dialog( "close" );
+                        $.ajax({
+
+                            url: '/digest/comments/rewiew',
+                            type: 'post',
+                            dataType: "json",
+
+                            data:{
+                                checksum: $(this).find('p').html(),
+                                tableName : $('table.mws-datatable-fn').attr('id') ,
+                                comment :$(this).find('textarea').val()
+                            },
+
+                            success: function(res){
+                                if(res == 'True'){
+                                    window.location.reload()
+                                 }
+                                 else{
+                                    alert("Review失败")
+                                 }
+                            },
+
+                            error: function(res){
+                                if(window.console){ console.log(res)}
+                            }
+                        });
                     }
                 },
                 {
