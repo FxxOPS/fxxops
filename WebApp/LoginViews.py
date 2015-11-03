@@ -10,7 +10,7 @@ import time,hashlib
 from flask import request, flash, redirect, render_template, session, url_for
 from . import WebApp
 from forms import LoginForm, PasswordForm
-from Database.SeaOpsSqlAlchemy import db_session
+from Database.SeaOpsSqlAlchemy import db_session, PrivilegeSession
 from Utils import IsSessValid
 
 @WebApp.route('/login', methods = ['GET', 'POST'])
@@ -38,6 +38,8 @@ def login():
             flash(loginErr.decode('utf8'))
             return redirect(url_for('login'))
 
+        menupriv_list = PrivilegeSession.SelectMenuPrivilege(dictUser["id"])
+
         lstProject = db_session.SelectProject(dictUser["id"], True)
         lstSet = db_session.SelectSet(dictUser["id"], True)
 
@@ -48,6 +50,7 @@ def login():
         session["last_time"] = time.time()
         session["project_list"] = lstProject
         session["set_list"] = lstSet
+        session["menu_priv"] = menupriv_list
         if 'referUrl' in session:
             return redirect(session["referUrl"])
         else:
@@ -68,4 +71,5 @@ def logout():
     session.pop("server_list", None)
     session.pop('project_list', None)
     session.pop("set_list", None)
+    session.pop("menu_priv", None)
     return redirect(url_for('login'))

@@ -10,80 +10,92 @@ from sqlalchemy import Column, String, Integer, Text, TIMESTAMP, text
 from Database.const import DB_ADDRESS, DB_PORT, DB_USER, DB_PWD, DB_CHAR_SET, DB_DEF
 
 strEngine = "mysql+mysqldb://%s:%s@%s:%s/%s?charset=%s" % (DB_USER, DB_PWD, DB_ADDRESS, DB_PORT, DB_DEF, DB_CHAR_SET)
-engine = create_engine(strEngine, echo = False)
-Base = declarative_base(bind = engine)
+engine = create_engine(strEngine, echo=False)
+Base = declarative_base(bind=engine)
+
 
 class User(Base):
     __tablename__ = "user"
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True)
     name = Column("name", String(16))
     password = Column("password", String(16))
-    type = Column("type", Integer, nullable = False)
+    type = Column("type", Integer, nullable=False)
     create_time = Column("create_time", TIMESTAMP)
 
     def __repr__(self):
-        return "<User(id='%s', name='%s, password=%s, type=%s, create_time=%s')>" % (self.id, self.name, self.password, self.type, self.create_time)
+        return "<User(id='%s', name='%s, password=%s, type=%s, create_time=%s')>" % (
+            self.id, self.name, self.password, self.type, self.create_time)
+
 
 class Project(Base):
     __tablename__ = "project"
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True)
     name = Column("name", String(128))
-    gm_url= Column("gm_url",String(256))
-    type=Column("type",String(64))
+    gm_url = Column("gm_url", String(256))
+    type = Column("type", String(64))
 
     def __repr__(self):
         return "<Project(id='%s', name='%s')>" % (self.id, self.name)
 
+
 class PrivilegeProject(Base):
     __tablename__ = "prvlg_prj"
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    project_id = Column("project_id", Integer, nullable = False, unique = True)
-    user_id = Column("user_id", Integer, nullable = False, unique = True)
-    read = Column("read", Integer, nullable = False, unique = True)
-    write = Column("write", Integer, nullable = False, unique = True)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    project_id = Column("project_id", Integer, nullable=False, unique=True)
+    user_id = Column("user_id", Integer, nullable=False, unique=True)
+    read = Column("read", Integer, nullable=False, unique=True)
+    write = Column("write", Integer, nullable=False, unique=True)
 
     def __repr__(self):
-        return "<PrivilegeProject(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (self.id, self.project_id, self.user_id, self.read, self.write)
+        return "<PrivilegeProject(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (
+            self.id, self.project_id, self.user_id, self.read, self.write)
+
 
 class PrivilegeSet(Base):
     __tablename__ = "prvlg_set"
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    set_id = Column("set_id", Integer, nullable = False, unique = True)
-    user_id = Column("user_id", Integer, nullable = False, unique = True)
-    init = Column("init", Integer, nullable = False, unique = True)
-    merge = Column("merge", Integer, nullable = False, unique = True)
-    upgrade = Column("upgrade", Integer, nullable = False, unique = True)
-    reboot = Column("reboot", Integer, nullable = False, unique = True)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    set_id = Column("set_id", Integer, nullable=False, unique=True)
+    user_id = Column("user_id", Integer, nullable=False, unique=True)
+    init = Column("init", Integer, nullable=False, unique=True)
+    merge = Column("merge", Integer, nullable=False, unique=True)
+    upgrade = Column("upgrade", Integer, nullable=False, unique=True)
+    reboot = Column("reboot", Integer, nullable=False, unique=True)
 
     def __repr__(self):
-        return "<PrivilegeSet(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (self.id, self.project_id, self.user_id, self.init, self.merge, self.upgrade, self.reboot)
+        return "<PrivilegeSet(id='%s', project_id='%s', user_id='%s', read='%s', write='%s')>" % (
+            self.id, self.project_id, self.user_id, self.init, self.merge, self.upgrade, self.reboot)
+
 
 class CommentHistory(Base):
     __tablename__ = "comment_history"
 
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    server_id = Column("server_id", String(128), nullable = False)
-    comment = Column("comment", String(256), nullable = False, default = "INIT")
-    update_time = Column("update_time", TIMESTAMP, server_default = text("CURRENT_TIMESTAMP"))
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    server_id = Column("server_id", String(128), nullable=False)
+    comment = Column("comment", String(256), nullable=False, default="INIT")
+    update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+
     def __repr__(self):
-        return "<CommentHistory(id='%s', server_id = %s, comment='%s, update_time='%s')>" % (self.id, self.server_id, self.comment, self.update_time)
+        return "<CommentHistory(id='%s', server_id = %s, comment='%s, update_time='%s')>" % (
+            self.id, self.server_id, self.comment, self.update_time)
+
 
 class SaltReturns(Base):
     __tablename__ = "salt_returns"
 
-    job_id = Column("job_id", String(255), primary_key = True, nullable = False, unique = True)
-    minion_id = Column("minion_id", String(255), nullable = False)
-    fun = Column("fun", String(50), nullable = False)
+    job_id = Column("job_id", String(255), primary_key=True, nullable=False, unique=True)
+    minion_id = Column("minion_id", String(255), nullable=False)
+    fun = Column("fun", String(50), nullable=False)
     success = Column("success", String(10))
     ret = Column("return", Text)
     full_ret = Column("full_ret", Text)
-    operation_id = Column("operation_id", String(32), nullable = False)
-    user_id = Column("user_id", Integer, nullable = False)
-    project_id = Column("project_id", Integer, nullable = False)
-    set_id = Column("set_id", Integer, nullable = False)
-    start_time = Column("start_time", String(64), nullable = False)
-    alter_time = Column("alter_time", TIMESTAMP, server_default = text("CURRENT_TIMESTAMP"))
+    operation_id = Column("operation_id", String(32), nullable=False)
+    user_id = Column("user_id", Integer, nullable=False)
+    project_id = Column("project_id", Integer, nullable=False)
+    set_id = Column("set_id", Integer, nullable=False)
+    start_time = Column("start_time", String(64), nullable=False)
+    alter_time = Column("alter_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     action = Column("action", String(256))
+
     def __repr__(self):
         return "<SaltReturns(job_id='%s',\
                              minion_id='%s',\
@@ -96,38 +108,39 @@ class SaltReturns(Base):
                              project_id = '%s',\
                              set_id = '%s',\
                              alter_time='%s',\)>" % \
-                             (self.job_id,
-                              self.minion_id,
-                              self.fun,
-                              self.success,
-                              self.ret,
-                              self.full_ret,
-                              self.operation_id,
-                              self.user_id,
-                              self.project_id,
-                              self.set_id,
-                              self.alter_time)
+               (self.job_id,
+                self.minion_id,
+                self.fun,
+                self.success,
+                self.ret,
+                self.full_ret,
+                self.operation_id,
+                self.user_id,
+                self.project_id,
+                self.set_id,
+                self.alter_time)
+
 
 class Server(Base):
     __tablename__ = "server"
 
-    id = Column("id", String(128), primary_key = True, nullable = False, unique = True)
-    domain = Column("domain", String(64), default = "NULL")
-    stat = Column("stat", String(16), default = "NULL")
-    ip_ex = Column("ip_ex", String(16), default = "NULL")
-    ip_in = Column("ip_in", String(16), unique = True, default = "NULL")
-    host_ip = Column("host_ip", String(16), default = "NULL")
-    project_id = Column("project_id", Integer, default = "NULL")
-    idc = Column("idc", String(64), default = "NULL")
-    usages = Column("usages", String(128), default = "NULL")
-    os = Column("os", String(32), default = "NULL")
-    cpu = Column("cpu", String(32), default = "NULL")
-    memory = Column("memory", String(32), default = "NULL")
-    disk = Column("disk", String(32), default = "NULL")
-    pool = Column("pool", String(32), default = "NULL")
-    comment = Column("comment", String(255), default = "NULL")
-    update_time = Column("update_time", TIMESTAMP, server_default = text("CURRENT_TIMESTAMP"))
-    visible = Column("visible", Integer, default = "NULL")
+    id = Column("id", String(128), primary_key=True, nullable=False, unique=True)
+    domain = Column("domain", String(64), default="NULL")
+    stat = Column("stat", String(16), default="NULL")
+    ip_ex = Column("ip_ex", String(16), default="NULL")
+    ip_in = Column("ip_in", String(16), unique=True, default="NULL")
+    host_ip = Column("host_ip", String(16), default="NULL")
+    project_id = Column("project_id", Integer, default="NULL")
+    idc = Column("idc", String(64), default="NULL")
+    usages = Column("usages", String(128), default="NULL")
+    os = Column("os", String(32), default="NULL")
+    cpu = Column("cpu", String(32), default="NULL")
+    memory = Column("memory", String(32), default="NULL")
+    disk = Column("disk", String(32), default="NULL")
+    pool = Column("pool", String(32), default="NULL")
+    comment = Column("comment", String(255), default="NULL")
+    update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    visible = Column("visible", Integer, default="NULL")
 
     def __repr__(self):
         return "<Server(id='%s',\
@@ -164,33 +177,39 @@ class Server(Base):
                                           self.update_time,
                                           self.visible)
 
+
 class Server_Set(Base):
     __tablename__ = "server_set"
 
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    server_id = Column("server_id", Integer, nullable = False)
-    set_id = Column("set_id", Integer, nullable = False)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    server_id = Column("server_id", Integer, nullable=False)
+    set_id = Column("set_id", Integer, nullable=False)
+
     def __repr__(self):
         return "<Server_Set(id='%s', server_id = %s, set_id='%s')>" % (self.id, self.server_id, self.set_id)
+
 
 class Set(Base):
     __tablename__ = "set"
 
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    name = Column("name", String(32), nullable = False, unique = True)
-    project_id = Column("project_id", Integer, nullable = False)
-    create_userid =  Column("create_userid", Integer, nullable = False)
-    create_time =  Column("create_time", TIMESTAMP, server_default = text("CURRENT_TIMESTAMP"))
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    name = Column("name", String(32), nullable=False, unique=True)
+    project_id = Column("project_id", Integer, nullable=False)
+    create_userid = Column("create_userid", Integer, nullable=False)
+    create_time = Column("create_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+
     def __repr__(self):
         return "<Set(id='%s', name = %s, project_id='%s')>" % (self.id, self.name, self.project_id)
+
 
 class Action(Base):
     __tablename__ = "action"
 
-    id = Column("id", Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
-    name = Column("name", String(32), nullable = False)
+    id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    name = Column("name", String(32), nullable=False)
     path = Column("path", String(32))
-    set_id = Column("set_id", Integer, nullable = False)
+    set_id = Column("set_id", Integer, nullable=False)
+
     def __repr__(self):
         return "<Set(id='%s', name = %s, path='%s, set_id='%s')>" % (self.id, self.name, self.path, self.set_id)
 
@@ -199,7 +218,7 @@ class Domain(Base):
     __tablename__ = "domain_info"
 
     domain_id = Column("domain_id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    domain_name = Column("domain_name", String(64), unique=True,  nullable=False)
+    domain_name = Column("domain_name", String(64), unique=True, nullable=False)
     project_id = Column("project_id", Integer)
     project_name = Column("project_name", String(64), default="NULL")
     ip_source = Column("ip_source", String(16), default="NULL")
@@ -254,6 +273,7 @@ class Domain(Base):
                                            self.dml_time,
                                            self.dml_flag)
 
+
 class Redis(Base):
     __tablename__ = "redis_info"
 
@@ -292,6 +312,7 @@ class Redis(Base):
                                            self.dml_time,
                                            self.dml_flag)
 
+
 class Datadict(Base):
     __tablename__ = "system_datadict"
 
@@ -318,3 +339,64 @@ class Datadict(Base):
                                         self.dml_time,
                                         self.dml_flag,
                                         self.value)
+
+
+class Menu(Base):
+    __tablename__ = "ops_menu"
+
+    mid = Column("mid", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    preid = Column("preid", Integer, nullable=False, default=0)
+    name = Column("name", String(32), nullable=False)
+    url = Column("url", String(128), nullable=False)
+    is_func = Column("is_func", Integer, nullable=False, default=1)
+    level = Column("level", Integer, nullable=False, default=1)
+    status = Column("status", Integer, nullable=False, default=1)
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+
+
+    def __repr__(self):
+        return "<Datadict(mid='%s',\
+                       preid = '%s',\
+                       name = '%s',\
+                       url = '%s',\
+                       is_func = '%s',\
+                       level = '%s',\
+                       status = '%s',\
+                       dml_time='%s',\
+                       dml_flag='%s')>" % (self.mid,
+                                           self.preid,
+                                           self.name,
+                                           self.url,
+                                           self.is_func,
+                                           self.level,
+                                           self.status,
+                                           self.dml_time,
+                                           self.dml_flag)
+
+class MenuPrivilege(Base):
+    __tablename__ = "ops_priv_data"
+
+    uid = Column("uid", Integer, nullable=False, primary_key=True, unique=True)
+    mid = Column("mid", Integer, nullable=False, primary_key=True, unique=True)
+    pid = Column("pid", Integer, nullable=False, primary_key=True, unique=True)
+    r_priv = Column("r_priv", Integer, nullable=False, default=0)
+    w_priv = Column("w_priv", Integer, nullable=False, default=0)
+    dml_time = Column("dml_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    dml_flag = Column("dml_flag", Integer, default=1)
+
+
+    def __repr__(self):
+        return "<Datadict(uid='%s',\
+                       mid = '%s',\
+                       pid = '%s',\
+                       r_priv = '%s',\
+                       w_priv = '%s',\
+                       dml_time='%s',\
+                       dml_flag='%s')>" % (self.uid,
+                                           self.mid,
+                                           self.pid,
+                                           self.r_priv,
+                                           self.w_priv,
+                                           self.dml_time,
+                                           self.dml_flag)

@@ -58,7 +58,6 @@ Return a mysql cursor
 class mysql_connect:
 
         def sql_exec(self, amont_sql, where='local',):
-                result_dic = {}
                 try:
                         if where == 'local':
                             conn = MySQLdb.connect(host=DB_ADDRESS, user=DB_USER, passwd=DB_PWD, port=DB_PORT, db=DB_DEF, charset=DB_CHAR_SET)
