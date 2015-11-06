@@ -3,7 +3,8 @@ __author__ = 'Abbott'
 
 from DbSession import GetSession
 from . import tables, logger
-from WebApp.config import *
+from WebApp.const import *
+from CommonSession import SelectProject
 
 def SelectRedisInfo():
     """
@@ -37,14 +38,11 @@ def InsertRedisInfo(strProjectName, strCommand, strApplyUserId, strRedisFilePath
     :return:
     """
     with GetSession() as db_ses:
-        if strProjectName == 'video':
-            redis_insert = tables.Redis(project_id=1, project_name='V项目', status=1, command=strCommand,
-                                        apply_user_id=strApplyUserId, redis_file_path=strRedisFilePath,
-                                        redis_filename=strRedisFilename)
-        elif strProjectName == 'discuze':
-            redis_insert = tables.Redis(project_id=2, project_name='论坛', status=1, command=strCommand,
-                                        apply_user_id=strApplyUserId, redis_file_path=strRedisFilePath,
-                                        redis_filename=strRedisFilename)
-
-        db_ses.add(redis_insert)
+        project_list = SelectProject('None')
+        for prj in project_list:
+            if strProjectName == prj['prj_keys']:
+                redis_insert = tables.Redis(project_id=prj['prj_id'], project_name=prj['prj_name'], status=1, command=strCommand,
+                                            apply_user_id=strApplyUserId, redis_file_path=strRedisFilePath,
+                                            redis_filename=strRedisFilename)
+                db_ses.add(redis_insert)
     return

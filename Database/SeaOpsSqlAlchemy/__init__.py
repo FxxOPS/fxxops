@@ -12,3 +12,4 @@ from . import DbSession
 from . import DomainSession
 from . import RedisSession
 from . import PrivilegeSession
+from . import CommonSession

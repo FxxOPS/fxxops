@@ -5,7 +5,7 @@ import sys
 import uuid
 import os
 from .. import WebApp
-from ..config import *
+from ..const import *
 
 # REDIS_DOWNLOAD_PATH = 'FileOperate/Redis/Download'
 
