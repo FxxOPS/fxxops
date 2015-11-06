@@ -15,7 +15,9 @@
                                     <th>域名状态</th>
                                     <th>是否开放给运营</th>
                                     <th>用途</th>
+                                    {% if ReadWirte_privilege.w_priv == '1'  %}
                                     <th>备注</th>
+                                    {% endif %}
                                     <th>域名解析</th>
                                     <th>过期时间</th>
                                     <th>其他信息</th>
@@ -44,10 +46,12 @@
                                 <td>{{domain.functions}}</td>
 
 {#                                <td>{% if domain.cdn_hightanti %}{{domain.cdn_hightanti}}{% endif %}</td>#}
-                                {% if domain.comments %}
-                                <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
-                                {% else %}
-                                <td><pre> <a type="button" class="mws-button blue" href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
+                                {% if ReadWirte_privilege.w_priv == '1'  %}
+                                    {% if domain.comments %}
+                                        <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
+                                    {% else %}
+                                        <td><pre> <a type="button" class="mws-button blue" href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
+                                    {% endif %}
                                 {% endif %}
                                 <td>{{domain.domain_DNS}}</td>
                                 {% if domain.expiration | Expiration  == 'True'%}
@@ -101,7 +105,7 @@ $(function(){
     /* Data Tables */
 
 {#    $(".mws-datatable").dataTable();#}
-    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>"});
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}"});
     $('#edit').on('click',function(){
             var checks = "";
             $("input[name='url']").each(function(){

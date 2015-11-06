@@ -514,7 +514,9 @@ def InsertUser(strUserName, strPassword, iType, strCtime):
     with GetSession() as db_ses:
         user = tables.User(name=strUserName, password=strPassword, type=iType, create_time=strCtime)
         db_ses.add(user)
-    return
+
+        user_id = db_ses.query(tables.User.id).filter(tables.User.name == strUserName).first()
+    return user_id
 
 
 def SelectUser():

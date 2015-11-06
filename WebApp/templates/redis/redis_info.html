@@ -63,7 +63,9 @@ $(function(){
     /* Data Tables */
 
 {#    $(".mws-datatable").dataTable();#}
-    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "<a class='mws-button green' href='/redis/add/video/'>V项目申请</a><a class='mws-button green' href='/redis/add/discuze/'>论坛申请</a>label>"});
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% for priv in function_privilege %}{% if priv['w_priv'] == '1' %}<a class='mws-button green' href='/redis/add/{{ session['project_dic'][priv['pid']]['prj_keys'] }}/'>{{ session['project_dic'][priv['pid']]['prj_name'] }}申请</a>{% endif %}{% endfor %}"});
+{#    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% for priv in function_privilege %}<a class='mws-button green' href='/redis/add/video/'>V项目申请</a><a class='mws-button green' href='/redis/add/discuze/'>论坛申请</a>label>"});#}
+
     $('#edit').on('click',function(){
             var checks = "";
             $("input[name='url']").each(function(){

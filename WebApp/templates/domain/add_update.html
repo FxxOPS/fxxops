@@ -1,92 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{#<div id="main-content">#}
-{#            <div >#}
-{#                <h2><i class="fa fa-edit"></i>批量添加域名</h2>#}
-{#                <div class="box-icon">#}
-{#                    <a href="#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>#}
-{#                    <a href="#" class="btn-close"><i class="fa fa-times"></i></a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div >#}
-{#                <form role="form" id="DomainForm" action="/domain/add/" method="post">#}
-{#                <div class="row">#}
-{##}
-{#                    <div >#}
-{#                        <div >#}
-{#                            <div >#}
-{#                                <label  for="project_name">* 所属项目</label>#}
-{#                            </div>#}
-{#                            <div >#}
-{#                                <select  id="project_name" name="project_id">#}
-{#                                <option value="" selected="selected">-- 请选择所属项目 --</option>#}
-{#                                <option value="1">V项目</option>#}
-{#                                </select>#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{##}
-{##}
-{#                        <div >#}
-{#                            <div >#}
-{#                                <label class="control-label parallel-label" for="">源IP</label>#}
-{#                            </div>#}
-{#                            <div >#}
-{#                                www <input  id="www_ip" name="www_ip" type="text" value=""><br>#}
-{#                                v <input  id="v_ip" name="v_ip" type="text" value=""><br>#}
-{#                                s <input  id="s_ip" name="s_ip" type="text" value=""><br>#}
-{#                                p1 <input  id="p1_ip" name="p1_ip" type="text" value="">#}
-{##}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{##}
-{#                        <div >#}
-{#                            <div >#}
-{#                                <label  for="fuction">用途</label>#}
-{#                            </div>#}
-{#                            <div >#}
-{#                                <input  id="fuction" maxlength="254" name="fuction" placeholder="请输入用途" type="text">#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{#                        <div >#}
-{#                            <div >#}
-{#                                <label  for="cooments">备注</label>#}
-{#                            </div>#}
-{#                            <div >#}
-{#                                <textarea  cols="120" id="comments" name="comments" placeholder="请输入备注" rows="4" style="resize:vertical;"></textarea>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{#                    <div >#}
-{#                        <label  for="">* 域名列表</label>#}
-{#                        <div >#}
-{#                            <div >#}
-{#                                <div >#}
-{#                                    <textarea  cols="120" id="id_name" maxlength="4096" name="domain_name" placeholder="请输入域名,如果有多个域名,请以回车分隔" rows="20" style="resize:vertical;"></textarea>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div >#}
-{#                                <ul id="domains" class="list"></ul>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{##}
-{##}
-{##}
-{#                    <div >#}
-{#                        <div >#}
-{#                          <button type="submit"  class="btn btn-primary">保 存</button>#}
-{#                          <button type="reset"  class="btn">重 置</button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                </form>#}
-{#            </div>#}
-{#</div>#}
 
 <div class="mws-panel grid_8" id="mian-content">
     <div class="mws-panel grid_8">
@@ -101,7 +14,11 @@
                         <div class="mws-form-item small">
                             <select id="project_name" name="project_id">
                                 <option value="" selected="selected">-- 请选择所属项目 --</option>
-                                <option value="1">V项目</option>
+                                {% for priv in function_privilege %}
+                                {% if priv['w_priv'] == '1' %}
+                                    <option value="{{ priv['pid'] }}">{{ session['project_dic'][priv['pid']]['prj_name'] }}</option>
+                                {% endif %}
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
