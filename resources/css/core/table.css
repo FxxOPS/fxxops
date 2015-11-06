@@ -339,3 +339,9 @@ table tbody tr td.date { min-width: 120px;}
 .other-table tr { height: 40px;}
 .other-table tr th { height: 50px;}
 .other-item-new { width: 100%;}
+
+
+.tx-center { text-align: center}
+.mws-dialog table { width: 100%; border: 1px solid #ccc; margin-top: 10px;}
+.mws-dialog table, .mws-dialog table th, .mws-dialog table td { padding: 5px 8px; border: 1px solid #ccc; border-collapse: collapse; }
+

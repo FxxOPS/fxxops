@@ -184,45 +184,26 @@
             </div>
             <div id="mws-navigation">
             	<ul>
+
                 	<li><a href="/" class="mws-i-24 i-home">回到首页</a></li>
-{#                	<li><a href="" class="mws-i-24 i-clock-1">操作历史</a></li>#}
-{#                	<li><a href="" class="mws-i-24 i-multiple-users">权限管理</a></li>#}
-{#                	<li><a href="" class="mws-i-24 i-file-cabinet">分组管理</a></li>#}
-                    {% if 1 in session["menu_priv"] %}
-                        <li >
-                            <a href="#" class="mws-i-24 i-table-1">域名管理</a>
-                            {% if 3 in session["menu_priv"] %}
+                    {% for lev1 in session["lev1_list"] %}
+                        <li>
+                            {% if lev1.m_lev1_show == '1' %}
+                            <a href="{{ lev1.m_lev1_url }}" class="mws-i-24 i-table-1">{{ lev1.m_lev1_name }}</a>
+                            {% endif %}
+
                             <ul>
-                                <li><a href="/domain/" >域名列表</a></li>
+                            {% for lev2 in session["lev2_list"] %}
+                                {% if lev2.m_lev2_preid == lev1.m_lev1_id and lev2.m_lev2_show == '1' %}
+                                <li><a href="{{ lev2.m_lev2_url }}" >{{ lev2.m_lev2_name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
                             </ul>
-                            {% endif %}
+
                         </li>
-                    {% endif %}
 
-                    {% if 2 in session["menu_priv"] %}
-                	<li class="active">
-                	    <a href="#" class="mws-i-24 i-table-1">MySQL</a>
-                        <ul>
-                            {% if 4 in session["menu_priv"] %}
-                            <li class="active"><a href="/digest/" >Query-Digest-UI</a></li>
-                            {% endif %}
-                            {% if 5 in session["menu_priv"] %}
-                            <li class="active"><a href="/redis/" >Redis</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                    {% endif %}
+                    {% endfor %}
 
-                    {% if 7 in session["menu_priv"] or 0 == session["user_type"] %}
-                    <li class="active">
-                	    <a href="#" class="mws-i-24 i-table-1">Admin设置</a>
-                	    <ul>
-                	        {% if 7 in session["menu_priv"] or 0 == session["user_type"] %}
-                            <li class="active"><a href="/privilege/" >用户权限</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                    {% endif %}
                     <li><a href="/logout" class="mws-i-24 i-running-man">退出</a></li>
                 </ul>
             </div>

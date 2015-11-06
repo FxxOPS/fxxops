@@ -31,6 +31,7 @@ class Project(Base):
     __tablename__ = "project"
     id = Column("id", Integer, primary_key=True, nullable=False, unique=True)
     name = Column("name", String(128))
+    project_keys = Column("project_keys", String(128))
     gm_url = Column("gm_url", String(256))
     type = Column("type", String(64))
 
@@ -347,6 +348,7 @@ class Menu(Base):
     mid = Column("mid", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     preid = Column("preid", Integer, nullable=False, default=0)
     name = Column("name", String(32), nullable=False)
+    keys = Column("keys", String(32), nullable=False)
     url = Column("url", String(128), nullable=False)
     is_func = Column("is_func", Integer, nullable=False, default=1)
     level = Column("level", Integer, nullable=False, default=1)
@@ -359,6 +361,7 @@ class Menu(Base):
         return "<Datadict(mid='%s',\
                        preid = '%s',\
                        name = '%s',\
+                       keys = '%s',\
                        url = '%s',\
                        is_func = '%s',\
                        level = '%s',\
@@ -367,6 +370,7 @@ class Menu(Base):
                        dml_flag='%s')>" % (self.mid,
                                            self.preid,
                                            self.name,
+                                           self.keys,
                                            self.url,
                                            self.is_func,
                                            self.level,

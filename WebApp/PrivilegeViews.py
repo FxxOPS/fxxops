@@ -8,9 +8,12 @@ Created on 2014年5月28日
 '''
 import time, hashlib
 from WebApp import WebApp
-from flask import request, redirect, render_template, url_for, flash
-from Database.SeaOpsSqlAlchemy import db_session
+from flask import request, redirect, render_template, url_for, flash, session
+from Database.SeaOpsSqlAlchemy import db_session, PrivilegeSession, CommonSession
 from . import Utils, const
+import json
+from util.PrivilegeUtil import IsShowPage
+from const import *
 
 
 @WebApp.route('/privilege/', methods=['GET'])
@@ -22,8 +25,9 @@ def list_user():
         return redirect(url_for("login"))
 
     bIsAdmin = Utils.IsAdmin()
-    if (False == bIsAdmin):
-        return redirect(url_for("/"))
+
+    if False == bIsAdmin and IsShowPage(session["user_id"], MENU_DIC['UserPrivilege']) == FALSE:
+        return redirect("/")
 
     # 查询全部用户
     lstUser = db_session.SelectUser()
@@ -40,7 +44,8 @@ def add_user():
         return redirect(url_for("login"))
 
     bIsAdmin = Utils.IsAdmin()
-    if (False == bIsAdmin):
+
+    if False == bIsAdmin and IsShowPage(session["user_id"], MENU_DIC['UserPrivilege']) == FALSE:
         return redirect(url_for("/"))
 
     if (request.method == 'POST'):
@@ -74,10 +79,13 @@ def add_user():
         strCurTime = time.strftime("%Y%m%d%H%M%S", time.localtime())
         password = hashlib.md5(
             hashlib.md5("%s-%s" % (request.form["password"], strCurTime)).hexdigest()).hexdigest().upper()
-        db_session.InsertUser(request.form["name"], password, iType, strCurTime)
+
+        user_id = db_session.InsertUser(request.form["name"], password, iType, strCurTime)
+        PrivilegeSession.InsertNewUserPrivilege(user_id[0])
         return redirect("/privilege")
 
     return render_template("privilege_add_user.html", title="Add User")
+
 
 
 @WebApp.route('/privilege/del_user', methods=['POST'])
@@ -90,7 +98,8 @@ def del_user():
         return redirect(url_for("login"))
 
     bIsAdmin = Utils.IsAdmin()
-    if (False == bIsAdmin):
+    if False == bIsAdmin and IsShowPage(session["user_id"], MENU_DIC['UserPrivilege']) == FALSE:
+
         return redirect(url_for("/"))
 
     for tmp in request.form:
@@ -109,8 +118,10 @@ def empower_user(user_id):
 
     # 查询当前用户是否有Admin权限,如果没有,不能进行用户管理
     bIsAdmin = Utils.IsAdmin()
-    if (False == bIsAdmin):
-        return redirect("/error/%s" % "operate denied.")
+
+    if False == bIsAdmin and IsShowPage(session["user_id"], MENU_DIC['UserPrivilege']) == FALSE:
+        return redirect("/")
+
 
     #以用户ID为索引查找指定的用户,如果找不到用户,返回根页面
     dictUser = db_session.SelectUserById(user_id)
@@ -121,55 +132,24 @@ def empower_user(user_id):
     lstProjectPrivilege = db_session.SelectProjectPrivilege(user_id)
     lstSetPrivilege = db_session.SelectSetPrivilege(user_id)
 
+
+
     if (request.method == 'GET'):
+        menu_list = PrivilegeSession.SelectMenuProjectPrivilege(user_id)
+
         return render_template("privilege_empower_user.html",
                                title="User Privilege",
                                user_id=user_id,
                                user_name=dictUser["name"],
                                project_list=lstProjectPrivilege,
-                               set_list=lstSetPrivilege)
+                               set_list=lstSetPrivilege,
+                               menu_list=menu_list)
     else:
-        #遍历表单中的选定的组
-        for dictPrivilege in lstProjectPrivilege:
-            strRead = "project_%s_read" % dictPrivilege["project_id"]
-            strWrite = "project_%s_write" % dictPrivilege["project_id"]
-            iRead = 0
-            iWrite = 0
-            #如果当前组有读权限
-            if (strRead in request.form and request.form[strRead] == "on"):
-                iRead = 1
-            #如果当前组有写权限
-            if (strWrite in request.form and request.form[strWrite] == "on"):
-                iWrite = 1
+        datas = json.loads(request.form['data'])
+        strMenuId = datas['id']
 
-            #修改数据库中指定用户对当前组的权限
-            db_session.UpdateProjectPrivilege(dictPrivilege["project_id"], user_id, iRead, iWrite)
-            Utils.UpdateProjectList(dictPrivilege["project_id"], iRead)
+        PrivilegeSession.UpdateUserPrivilege(user_id, strMenuId, datas['detail'])
 
-        for dictSet in lstSetPrivilege:
-            strInit = "set_%s_init" % dictSet["set_id"]
-            strMerge = "set_%s_merge" % dictSet["set_id"]
-            strUpgrade = "set_%s_upgrade" % dictSet["set_id"]
-            strReboot = "set_%s_reboot" % dictSet["set_id"]
-            iInit = 0
-            iMerge = 0
-            iUpgrade = 0
-            iReboot = 0
+        # return redirect("/privilege/%s" % user_id)
+        return '%s' % json.dumps("ok")
 
-            #如果当前组有读权限
-            if (strInit in request.form and request.form[strInit] == "on"):
-                iInit = 1
-            #如果当前组有写权限
-            if (strMerge in request.form and request.form[strMerge] == "on"):
-                iMerge = 1
-            #如果当前组有写权限
-            if (strUpgrade in request.form and request.form[strUpgrade] == "on"):
-                iUpgrade = 1
-            #如果当前组有写权限
-            if (strReboot in request.form and request.form[strReboot] == "on"):
-                iReboot = 1
-
-            #修改数据库中指定用户对当前组的权限
-            db_session.UpdateSetPrivilege(dictSet["set_id"], user_id, iInit, iMerge, iUpgrade, iReboot)
-            Utils.UpdateServerSetList(dictSet["set_id"], iInit, iMerge, iUpgrade, iReboot)
-        return redirect("/privilege/%s" % user_id)

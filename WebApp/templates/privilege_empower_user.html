@@ -1,118 +1,166 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="main-content">
-<!-- Main Content Section with everything -->
-    <!-- Start Content Box -->
-    {% if project_list %}
-    <div class="content-box">
-        <div class="content-box-header">
-            <h3>项目权限:</h3>
-            <div class="clear"></div>
-        </div>
-        <!-- End .content-box-header -->
 
-		<p>
-			&nbsp;&nbsp;&nbsp;<a href="/privilege">返回用户列表</a>
-        </p>
-        <div class="content-box-content">
-            <h2>用户名: <span style="color:#FF0000">{{user_name}}</span></h2>
-            <form method="POST" name="input" action="/privilege/{{user_id}}">
-            <div align="left">
-			
-             <input class="check-all" type="checkbox" />全选 <input type ="submit" value ="Save">
-<table >
-<thead>
-	<th>项目权限</th>
-	<th>操作集权限</th>
-</thead>
-<tbody style="background-color:#FFFFFF"  >
-  <tr>
-	<td style="vertical-align:top;width:100px;" >		
-			<table>
-			<thead>
-			  <th>项目名称</th>
-				<th>读权限</th>
-				<th>操作权限 </th>
-			</thead>
-			<tbody>
-			{% for project in project_list %}
-				<tr>
-					<td>{{project["project_name"]}}</td>
-					<td>
-						{% if project["read"] == 1 %}
-							<input type="checkbox" name="project_{{project["project_id"]}}_read" checked="checked"/>
-						{% else %}
-							<input type="checkbox" name="project_{{project["project_id"]}}_read"/>
-						{% endif %}
-					</td>
-					<td>
-						{% if project["write"] == 1 %}
-							<input type="checkbox" name="project_{{project["project_id"]}}_write" checked="checked"/>
-						{% else %}
-							<input type="checkbox" name="project_{{project["project_id"]}}_write"/>
-						{% endif %}
-					</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-			</table> 
-	</td>
-  
-	<td style="vertical-align:top; width:100px;text-align:right;" >		
-			<table>
-			<thead>
-			  <th>操作集名称</th>
-				<th>开服</th>
-				<th>合服</th>
-				<th>更新</th>
-				<th>维护</th>
-			</thead>
-			<tbody>
-				{% if set_list %}
-                    {% for set in set_list %}
-                        <tr>
-                            <td>{{set["set_name"]}}</td>
-                            <td>
-                                {% if set["init"] == 1 %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_init" checked="checked"/>
-                                {% else %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_init"/>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if set["merge"] == 1 %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_merge" checked="checked"/>
-                                {% else %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_merge"/>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if set["upgrade"] == 1 %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_upgrade" checked="checked"/>
-                                {% else %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_upgrade"/>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if set["reboot"] == 1 %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_reboot" checked="checked"/>
-                                {% else %}
-                                    <input type="checkbox" name="set_{{set["set_id"]}}_reboot"/>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-				{% endif %}
-			</tbody>
-            </table> 
-	</td>
-  </tr>
-</tbody>	
-</table>
-			</div>
-            </form>
-        </div>
+<div class="mws-panel grid_8" id="mian-content">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-table-1">域名列表</span>
     </div>
-    {% endif %}
+    <div class="mws-panel-body">
+        <table class="mws-datatable-fn mws-table" id="{{ session['user_id'] }}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>功能</th>
+                <th>URL</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {%  for menu in menu_list %}
+            <tr id="tr{{ menu.menu_id }}">
+                <td>{{ menu.menu_id }}</td>
+                <td class="J-fn">{{ menu.menu_name }}</td>
+                <td>{{ menu.menu_url }}</td>
+                <td>
+                    <input type="button" class="mws-button blue" value="查看" data-lid="{{ menu.menu_id }}">
+                    <div class="mws-dialog" id="dialog{{ menu.menu_id }}" data-lid="{{ menu.menu_id }}">
+                        <label>{{ menu.menu_name }}</label><br>
+                        <label>全选：</label><input type="checkbox" name="checkAll" />
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>项目名称</th>
+                                    <th class="tx-center">R</th>
+                                    <th class="tx-center">W</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prj in menu.menu_pri %}
+                                <tr>
+                                    {% if 'video' in prj.keys() %}
+                                    <td data-pid="{{ prj['video']['pid'] }}">V项目</td>
+
+                                        {% if prj['video']['r_priv'] == '1' %}
+                                        <td class="tx-center"><input type="checkbox" name="R" checked/></td>
+                                        {% else  %}
+                                        <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                        {% endif %}
+
+                                        {% if prj['video']['w_priv'] == '1' %}
+                                        <td class="tx-center"><input type="checkbox" name="W" checked/></td>
+                                        {% else  %}
+                                        <td class="tx-center"><input type="checkbox" name="W" /></td>
+                                        {% endif %}
+
+
+                                    {% elif 'discuze' in prj.keys() %}
+                                    <td data-pid="{{ prj['discuze']['pid'] }}">BBS</td>
+                                        {% if prj['discuze']['r_priv'] == '1' %}
+                                        <td class="tx-center"><input type="checkbox" name="R" checked/></td>
+                                        {% else  %}
+                                        <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                        {% endif %}
+
+                                        {% if prj['discuze']['w_priv'] == '1' %}
+                                        <td class="tx-center"><input type="checkbox" name="W" checked/></td>
+                                        {% else  %}
+                                        <td class="tx-center"><input type="checkbox" name="W" /></td>
+                                        {% endif %}
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
+
+<script>
+    $(function(){
+        $(".mws-dialog").dialog({
+            autoOpen: false,
+            title: "",
+            modal: true,
+            width: 500,
+            buttons: [{
+                text: "关闭",
+                click: function() {
+                    $( this ).dialog( "close" );
+                }},
+                {
+                text: "提交",
+                click: function() {
+                    var lid = $(this).data('lid'),
+                        $tr = $('#tr'+lid),
+                        datas = {},
+                        pArray = [],
+                        trRW = $(this).find('table tbody tr');
+
+                    datas.id = lid;
+                    datas.fn = $tr.find('td:first').text();
+                    trRW.each(function(k,v){
+                        var pdatas = {};
+                        pdatas.pid = $(this).find('td:first').data('pid');
+                        pdatas.R = $(this).find('input[name="R"]').prop('checked') == true ? 1:0;
+                        pdatas.W = $(this).find('input[name="W"]').prop('checked') == true ? 1:0;
+                        pArray.push(pdatas);
+                    });
+                    datas.detail = pArray;
+
+                    $.ajax({
+
+                        url: '/privilege/{{ user_id }}',
+                        type: 'post',
+                        dataType: "json",
+
+                        data:{
+                            "data": JSON.stringify(datas)
+                        },
+
+                        success: function(res){
+                            window.location.reload()
+                        },
+
+                        error: function(res){
+                            if(window.console){ console.log(res)}
+                        }
+                    });
+                }}]
+        });
+
+        /* Data Tables */
+        $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",asStripeClasses:['sStrBg']});
+
+        // 列表按钮触发事件
+        $("table.mws-datatable-fn").on('click',function(e){
+            var target = e.target;
+            if($(target).hasClass('mws-button')) {
+                var dialogid = $(target).data('lid');
+                $('#dialog'+dialogid).dialog("option", {modal: true}).dialog("open");
+            }
+        });
+
+        // 弹出框全选按钮
+        $('input[name="checkAll"]').on('click',function(){
+            var table = $(this).next(),
+                isChecked = $(this).prop('checked'),
+                checkboxs = table.find('input[type="checkbox"]');
+
+            checkboxs.each(function(){
+                $(this).prop('checked', isChecked);
+            })
+        });
+
+    });
+</script>
+
 {% endblock %}

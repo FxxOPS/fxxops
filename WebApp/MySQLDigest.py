@@ -7,10 +7,13 @@ from flask import request, redirect, render_template, session, url_for
 from Database.SeaOpsMySQLdb import mysql_connect
 from Utils import IsSessValid, getFirstPY
 from util.MySQLUtil import MysqlReturnValue
+from util.PrivilegeUtil import IsShowPage
 import datetime
 import json
+from const import *
 
 mysql_conf = mysql_connect()
+
 
 
 @WebApp.route('/digest/')
@@ -22,7 +25,12 @@ def digest():
     if (False == IsSessValid()):
         return redirect(url_for("login"))
 
-    return render_template("digest/digest.html", title='Digest')
+    if IsShowPage(session["user_id"], MENU_DIC['Digest']) == FALSE:
+        return redirect("/")
+
+    function_privilege = IsShowPage(session["user_id"], MENU_DIC['Digest'], 'priv')
+
+    return render_template("digest/digest.html", title='Digest', function_privilege=function_privilege)
 
 
 @WebApp.route('/digest/<DigestName>/', methods=['GET', 'POST'])
@@ -34,6 +42,9 @@ def digest_info(DigestName):
     """
     if (False == IsSessValid()):
         return redirect(url_for("login"))
+
+    if IsShowPage(session["user_id"], MENU_DIC['Digest']) == FALSE:
+        return redirect("/")
 
     HistoryName = "analyze_sql_history_%s" % DigestName
     ReviewName = "analyze_sql_review_%s" % DigestName
@@ -60,6 +71,9 @@ def digest_pop(DigestName,SumCheck):
     if (False == IsSessValid()):
         return redirect(url_for("login"))
 
+    if IsShowPage(session["user_id"], MENU_DIC['Digest']) == FALSE:
+        return redirect("/")
+
     HistoryName = "analyze_sql_history_%s" % DigestName
     ReviewName = "analyze_sql_review_%s" % DigestName
 
@@ -74,6 +88,12 @@ def digest_comments(SumCheck):
     :param SumCheck:
     :return:
     """
+    if (False == IsSessValid()):
+        return redirect(url_for("login"))
+
+    if IsShowPage(session["user_id"], MENU_DIC['Digest']) == FALSE:
+        return redirect("/")
+
     if request.method == 'POST':
         now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ReviewName = "analyze_sql_review_%s" % request.form['tablename']
@@ -88,6 +108,11 @@ def digest_rewiew():
     @note 批量处理MySQL Digest rewiew数据
     :return:
     """
+    if (False == IsSessValid()):
+        return redirect(url_for("login"))
+
+    if IsShowPage(session["user_id"], MENU_DIC['Digest']) == FALSE:
+        return redirect("/")
 
     # 得到所有checksum，并去除最后一个多余的逗号
     rewies_list = request.form['checksum'].replace('<br>', ',')[:-1]
