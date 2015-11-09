@@ -99,6 +99,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Comment</th>
+                                    <th>修改人</th>
                                     <th>时间</th>
                                 </tr>
                             </thead>
@@ -107,6 +108,7 @@
                                 <tr class="gradeX even">
                                     <td>{{ history.history_id }}</td>
                                     <td>{{ history.history_comment }}</td>
+                                    <td>{{ history.history_user }}</td>
                                     <td>{{ history.history_time }}</td>
                                 </tr>
                                 {% endfor %}
