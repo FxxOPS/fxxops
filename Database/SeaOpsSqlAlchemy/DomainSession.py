@@ -89,3 +89,25 @@ def UpdateDomain(strDomainID, strDomainDic):
                                                tables.Domain.domain_name == sub[0]).update(
                 {"ip_source": strDomainDic[sub[0]]})
     return
+
+def InsertDomainCommentHistory(strDomainId, strComment):
+    """
+    @note 插入域名备注历史信息
+    :param strDomainId:
+    :param strComment:
+    :return:
+    """
+    with GetSession() as db_ses:
+        domain = tables.CommentHistory(domain_id=strDomainId, comment=strComment)
+        db_ses.add(domain)
+    return
+
+def SelectDomainHistory(strDomainId):
+    domain_history_list = []
+    with GetSession() as db_ses:
+        domain_history = db_ses.query(tables.CommentHistory).filter(tables.CommentHistory.domain_id == strDomainId).order_by(tables.CommentHistory.update_time.desc())
+        for history in domain_history:
+            domain_history_dic = {'history_id': history.id, 'history_did': history.domain_id, 'history_comment': history.comment, 'history_time': history.update_time}
+            domain_history_list.append(domain_history_dic)
+
+    return domain_history_list

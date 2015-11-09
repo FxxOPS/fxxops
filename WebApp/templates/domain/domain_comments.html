@@ -89,6 +89,32 @@
 {#                    </ul>#}
                     {% endfor %}
                 </div>
+    <div class="mws-panel grid_8">
+                	<div class="mws-panel-header">
+                    	<span class="mws-i-24 i-table-1">Comment历史记录</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Comment</th>
+                                    <th>时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for history in domain_history_list %}
+                                <tr class="gradeX even">
+                                    <td>{{ history.history_id }}</td>
+                                    <td>{{ history.history_comment }}</td>
+                                    <td>{{ history.history_time }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
 
 <script>
 $(function(){
