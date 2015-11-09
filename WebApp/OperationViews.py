@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月30日
-
-@author: yuan.gao
-
-@note: 操作视图(远程执行命令或脚本)
-'''
+__author__ = 'Abbott'
 import time, random
 from flask import request, redirect, render_template, session, url_for
 from salt import client

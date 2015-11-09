@@ -14,7 +14,7 @@ PRI_OP_ADMIN = 2
 
 ### Privielegs dic
 TRUE = '1'
-FALSE = '2'
+FALSE = '0'
 
 PRIV_TRUE = '1'
 PRIV_FALSE = '0'
@@ -26,7 +26,7 @@ PAGE_LEV1_PRE_ID = 0
 
 ### Menu Dic
 MENU_DIC = PrivilegeSession.SelectMenu('DIC')
-
+MENU_ID_DIC = PrivilegeSession.SelectMenu('MenuIdDic')
 
 ### Redis download path
 REDIS_DOWNLOAD_PATH = 'FileOperate/Redis/Download'

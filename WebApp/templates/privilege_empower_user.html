@@ -10,7 +10,8 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>功能</th>
+                <th>一级页面</th>
+                <th>二级页面</th>
                 <th>URL</th>
                 <th>操作</th>
             </tr>
@@ -18,63 +19,67 @@
 
             <tbody>
             {%  for menu in menu_list %}
-            <tr id="tr{{ menu.menu_id }}">
-                <td>{{ menu.menu_id }}</td>
-                <td class="J-fn">{{ menu.menu_name }}</td>
-                <td>{{ menu.menu_url }}</td>
-                <td>
-                    <input type="button" class="mws-button blue" value="查看" data-lid="{{ menu.menu_id }}">
-                    <div class="mws-dialog" id="dialog{{ menu.menu_id }}" data-lid="{{ menu.menu_id }}">
-                        <label>{{ menu.menu_name }}</label><br>
-                        <label>全选：</label><input type="checkbox" name="checkAll" />
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>项目名称</th>
-                                    <th class="tx-center">R</th>
-                                    <th class="tx-center">W</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for prj in menu.menu_pri %}
-                                <tr>
-                                    {% if 'video' in prj.keys() %}
-                                    <td data-pid="{{ prj['video']['pid'] }}">V项目</td>
+                {% if menu.menu_preid != 0 %}
+                <tr id="tr{{ menu.menu_id }}">
+                    <td>{{ menu.menu_id }}</td>
+                    <td>{{ menu.menu_preid |Showlev1MenuName}}</td>
+                    <td class="J-fn">{{ menu.menu_name }}</td>
+                    <td>{{ menu.menu_url }}</td>
+                    <td>
+                        <input type="button" class="mws-button blue" value="查看" data-lid="{{ menu.menu_id }}">
+                        <div class="mws-dialog" id="dialog{{ menu.menu_id }}" data-lid="{{ menu.menu_id }}">
+                            <label>{{ menu.menu_name }}</label><br>
+                            <label>全选：</label><input type="checkbox" name="checkAll" />
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>项目名称</th>
+                                        <th class="tx-center">R</th>
+                                        <th class="tx-center">W</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prj in menu.menu_pri %}
+                                    <tr>
+                                        {% if 'video' in prj.keys() %}
+                                        <td data-pid="{{ prj['video']['pid'] }}">V项目</td>
 
-                                        {% if prj['video']['r_priv'] == '1' %}
-                                        <td class="tx-center"><input type="checkbox" name="R" checked/></td>
-                                        {% else  %}
-                                        <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                            {% if prj['video']['r_priv'] == '1' %}
+                                            <td class="tx-center"><input type="checkbox" name="R" checked/></td>
+                                            {% else  %}
+                                            <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                            {% endif %}
+
+                                            {% if prj['video']['w_priv'] == '1' %}
+                                            <td class="tx-center"><input type="checkbox" name="W" checked/></td>
+                                            {% else  %}
+                                            <td class="tx-center"><input type="checkbox" name="W" /></td>
+                                            {% endif %}
+
+
+                                        {% elif 'discuze' in prj.keys() %}
+                                        <td data-pid="{{ prj['discuze']['pid'] }}">BBS</td>
+                                            {% if prj['discuze']['r_priv'] == '1' %}
+                                            <td class="tx-center"><input type="checkbox" name="R" checked/></td>
+                                            {% else  %}
+                                            <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                            {% endif %}
+
+                                            {% if prj['discuze']['w_priv'] == '1' %}
+                                            <td class="tx-center"><input type="checkbox" name="W" checked/></td>
+                                            {% else  %}
+                                            <td class="tx-center"><input type="checkbox" name="W" /></td>
+                                            {% endif %}
                                         {% endif %}
+                                    </tr>
 
-                                        {% if prj['video']['w_priv'] == '1' %}
-                                        <td class="tx-center"><input type="checkbox" name="W" checked/></td>
-                                        {% else  %}
-                                        <td class="tx-center"><input type="checkbox" name="W" /></td>
-                                        {% endif %}
-
-
-                                    {% elif 'discuze' in prj.keys() %}
-                                    <td data-pid="{{ prj['discuze']['pid'] }}">BBS</td>
-                                        {% if prj['discuze']['r_priv'] == '1' %}
-                                        <td class="tx-center"><input type="checkbox" name="R" checked/></td>
-                                        {% else  %}
-                                        <td class="tx-center"><input type="checkbox" name="R" /></td>
-                                        {% endif %}
-
-                                        {% if prj['discuze']['w_priv'] == '1' %}
-                                        <td class="tx-center"><input type="checkbox" name="W" checked/></td>
-                                        {% else  %}
-                                        <td class="tx-center"><input type="checkbox" name="W" /></td>
-                                        {% endif %}
-                                    {% endif %}
-                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
 
             </tbody>

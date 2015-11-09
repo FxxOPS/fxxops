@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月28日
-
-@author: yuan.gao
-
-@note: 用户视图(包括用户登录/离开/修改密码)
-'''
+__author__ = 'Abbott'
 import time, hashlib
 from flask import request, flash, redirect, render_template, session, url_for
 from . import WebApp

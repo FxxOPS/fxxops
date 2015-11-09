@@ -26,7 +26,7 @@ def redis_info():
 
     function_privilege = IsShowPage(session["user_id"], MENU_DIC['Redis'], 'priv')
 
-    redis_list = RedisSession.SelectRedisInfo()
+    redis_list = RedisSession.SelectRedisInfo(session["user_id"])
 
     return render_template("redis/redis_info.html", title='Redis', redis_list=redis_list, function_privilege=function_privilege)
 

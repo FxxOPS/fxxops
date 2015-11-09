@@ -6,6 +6,11 @@ from Database.SeaOpsSqlAlchemy import PrivilegeSession
 
 
 def BuiltPageMenu(PrivMenuList):
+    """
+    @note 分别查询1级菜单和2级菜单的权限
+    :param PrivMenuList:
+    :return:
+    """
     menu_lev1_list = []
     menu_lev2_list = []
     lev2_list = []
@@ -37,6 +42,16 @@ def BuiltPageMenu(PrivMenuList):
 
 
 def IsShowPage(strUserID, strMenuID, strPrivilege='None'):
+    """
+    @note 判断用户是否有权限查看页面
+    @note strPrivilege == ‘None’ TRUE，FALSE判断
+          strPrivilege == ‘priv'  查询各个项目的权限 format [{'pid': pid, 'r_priv': r_priv, 'w_priv': w_priv}]
+
+    :param strUserID:
+    :param strMenuID:
+    :param strPrivilege:
+    :return:
+    """
     user_priv = PrivilegeSession.SelectMenuProjectPrivilege(strUserID, strMenuID)
     if strPrivilege == 'None':
         show_list = []
@@ -46,10 +61,10 @@ def IsShowPage(strUserID, strMenuID, strPrivilege='None'):
                     show_list.append(TRUE)
                 else:
                     show_list.append(FALSE)
-            if '1' in list(set(show_list)):
-                return TRUE
-            else:
-                return FALSE
+        if TRUE in list(set(show_list)):
+            return TRUE
+        else:
+            return FALSE
 
     else:
         priv_list = []
@@ -60,13 +75,22 @@ def IsShowPage(strUserID, strMenuID, strPrivilege='None'):
         return priv_list
 
 
-def ReadWirteShowPage(FunctionPrivilege):
+def ReadWirteShowPage(FunctionPrivilege, arvg='None'):
+    """
+    @note 查询此用户页面的读写权限
+    :param FunctionPrivilege:
+    :param arvg: None 返回字典{'r_priv': r_priv, 'w_priv': w_priv}
+                  PrjList 返回有读权限的项目ID列表 [pid]
+    :return:
+    """
     read_list = []
     write_list = []
     funPriv_dic = {}
+    prj_list = []
     for priv in FunctionPrivilege:
         if priv['r_priv'] == '1':
             read_list.append('1')
+            prj_list.append(priv['pid'])
         else:
             read_list.append('0')
 
@@ -84,4 +108,8 @@ def ReadWirteShowPage(FunctionPrivilege):
         funPriv_dic['w_priv'] = '1'
     else:
         funPriv_dic['w_priv'] = '0'
-    return funPriv_dic
+
+    if arvg == 'PrjList':
+        return prj_list
+    else:
+        return funPriv_dic

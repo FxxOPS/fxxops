@@ -105,7 +105,14 @@ $(function(){
     /* Data Tables */
 
 {#    $(".mws-datatable").dataTable();#}
-    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}"});
+    //$(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}<select class='fnTabFilter' ><option value='000'>----过滤条件----</option><option value='9'>All</option><option value='0'>UnCheck</option><option value="1">Check</option>"});
+    var selectFilter = "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}<select class='fnTabFilter' ><option value='000'>----过滤条件----</option><option value='000'>All</option>{% for priv in function_privilege %}{% if priv['r_priv'] == '1' %} <option value='{{ priv['pid'] }}'>{{ session['project_dic'][priv['pid']]['prj_name'] }}</option>{% endif %}{% endfor %}";
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabFilter:selectFilter});
+    $(".fnTabFilter").on('change',function(){
+            var value = $(this).val();
+            location = "/domain/?project_id="+value;
+        });
+
     $('#edit').on('click',function(){
             var checks = "";
             $("input[name='url']").each(function(){

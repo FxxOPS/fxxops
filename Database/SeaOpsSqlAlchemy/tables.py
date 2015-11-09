@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月26日
+__author__ = 'Abbott'
 
-@author: root
-'''
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, Text, TIMESTAMP, text
