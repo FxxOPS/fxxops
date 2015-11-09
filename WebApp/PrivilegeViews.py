@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月28日
-
-@author: yuan.gao
-
-@note: 权限管理视图(包括用户列表/用户添加/用户删除/用户赋权)
-'''
+__author__ = 'Abbott'
 import time, hashlib
 from WebApp import WebApp
 from flask import request, redirect, render_template, url_for, flash, session
@@ -136,7 +130,6 @@ def empower_user(user_id):
 
     if (request.method == 'GET'):
         menu_list = PrivilegeSession.SelectMenuProjectPrivilege(user_id)
-
         return render_template("privilege_empower_user.html",
                                title="User Privilege",
                                user_id=user_id,

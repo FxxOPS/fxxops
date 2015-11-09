@@ -6,7 +6,7 @@ from . import tables, logger
 from WebApp.const import *
 from CommonSession import SelectProject
 
-def SelectRedisInfo():
+def SelectRedisInfo(strUserId):
     """
     @note 查询redis信息表所有信息
     :return: 以列表形式返回redis所有信息
@@ -16,7 +16,7 @@ def SelectRedisInfo():
         redis_result_info = db_ses.query(tables.Redis, tables.User, tables.Datadict).join(tables.User,
                                                                                           tables.Redis.apply_user_id == tables.User.id).join(
             tables.Datadict, tables.Redis.status == tables.Datadict.value).filter(
-            tables.Datadict.pre_id == REDIS_STATUS_PRE_ID)
+            tables.Datadict.pre_id == REDIS_STATUS_PRE_ID, tables.Redis.apply_user_id == strUserId)
 
         for redisTmp, userTmp, datadictTmp in redis_result_info:
             redis_dic = {'redis_id': redisTmp.redis_id, 'command': redisTmp.command, 'status': datadictTmp.name,

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月28日
-
-@author: yuan.gao6
-'''
+__author__ = 'Abbott'
 
 from contextlib import contextmanager
 import MySQLdb

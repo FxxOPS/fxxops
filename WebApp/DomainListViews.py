@@ -13,10 +13,11 @@ from const import *
 mysql_conf = mysql_connect()
 
 
-@WebApp.route('/domain/')
+@WebApp.route('/domain/', methods=['GET', 'POST'])
 def domain_info():
     """
     @note domain信息返回页面
+    @note Get方法：主要是filter数据
     :return:
     """
     if (False == IsSessValid()):
@@ -25,14 +26,23 @@ def domain_info():
     if IsShowPage(session["user_id"], MENU_DIC['DomainList']) == FALSE:
         return redirect("/")
 
+    # 当前页面权限
     function_privilege = IsShowPage(session["user_id"], MENU_DIC['DomainList'], 'priv')
 
     ReadWirte_privilege = ReadWirteShowPage(function_privilege)
+    prj_list = ReadWirteShowPage(function_privilege, 'PrjList')
 
     domain_return_list = []
     domain_field = []
+    # 过滤的项目值
+    if request.method == 'GET':
+        if request.args.get('project_id') is None or request.args.get('project_id') == '000':
+            project_id = ','.join((prj_list))
+        else:
+            project_id = request.args.get('project_id')
 
-    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,"," ,z.ip_source, "," ,z.cdn_hightanti SEPARATOR ";") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0  group by f.domain_id;'
+    domain_select_sql = 'select f.*, GROUP_CONCAT(z.domain_name,"," ,z.ip_source, "," ,z.cdn_hightanti SEPARATOR ";") as subdomain  from domain_info f left join domain_info z on z.pre_domain_id = f.domain_id where f.pre_domain_id = 0 and f.project_id in (%s) group by f.domain_id ' % (
+    project_id)
 
     domain_result = mysql_conf.sql_exec(domain_select_sql)
     for f in domain_result['field']:
@@ -48,7 +58,7 @@ def domain_info():
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
     return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list,
-                           ReadWirte_privilege=ReadWirte_privilege)
+                           ReadWirte_privilege=ReadWirte_privilege, function_privilege=function_privilege)
 
 
 @WebApp.route('/domain/add/', methods=['GET', 'POST'])
@@ -76,7 +86,6 @@ def domain_add():
             DomainSession.InsertSubdomain(pre_id[0], subdomain_dic)
         return redirect("/domain/")
     return render_template("domain/add_update.html", function_privilege=function_privilege)
-
 
 
 @WebApp.route('/domain/comments/<iDomainId>', methods=['GET', 'POST'])

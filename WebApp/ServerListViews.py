@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2014年5月26日
-
-@author: yuan.gao
-
-@note: 查询视图(包括主机列表/分组列表/机房列表/指定索引查询等)
-'''
+__author__ = 'Abbott'
 import json
 import MySQLdb
 from flask import request, redirect, render_template, session, url_for
