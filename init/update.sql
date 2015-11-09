@@ -26,6 +26,7 @@ CREATE TABLE `ops_menu` (
   `mid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
   `preid` int(11) NOT NULL DEFAULT '0' COMMENT '上级节点ID，默认0-TOP',
   `name` varchar(32) NOT NULL COMMENT '菜单名称',
+  `keys` varchar(32) NOT NULL DEFAULT '' COMMENT '菜单KEYS',
   `url` varchar(128) NOT NULL DEFAULT '' COMMENT 'URL名称',
   `is_func` tinyint(3) NOT NULL DEFAULT '1' COMMENT '是否功能页面（0-否；1-是）',
   `level` tinyint(4) NOT NULL DEFAULT '1' COMMENT '菜单层级',
@@ -34,7 +35,7 @@ CREATE TABLE `ops_menu` (
   `dml_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据最后修改时间',
   PRIMARY KEY (`mid`),
   KEY `pre_key` (`preid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='系统菜单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统菜单表'
 
 
 CREATE TABLE `ops_priv_data` (
@@ -75,3 +76,14 @@ CREATE TABLE `system_datadict` (
   `value` varchar(64) DEFAULT NULL COMMENT '对应值',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='系统字典表';
+
+CREATE TABLE `project` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) CHARACTER SET gbk NOT NULL,
+  `project_keys` varchar(32) DEFAULT NULL,
+  `gm_url` varchar(256) DEFAULT NULL,
+  `type` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
