@@ -122,7 +122,7 @@ def domain_comments(iDomainId):
     domain_history_list = DomainSession.SelectDomainHistory(iDomainId)
     if request.method == 'POST':
         DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
-        DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'])
+        DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'], session["user_id"])
         return redirect("/domain")
     return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
 

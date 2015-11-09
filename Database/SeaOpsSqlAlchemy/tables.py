@@ -70,6 +70,7 @@ class CommentHistory(Base):
     id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     domain_id = Column("domain_id", String(128), nullable=False)
     comment = Column("comment", String(256), nullable=False, default="INIT")
+    apply_user_id = Column("apply_user_id", Integer, default="NULL")
     update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
     def __repr__(self):

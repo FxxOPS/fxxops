@@ -12,8 +12,8 @@
                                     <label>xxxxx</label>
                                     <div class="mws-form-item normal">
                                         <select id="J-otherSelect">
-                                            <option>-- 请选择Redis命令 --</option>
-                                            <option>hgetall</option>
+                                            <option value="0">-- 请选择Redis命令 --</option>
+                                            <option >hgetall</option>
 {#                                            <option>Option3</option>#}
 {#                                            <option>Option4</option>#}
 {#                                            <option>Option5</option>#}
@@ -75,6 +75,9 @@
         $('.submit').on('click',function(){
             var ary = [];
             $('.other-item-new').each(function(){
+                if($.trim($(this).val()) == ""){
+                    return false;
+                }
                 ary.push($(this).val())
             });
 
@@ -87,7 +90,14 @@
                     return false;
                 }
             }
-            $('form').submit();
+
+
+            if(!ary || ary.length == 0){
+                alert("不能为空");
+            }else{
+                $('form').submit();
+            }
+
         })
     });
 </script>

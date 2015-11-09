@@ -5,6 +5,7 @@ from DbSession import GetSession
 from . import tables, logger
 from WebApp.config import *
 
+
 def InsertDomain(strDomainName, strProjectId, strProjectName, strFunctions, strComments):
     """
     @note 主域名信息数据插入Domain表里，并返回domain id
@@ -90,7 +91,8 @@ def UpdateDomain(strDomainID, strDomainDic):
                 {"ip_source": strDomainDic[sub[0]]})
     return
 
-def InsertDomainCommentHistory(strDomainId, strComment):
+
+def InsertDomainCommentHistory(strDomainId, strComment, strUserId):
     """
     @note 插入域名备注历史信息
     :param strDomainId:
@@ -98,16 +100,20 @@ def InsertDomainCommentHistory(strDomainId, strComment):
     :return:
     """
     with GetSession() as db_ses:
-        domain = tables.CommentHistory(domain_id=strDomainId, comment=strComment)
+        domain = tables.CommentHistory(domain_id=strDomainId, comment=strComment, apply_user_id=strUserId)
         db_ses.add(domain)
     return
+
 
 def SelectDomainHistory(strDomainId):
     domain_history_list = []
     with GetSession() as db_ses:
-        domain_history = db_ses.query(tables.CommentHistory).filter(tables.CommentHistory.domain_id == strDomainId).order_by(tables.CommentHistory.update_time.desc())
-        for history in domain_history:
-            domain_history_dic = {'history_id': history.id, 'history_did': history.domain_id, 'history_comment': history.comment, 'history_time': history.update_time}
+        domain_history = db_ses.query(tables.CommentHistory, tables.User).join(tables.User,
+                                                                               tables.CommentHistory.apply_user_id == tables.User.id).filter(
+            tables.CommentHistory.domain_id == strDomainId).order_by(tables.CommentHistory.update_time.desc())
+        for historyTmp, userTmp in domain_history:
+            domain_history_dic = {'history_id': historyTmp.id, 'history_did': historyTmp.domain_id,
+                                  'history_comment': historyTmp.comment, 'history_time': historyTmp.update_time,
+                                  'history_user': userTmp.name}
             domain_history_list.append(domain_history_dic)
-
     return domain_history_list
