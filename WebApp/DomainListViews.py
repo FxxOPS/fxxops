@@ -119,10 +119,12 @@ def domain_comments(iDomainId):
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
 
+    domain_history_list = DomainSession.SelectDomainHistory(iDomainId)
     if request.method == 'POST':
         DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
+        DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'])
         return redirect("/domain")
-    return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list)
+    return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
 
 
 @WebApp.route('/domain/update/', methods=['GET', 'POST'])

@@ -68,13 +68,13 @@ class CommentHistory(Base):
     __tablename__ = "comment_history"
 
     id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    server_id = Column("server_id", String(128), nullable=False)
+    domain_id = Column("domain_id", String(128), nullable=False)
     comment = Column("comment", String(256), nullable=False, default="INIT")
     update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
     def __repr__(self):
         return "<CommentHistory(id='%s', server_id = %s, comment='%s, update_time='%s')>" % (
-            self.id, self.server_id, self.comment, self.update_time)
+            self.id, self.domain_id, self.comment, self.update_time)
 
 
 class SaltReturns(Base):
