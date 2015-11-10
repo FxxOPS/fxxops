@@ -39,7 +39,7 @@ def InsertSubdomain(pre_id, DicSubdomain):
                 db_ses.add(subdomain)
 
 
-def UpdateDomainComments(strDomainId, strComments):
+def UpdateDomainComments(strDomainId, strComments, strArvg = 'None'):
     """
     @note 更新域名Comments
     :param strDomainId:
@@ -47,7 +47,10 @@ def UpdateDomainComments(strDomainId, strComments):
     :return:
     """
     with GetSession() as db_ses:
-        db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainId).update({"comments": strComments})
+        if strArvg == 'Op':
+            db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainId).update({"op_comments": strComments})
+        else:
+            db_ses.query(tables.Domain).filter(tables.Domain.domain_id == strDomainId).update({"comments": strComments})
 
 
 def SelectProjectId(strProjectId):
@@ -92,7 +95,7 @@ def UpdateDomain(strDomainID, strDomainDic):
     return
 
 
-def InsertDomainCommentHistory(strDomainId, strComment, strUserId):
+def InsertDomainCommentHistory(strDomainId, strComment, strUserId, strArvg = 'None'):
     """
     @note 插入域名备注历史信息
     :param strDomainId:
@@ -100,20 +103,23 @@ def InsertDomainCommentHistory(strDomainId, strComment, strUserId):
     :return:
     """
     with GetSession() as db_ses:
-        domain = tables.CommentHistory(domain_id=strDomainId, comment=strComment, apply_user_id=strUserId)
+        if strArvg == 'Op':
+            domain = tables.CommentHistory(domain_id=strDomainId, op_comments=strComment, apply_user_id=strUserId)
+        else:
+            domain = tables.CommentHistory(domain_id=strDomainId, comment=strComment, apply_user_id=strUserId)
         db_ses.add(domain)
     return
 
 
-def SelectDomainHistory(strDomainId):
+def SelectDomainHistory(strDomainId, strTypeId):
     domain_history_list = []
     with GetSession() as db_ses:
         domain_history = db_ses.query(tables.CommentHistory, tables.User).join(tables.User,
                                                                                tables.CommentHistory.apply_user_id == tables.User.id).filter(
-            tables.CommentHistory.domain_id == strDomainId).order_by(tables.CommentHistory.update_time.desc())
+            tables.CommentHistory.domain_id == strDomainId, tables.User.type == strTypeId).order_by(tables.CommentHistory.update_time.desc())
         for historyTmp, userTmp in domain_history:
             domain_history_dic = {'history_id': historyTmp.id, 'history_did': historyTmp.domain_id,
-                                  'history_comment': historyTmp.comment, 'history_time': historyTmp.update_time,
+                                  'history_comment': historyTmp.comment, 'history_op_comments': historyTmp.op_comments,'history_time': historyTmp.update_time,
                                   'history_user': userTmp.name}
             domain_history_list.append(domain_history_dic)
     return domain_history_list

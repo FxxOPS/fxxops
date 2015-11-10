@@ -7,7 +7,7 @@ from flask import request, redirect, render_template, session, url_for
 from Database.SeaOpsSqlAlchemy import DomainSession
 from Database.SeaOpsMySQLdb import mysql_connect
 from Utils import IsSessValid, getFirstPY
-from util.PrivilegeUtil import IsShowPage, ReadWirteShowPage
+from util.PrivilegeUtil import *
 from const import *
 
 mysql_conf = mysql_connect()
@@ -57,7 +57,12 @@ def domain_info():
             else:
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
-    return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list,
+
+    if IsOp() == True:
+        return render_template("domain/op_domain_info.html", title='OpDomain', domain_return_list=domain_return_list,
+                           ReadWirte_privilege=ReadWirte_privilege, function_privilege=function_privilege)
+    else:
+        return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list,
                            ReadWirte_privilege=ReadWirte_privilege, function_privilege=function_privilege)
 
 
@@ -119,12 +124,21 @@ def domain_comments(iDomainId):
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
 
-    domain_history_list = DomainSession.SelectDomainHistory(iDomainId)
+    domain_history_list = DomainSession.SelectDomainHistory(iDomainId, session['user_type'])
     if request.method == 'POST':
-        DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
-        DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'], session["user_id"])
+
+        if IsOp() == True:
+            DomainSession.UpdateDomainComments(iDomainId, request.form['op_comments'], 'Op')
+            DomainSession.InsertDomainCommentHistory(iDomainId, request.form['op_comments'], session["user_id"], 'Op')
+        else:
+            DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
+            DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'], session["user_id"])
         return redirect("/domain")
-    return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
+
+    if IsOp()==True:
+        return render_template("domain/op_domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
+    else:
+        return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
 
 
 @WebApp.route('/domain/update/', methods=['GET', 'POST'])
