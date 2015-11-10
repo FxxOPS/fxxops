@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mws-panel grid_8" id="mian-content">
+                	<div class="mws-panel-header">
+                    	<span class="mws-i-24 i-table-1">域名列表</span>
+                    </div>
+                    <div class="mws-panel-body">
+                        <table class="mws-datatable-fn mws-table">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>域名</th>
+                                    <th>域名状态</th>
+                                    <th>运营用途</th>
+                                    <th>过期时间</th>
+                                    <th>其他信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 {% for domain in domain_return_list %}
+                            <tr class="gradeA">
+{#                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>#}
+                                <td><input type="checkbox" name="url" value="{{ domain.domain_name }}" /></td>
+                                <td>{{domain.domain_name}}</td>
+                                {% if domain.status == '已解析' %}
+                                <td><span style="color: #5092C7">{{domain.status}}</span></td>
+                                {% else %}
+                                <td><span style="color: #A4A4A4">{{domain.status}}</span></td>
+                                {% endif %}
+
+                                {% if domain.op_comments %}
+                                    <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.op_comments}}'>{{domain.op_comments[0:20]}}</a></pre></td>
+                                {% else %}
+                                    <td><pre> <a type="button" class="mws-button blue" href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
+                                {% endif %}
+
+                                {% if domain.expiration | Expiration  == 'True'%}
+                                <td><font color="red">{{domain.expiration}}</font></td>
+                                {% else %}
+                                <td>{{domain.expiration}}</td>
+                                {% endif %}
+
+                                <td>
+                                <input type="button" class="mws-button blue mws-pop" value="查看" data-dialogid="messages{{domain.domain_id}}" />
+
+{#                                  <div  id="messages{{domain.domain_id}}" style="display: none; ">#}
+                                  <div  id="messages{{domain.domain_id}}" class="mws-dialog nws-hide">
+                                    <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
+                                    <h3>信息</h3>
+                                    <p>
+                                        注册商    :    {{domain.register}} <br />
+                                        注册时间 :      {{domain.register_date}}
+
+                                    </p>
+                                  </div>
+                                </td>
+                                  <!-- End #messages -->
+                            </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+<script>
+$(function(){
+    $(".mws-dialog").dialog({
+        autoOpen: false,
+        title: "",
+        modal: true,
+        width: 500,
+        buttons: [{
+            text: "关闭",
+            click: function() {
+                $( this ).dialog( "close" );
+            }}]
+    });
+    $(".mws-table .mws-pop").bind("click", function(event) {
+        var id = $(this).data('dialogid');
+        $("#"+id).dialog("option", {modal: true}).dialog("open");
+        event.preventDefault();
+    });
+
+    /* Data Tables */
+
+{#    $(".mws-datatable").dataTable();#}
+    //$(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabInnerHtml: "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}<select class='fnTabFilter' ><option value='000'>----过滤条件----</option><option value='9'>All</option><option value='0'>UnCheck</option><option value="1">Check</option>"});
+    var selectFilter = "{% if ReadWirte_privilege.w_priv == '1'  %}<a class='mws-button green' href='/domain/add/'>添加</a><a class='mws-button green' id = 'edit'>修改</a><label>{% endif %}<select class='fnTabFilter' ><option value='000'>----过滤条件----</option><option value='000'>All</option>{% for priv in function_privilege %}{% if priv['r_priv'] == '1' %} <option value='{{ priv['pid'] }}'>{{ session['project_dic'][priv['pid']]['prj_name'] }}</option>{% endif %}{% endfor %}";
+    $(".mws-datatable-fn").dataTable({sPaginationType: "full_numbers",fnTabFilter:selectFilter});
+    $(".fnTabFilter").on('change',function(){
+            var value = $(this).val();
+            location = "/domain/?project_id="+value;
+        });
+
+    $('#edit').on('click',function(){
+            var checks = "";
+            $("input[name='url']").each(function(){
+                if($(this).prop("checked") == true){
+                    checks += $(this).val() + "|";            //动态拼取选中的checkbox的值，用“|”符号分隔
+                }
+            })
+            if(checks.length) {
+                checks = checks.substr(0,checks.length-1);
+                $.StandardPost('/domain/update/',{checks:checks, page:'DomainMain'});
+            }
+            else {
+                alert("请勾选")
+            }
+        });
+})
+</script>
+{% endblock %}

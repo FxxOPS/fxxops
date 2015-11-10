@@ -70,12 +70,13 @@ class CommentHistory(Base):
     id = Column("id", Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     domain_id = Column("domain_id", String(128), nullable=False)
     comment = Column("comment", String(256), nullable=False, default="INIT")
+    op_comments = Column("op_comments", String(256), nullable=False, default="INIT")
     apply_user_id = Column("apply_user_id", Integer, default="NULL")
     update_time = Column("update_time", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
     def __repr__(self):
-        return "<CommentHistory(id='%s', server_id = %s, comment='%s, update_time='%s')>" % (
-            self.id, self.domain_id, self.comment, self.update_time)
+        return "<CommentHistory(id='%s', server_id = %s, comment='%s, op_comments='%s', update_time='%s')>" % (
+            self.id, self.domain_id, self.comment, self.op_comments, self.update_time)
 
 
 class SaltReturns(Base):
@@ -226,6 +227,7 @@ class Domain(Base):
     pre_domain_id = Column("pre_domain_id", Integer, nullable=False, default=0)
     functions = Column("functions", String(255), default="NULL")
     comments = Column("comments", String(255), default="NULL")
+    op_comments = Column("op_comments", String(255), default="NULL")
     is_public = Column("is_public", Integer, default=0)
     register = Column("register", String(64), default="NULL")
     register_date = Column("register_date", TIMESTAMP, server_default="NULL")
@@ -246,6 +248,7 @@ class Domain(Base):
                        pre_domain_id='%s',\
                        functions='%s',\
                        comments='%s',\
+                       op_comments='%s',\
                        is_public='%s',\
                        register='%s',\
                        register_date='%s',\
@@ -263,6 +266,7 @@ class Domain(Base):
                                            self.pre_domain_id,
                                            self.functions,
                                            self.comments,
+                                           self.op_comments,
                                            self.is_public,
                                            self.register,
                                            self.register_date,

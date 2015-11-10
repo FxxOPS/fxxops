@@ -3,7 +3,7 @@ __author__ = 'Abbott'
 
 from ..const import *
 from Database.SeaOpsSqlAlchemy import PrivilegeSession
-
+from flask import request, redirect, render_template, session, url_for
 
 def BuiltPageMenu(PrivMenuList):
     """
@@ -113,3 +113,13 @@ def ReadWirteShowPage(FunctionPrivilege, arvg='None'):
         return prj_list
     else:
         return funPriv_dic
+
+
+def IsOp():
+    if ("user_type" not in session):
+        return False
+
+    if (session["user_type"] != PRI_OP_ADMIN):
+        return False
+
+    return True
