@@ -58,11 +58,7 @@ def domain_info():
                 domain_dic[domain_field[n]] = v[n]
         domain_return_list.append(domain_dic)
 
-    if IsOp() == True:
-        return render_template("domain/op_domain_info.html", title='OpDomain', domain_return_list=domain_return_list,
-                           ReadWirte_privilege=ReadWirte_privilege, function_privilege=function_privilege)
-    else:
-        return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list,
+    return render_template("domain/domain_info.html", title='Domain', domain_return_list=domain_return_list,
                            ReadWirte_privilege=ReadWirte_privilege, function_privilege=function_privilege)
 
 
@@ -126,19 +122,11 @@ def domain_comments(iDomainId):
 
     domain_history_list = DomainSession.SelectDomainHistory(iDomainId, session['user_type'])
     if request.method == 'POST':
-
-        if IsOp() == True:
-            DomainSession.UpdateDomainComments(iDomainId, request.form['op_comments'], 'Op')
-            DomainSession.InsertDomainCommentHistory(iDomainId, request.form['op_comments'], session["user_id"], 'Op')
-        else:
-            DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
-            DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'], session["user_id"])
+        DomainSession.UpdateDomainComments(iDomainId, request.form['comments'])
+        DomainSession.InsertDomainCommentHistory(iDomainId, request.form['comments'], session["user_id"])
         return redirect("/domain")
 
-    if IsOp()==True:
-        return render_template("domain/op_domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
-    else:
-        return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
+    return render_template("domain/domain_comments.html", title='Comment', domain_return_list=domain_return_list, domain_history_list=domain_history_list)
 
 
 @WebApp.route('/domain/update/', methods=['GET', 'POST'])
