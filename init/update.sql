@@ -1,27 +1,3 @@
-
-CREATE TABLE `domain_info` (
-  `domain_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '域名ID',
-  `domain_name` varchar(64) NOT NULL COMMENT '主域名',
-  `project_id` int(11) DEFAULT NULL COMMENT '项目ID',
-  `project_name` varchar(64) DEFAULT NULL COMMENT '项目名称',
-  `ip_source` varchar(16) DEFAULT NULL COMMENT '源IP',
-  `status` enum('已解析','未解析') DEFAULT NULL COMMENT '域名状态',
-  `cdn_hightanti` varchar(64) DEFAULT NULL COMMENT '解析是CDN or 高防',
-  `pre_domain_id` int(11) NOT NULL DEFAULT '0' COMMENT '父域ID，顶级域名为0',
-  `functions` varchar(255) DEFAULT NULL COMMENT '用途',
-  `comments` varchar(255) DEFAULT NULL COMMENT '备注',
-  `is_public` int(11) NOT NULL DEFAULT '0' COMMENT '开放给运营',
-  `register` varchar(64) DEFAULT NULL COMMENT '注册商',
-  `register_date` datetime DEFAULT NULL COMMENT '注册时间',
-  `domain_DNS` varchar(64) DEFAULT NULL COMMENT '域名解析',
-  `expiration` date DEFAULT NULL COMMENT '过期时间',
-  `init_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据创建时间',
-  `dml_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据最后修改时间',
-  `dml_flag` tinyint(4) NOT NULL DEFAULT '1' COMMENT '数据操作标识: 1-新增;2-修改;3-删除',
-  PRIMARY KEY (`domain_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='域名信息表';
-
-
 CREATE TABLE `ops_menu` (
   `mid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
   `preid` int(11) NOT NULL DEFAULT '0' COMMENT '上级节点ID，默认0-TOP',
@@ -35,8 +11,16 @@ CREATE TABLE `ops_menu` (
   `dml_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据最后修改时间',
   PRIMARY KEY (`mid`),
   KEY `pre_key` (`preid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统菜单表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统菜单表';
 
+INSERT INTO `ops_menu` VALUES (1, 0, '域名管理', 'DomainManager', '#', 1, 1, 1, 1, '2015-10-28 00:18:35'),
+  (2, 0, 'MySQL', 'MySQL', '#', 1, 1, 1, 1, '2015-10-28 00:18:28'),
+  (3, 1, '域名列表', 'DomainList', '/domain/', 1, 2, 1, 1, '2015-10-28 19:59:24'),
+  (4, 2, 'Query-Digest-UI', 'Digest', '/digest/', 1, 2, 1, 1, '2015-10-28 20:01:05'),
+  (5, 2, 'Redis', 'Redis', '/redis/', 1, 2, 1, 1, '2015-10-28 20:01:02'),
+  (6, 0, 'Admin设置', 'AdminSet', '#', 1, 1, 1, 1, '2015-11-02 02:10:27'),
+  (7, 6, '用户权限', 'UserPrivilege', '/privilege/', 1, 2, 1, 1, '2015-11-02 02:12:04'),
+  (8, 1, '运营域名列表', 'OpDomainList', '/op/domain/', 1, 2, 1, 1, '2015-11-10 19:04:33');
 
 CREATE TABLE `ops_priv_data` (
   `uid` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -77,13 +61,11 @@ CREATE TABLE `system_datadict` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='系统字典表';
 
-CREATE TABLE `project` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET gbk NOT NULL,
-  `project_keys` varchar(32) DEFAULT NULL,
-  `gm_url` varchar(256) DEFAULT NULL,
-  `type` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+INSERT INTO `system_datadict` VALUES (1, 0, '执行状态', '2015-10-22 16:21:00', '2015-10-22 01:30:40', 1, '0'),
+  (2, 1, '成功', '2015-10-22 16:21:00', '2015-10-22 01:28:29', 1, '1'),
+  (3, 1, '失败', '2015-10-22 16:21:00', '2015-10-22 01:28:31', 1, '2');
+
+INSERT INTO `project` VALUES (1,'V项目','video',NULL,NULL),(2,'论坛','discuze',NULL,NULL);
+
+alter table `domain_info` add `op_comments` varchar(255) DEFAULT NULL COMMENT '运营备注';
+alter table `project` add `project_keys` varchar(32) DEFAULT NULL COMMENT '项目keys';
