@@ -40,40 +40,29 @@
                                 </thead>
                                 <tbody>
                                     {% for prj in menu.menu_pri %}
-                                    <tr>
-                                        {% if 'video' in prj.keys() %}
-                                        <td data-pid="{{ prj['video']['pid'] }}">V项目</td>
+                                        {% for k, v in prj.items() %}
+                                        <tr>
 
-                                            {% if prj['video']['r_priv'] == '1' %}
-                                            <td class="tx-center"><input type="checkbox" name="R" checked/></td>
-                                            {% else  %}
-                                            <td class="tx-center"><input type="checkbox" name="R" /></td>
-                                            {% endif %}
+                                            <td data-pid="{{ v['pid'] }}">{{ session['project_dic'][v['pid']]['prj_name'] }}</td>
 
-                                            {% if prj['video']['w_priv'] == '1' %}
-                                            <td class="tx-center"><input type="checkbox" name="W" checked/></td>
-                                            {% else  %}
-                                            <td class="tx-center"><input type="checkbox" name="W" /></td>
-                                            {% endif %}
+                                                {% if v['r_priv'] == '1' %}
+                                                <td class="tx-center"><input type="checkbox" name="R" checked/></td>
+                                                {% else  %}
+                                                <td class="tx-center"><input type="checkbox" name="R" /></td>
+                                                {% endif %}
+
+                                                {% if v['w_priv'] == '1' %}
+                                                <td class="tx-center"><input type="checkbox" name="W" checked/></td>
+                                                {% else  %}
+                                                <td class="tx-center"><input type="checkbox" name="W" /></td>
+                                                {% endif %}
+                                        </tr>
+                                        {% endfor %}
 
 
-                                        {% elif 'discuze' in prj.keys() %}
-                                        <td data-pid="{{ prj['discuze']['pid'] }}">BBS</td>
-                                            {% if prj['discuze']['r_priv'] == '1' %}
-                                            <td class="tx-center"><input type="checkbox" name="R" checked/></td>
-                                            {% else  %}
-                                            <td class="tx-center"><input type="checkbox" name="R" /></td>
-                                            {% endif %}
 
-                                            {% if prj['discuze']['w_priv'] == '1' %}
-                                            <td class="tx-center"><input type="checkbox" name="W" checked/></td>
-                                            {% else  %}
-                                            <td class="tx-center"><input type="checkbox" name="W" /></td>
-                                            {% endif %}
-                                        {% endif %}
-                                    </tr>
+                                    {% endfor %}
 
-                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
