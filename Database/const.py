@@ -7,7 +7,8 @@ DB_USER = 'root'
 DB_PWD = '123456'
 DB_CHAR_SET = 'utf8'
 DB_DEF = 'ops'
-
+DB_POOL_SIZE = 100
+DB_POOL_RECYCLE = 30
 
 ## Mysql digest conf
 
