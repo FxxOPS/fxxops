@@ -4,10 +4,10 @@ __author__ = 'Abbott'
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, Text, TIMESTAMP, text
-from Database.const import DB_ADDRESS, DB_PORT, DB_USER, DB_PWD, DB_CHAR_SET, DB_DEF
+from Database.const import DB_ADDRESS, DB_PORT, DB_USER, DB_PWD, DB_CHAR_SET, DB_DEF, DB_POOL_RECYCLE, DB_POOL_SIZE
 
 strEngine = "mysql+mysqldb://%s:%s@%s:%s/%s?charset=%s" % (DB_USER, DB_PWD, DB_ADDRESS, DB_PORT, DB_DEF, DB_CHAR_SET)
-engine = create_engine(strEngine, echo=False)
+engine = create_engine(strEngine, echo=False, pool_size=DB_POOL_SIZE, pool_recycle=DB_POOL_RECYCLE)
 Base = declarative_base(bind=engine)
 
 
