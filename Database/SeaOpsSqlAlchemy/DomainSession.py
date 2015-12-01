@@ -3,7 +3,6 @@ __author__ = 'Abbott'
 
 from DbSession import GetSession
 from . import tables, logger
-from WebApp.config import *
 
 
 def InsertDomain(strDomainName, strProjectId, strProjectName, strFunctions, strComments):
@@ -33,7 +32,6 @@ def InsertSubdomain(pre_id, DicSubdomain):
     """
     with GetSession() as db_ses:
         for k, v in DicSubdomain.items():
-            print k, v
             if v:
                 subdomain = tables.Domain(domain_name=k, ip_source=v, pre_domain_id=pre_id)
                 db_ses.add(subdomain)

@@ -69,7 +69,6 @@ def auto_dig(domain, pre_id):
             delete_list.append("Unknow")
             pass
         else:
-            print cdn_result_list, "+++"
             if 'Unknow' in cdn_result_list:
                 reslut = list(set(cdn_result_list)).remove('Unknow')[0]
             else:
@@ -82,7 +81,6 @@ def auto_dig(domain, pre_id):
                 check_value.append(v[0])
 
             if head in check_value:
-                print head,"update, fff"
                 mysql_conf.sql_exec(update_sub_sql % (reslut, now_time, head, pre_id))
             else:
                 mysql_conf.sql_exec(insert_sub_sql % (head, reslut, pre_id, now_time, now_time))
@@ -98,7 +96,6 @@ def auto_dig(domain, pre_id):
             delete_list.append("Unknow")
             pass
         else:
-            print highanti_result_list, '---'
             if 'Unknow' in highanti_result_list:
                 reslut = list(set(highanti_result_list)).remove('Unknow')[0]
             else:
@@ -111,7 +108,6 @@ def auto_dig(domain, pre_id):
                 check_value.append(v[0])
 
             if head in check_value:
-                print head,"update, fff"
                 mysql_conf.sql_exec(update_sub_sql % (reslut, now_time, head, pre_id))
             else:
                 mysql_conf.sql_exec(insert_sub_sql % (head, reslut, pre_id, now_time, now_time))
@@ -119,7 +115,6 @@ def auto_dig(domain, pre_id):
             mysql_conf.sql_exec(delete_sub_sql % (head, pre_id))
 
     count_result = mysql_conf.sql_exec(counts_sql % int(pre_id))
-    print count_result,"+++"
     if int(count_result['value'][0][0]) == 0:
         mysql_conf.sql_exec("update domain_info set status = '未解析', dml_time = '%s' where domain_name = '%s' " % (now_time, str(domain)))
     else:

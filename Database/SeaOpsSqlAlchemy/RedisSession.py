@@ -3,7 +3,7 @@ __author__ = 'Abbott'
 
 from DbSession import GetSession
 from . import tables, logger
-from WebApp.const import *
+from common import *
 from CommonSession import SelectProject
 
 def SelectRedisInfo(strUserId):

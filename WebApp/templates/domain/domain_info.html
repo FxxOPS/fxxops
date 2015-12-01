@@ -15,9 +15,7 @@
                                     <th>域名状态</th>
                                     <th>是否开放给运营</th>
                                     <th>用途</th>
-                                    {% if ReadWirte_privilege.w_priv == '1'  %}
                                     <th>备注</th>
-                                    {% endif %}
                                     <th>域名解析</th>
                                     <th>过期时间</th>
                                     <th>其他信息</th>
@@ -26,11 +24,9 @@
                             <tbody>
                                  {% for domain in domain_return_list %}
                             <tr class="gradeA">
-{#                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>#}
                                 <td><input type="checkbox" name="url" value="{{ domain.domain_name }}" /></td>
                                 <td>{{domain.project_name}}</td>
                                 <td>{{domain.domain_name}}</td>
-{#                                <td>{{domain.subdomain | Subdomain}}</td>#}
                                 <td>
                                     {% for subdomain in domain.subdomain | Subdomain  %}
                                     <div><span style="width: 50px; display: inline-block; text-align: right;margin-right: 10px;">{{ subdomain[0] }}:</span><span style="display: inline-block;margin-right: 5px;">{{ subdomain[1] }}</span>&nbsp;|&nbsp;&nbsp;<span style="display: inline-block;">{{ subdomain[2] }}</span></div>
@@ -41,18 +37,14 @@
                                 {% else %}
                                 <td><span style="color: #A4A4A4">{{domain.status}}</span></td>
                                 {% endif %}
-{#                                <td>{{domain.ip_source}}</td>#}
+
                                 <td>{{domain.is_public}}</td>
                                 <td>{{domain.functions}}</td>
-
-{#                                <td>{% if domain.cdn_hightanti %}{{domain.cdn_hightanti}}{% endif %}</td>#}
-                                {% if ReadWirte_privilege.w_priv == '1'  %}
                                     {% if domain.comments %}
                                         <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
                                     {% else %}
                                         <td><pre> <a type="button" class="mws-button blue" href="/domain/comments/{{domain.domain_id}}" title='添加'>添加</a></pre></td>
                                     {% endif %}
-                                {% endif %}
                                 <td>{{domain.domain_DNS}}</td>
                                 {% if domain.expiration | Expiration  == 'True'%}
                                 <td><font color="red">{{domain.expiration}}</font></td>
@@ -60,11 +52,9 @@
                                 <td>{{domain.expiration}}</td>
                                 {% endif %}
 
-{#                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>#}
                                 <td>
                                 <input type="button" class="mws-button blue mws-pop" value="查看" data-dialogid="messages{{domain.domain_id}}" />
 
-{#                                  <div  id="messages{{domain.domain_id}}" style="display: none; ">#}
                                   <div  id="messages{{domain.domain_id}}" class="mws-dialog nws-hide">
                                     <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
                                     <h3>信息</h3>

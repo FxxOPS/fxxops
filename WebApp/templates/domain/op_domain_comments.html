@@ -20,7 +20,7 @@
                             <tbody>
                                 {% for domain in domain_return_list %}
                             <tr class="gradeA">
-{#                                <td><input type="checkbox" name="{{ domain.domain_id }}"></td>#}
+
                                 <td><input type="checkbox" name="url" value="{{ domain.domain_name }}" /></td>
                                 <td>{{domain.domain_name}}</td>
                                 {% if domain.status == '已解析' %}
@@ -37,7 +37,7 @@
                                 <td>{{domain.expiration}}</td>
                                 {% endif %}
 
-{#                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>#}
+
                                   <td>
                                   <input type="button" class="mws-button blue mws-pop" value="查看" data-dialogid="messages{{domain.domain_id}}" />
                                   <div  id="messages{{domain.domain_id}}" class="mws-dialog nws-hide">
@@ -61,13 +61,7 @@
                         comment:<textarea cols="300" rows="10" name="op_comments">{{domain.op_comments}}</textarea>
                         <input type="submit" value="Submit" />
                     </form>
-{#                    <ul>#}
-{#                        {% for comment in comment_list %}#}
-{#                            <li>------ {{comment.update_time}} ------ ------#}
-{#                                <pre> {{comment.history}} </pre>#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-{#                    </ul>#}
+
                     {% endfor %}
                 </div>
     <div class="mws-panel grid_8">

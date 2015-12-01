@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 from . import tables, logger
-from WebApp.config import *
+
 
 
 @contextmanager
