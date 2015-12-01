@@ -21,6 +21,8 @@ table.mws-table
 	padding:10px 16px;
 	border-bottom:1px solid #cccccc;
 	border-left:1px solid #cccccc;
+	    white-space: nowrap;
+
 }
 
 .mws-table tbody td, 
@@ -345,3 +347,7 @@ table tbody tr td.date { min-width: 120px;}
 .mws-dialog table { width: 100%; border: 1px solid #ccc; margin-top: 10px;}
 .mws-dialog table, .mws-dialog table th, .mws-dialog table td { padding: 5px 8px; border: 1px solid #ccc; border-collapse: collapse; }
 
+.dataTables_wrapper {
+   position: relative;
+   overflow-x: auto;
+}
