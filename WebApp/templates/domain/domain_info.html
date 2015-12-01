@@ -11,9 +11,9 @@
                                     <th>&nbsp;</th>
                                     <th>项目</th>
                                     <th>域名</th>
-                                    <th>子域名:源IP | 高防or防火墙</th>
+                                    <th>子域名:源IP | 高防</th>
                                     <th>域名状态</th>
-                                    <th>是否开放给运营</th>
+                                    <th>开放给运营</th>
                                     <th>用途</th>
                                     <th>备注</th>
                                     <th>域名解析</th>
@@ -38,7 +38,11 @@
                                 <td><span style="color: #A4A4A4">{{domain.status}}</span></td>
                                 {% endif %}
 
-                                <td>{{domain.is_public}}</td>
+                                 {% if domain.is_public == 1 %}
+                                 <td>是</td>
+                                 {% else %}
+                                 <td>否</td>
+                                 {% endif %}
                                 <td>{{domain.functions}}</td>
                                     {% if domain.comments %}
                                         <td><pre> <a href="/domain/comments/{{domain.domain_id}}" title='{{domain.comments}}'>{{domain.comments[0:20]}}</a></pre></td>
