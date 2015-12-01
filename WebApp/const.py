@@ -5,7 +5,7 @@ Created on 2014年6月10日
 @author: root
 '''
 
-from Database.SeaOpsSqlAlchemy import db_session, PrivilegeSession
+from Database.SeaOpsSqlAlchemy import PrivilegeSession
 
 PRI_SYS_ADMIN = 0
 PRI_OPS_ADMIN = 1
@@ -30,6 +30,3 @@ MENU_ID_DIC = PrivilegeSession.SelectMenu('MenuIdDic')
 
 ### Redis download path
 REDIS_DOWNLOAD_PATH = 'FileOperate/Redis/Download'
-
-### Redis dict
-REDIS_STATUS_PRE_ID = '1'

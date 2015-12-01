@@ -79,7 +79,7 @@ def domain_add():
 
     if request.method == 'POST':
         subdomain_dic = {"www": request.form['www_ip'], 'v': request.form['v_ip'], 's': request.form['s_ip'],
-                         'p1': request.form['p1_ip']}
+                         'p1': request.form['p1_ip'], 'img': request.form['img_ip']}
         project_name = DomainSession.SelectProjectId(request.form['project_id'])
         for domain in request.form['domain_name'].split('\r\n'):
             pre_id = DomainSession.InsertDomain(domain, request.form['project_id'], project_name[0],
@@ -154,7 +154,8 @@ def domain_update():
             'www': request.form['www_ip'],
             'v': request.form['v_ip'],
             'p1': request.form['p1_ip'],
-            's': request.form['s_ip']
+            's': request.form['s_ip'],
+            'img': request.form['img_ip']
         }
         domain_list = request.values.getlist('domains')
         for domain in domain_list:

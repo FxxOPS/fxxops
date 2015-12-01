@@ -54,3 +54,4 @@ from . import RedisListViews
 from . import config
 from . import IndexViews
 from . import OpDomainListViews
+from . import const

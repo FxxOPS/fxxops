@@ -6,15 +6,16 @@ import re
 import datetime
 import time
 import sys
+import os
 
-# sys.path.append("/ops/fxxops/Database")
-from Database import SeaOpsMySQLdb
+# sys.path.append(os.path.join(os.getcwd(), 'Database'))
+from Database.SeaOpsMySQLdb import mysql_connect
 
 
 starttime = time.clock()
 domain_list = []
 
-subdomain_head_list = ['www', 'v', 's', 'p1']
+subdomain_head_list = ['www', 'v', 's', 'p1', 'img']
 
 
 cdn_rule_dic = {'.cdng[a-z].net.': 'CDNetwork'}
@@ -30,7 +31,7 @@ insert_sub_sql = "insert into domain_info(domain_name, cdn_hightanti, pre_domain
 delete_sub_sql = "delete from domain_info where domain_name = '%s' and pre_domain_id = %d;"
 
 
-mysql_conf = SeaOpsMySQLdb.mysql_connect()
+mysql_conf = mysql_connect()
 now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def get_domain():

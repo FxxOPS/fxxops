@@ -3,7 +3,7 @@ __author__ = 'Abbott'
 
 from DbSession import GetSession
 from . import tables, logger
-from WebApp.config import *
+
 
 def SelectProject(arvg='None'):
     """

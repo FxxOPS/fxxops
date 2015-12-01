@@ -4,7 +4,7 @@ __author__ = 'Abbott'
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
 from . import tables, logger
-from WebApp.config import *
+
 
 @contextmanager
 def GetSession():

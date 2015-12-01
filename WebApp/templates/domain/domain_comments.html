@@ -56,7 +56,6 @@
                                 <td>{{domain.expiration}}</td>
                                 {% endif %}
 
-{#                                <td><a href="#messages{{domain.domain_id}}" rel="modal">查看</a></td>#}
                                   <td>
                                   <input type="button" class="mws-button blue mws-pop" value="查看" data-dialogid="messages{{domain.domain_id}}" />
                                   <div  id="messages{{domain.domain_id}}" class="mws-dialog nws-hide">
@@ -80,13 +79,7 @@
                         comment:<textarea cols="300" rows="10" name="comments">{{domain.comments}}</textarea>
                         <input type="submit" value="Submit" />
                     </form>
-{#                    <ul>#}
-{#                        {% for comment in comment_list %}#}
-{#                            <li>------ {{comment.update_time}} ------ ------#}
-{#                                <pre> {{comment.history}} </pre>#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-{#                    </ul>#}
+
                     {% endfor %}
                 </div>
     <div class="mws-panel grid_8">
