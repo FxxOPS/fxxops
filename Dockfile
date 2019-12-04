@@ -1,0 +1,19 @@
+#commit "ops:v1 image"
+FROM ops:v0
+MAINTAINER ops
+USER root
+RUN	git clone -b master https://github.com/FxxOPS/fxxops.git /data/www/ops &&\
+#       git clone -b dev https://github.com/FxxOPS/fxxops.git /data/www/ops &&\
+        cd /data/www/ops/WebApp/templates/ && sed -i 's/10.1.110.25:8011/ops.gagaten.com/g' `find /data/www/ops/WebApp/templates/|grep -ir 10.1.110.25:8011 |awk -F: '{print $1}'`
+
+######20151002######
+RUN yum install crontab* bind-utils jwhois screen -y
+
+#######20151006######
+RUN yum install ntpdate -y  &&\
+    echo "export TZ=Asia/Shanghai" >>/etc/profile  &&\
+    echo "0 * * * * /usr/sbin/ntpdate  172.16.30.16  " >> /var/spool/cron/root   &&\
+    echo "*/10 * * * * /usr/local/python27/bin/python /data/www/ops/auto_dig.py" >> /var/spool/cron/root
+
+#######20151027#####
+RUN /usr/local/python27/bin/pip install redis
